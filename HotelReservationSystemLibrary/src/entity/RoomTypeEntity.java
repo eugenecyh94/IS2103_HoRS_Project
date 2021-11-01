@@ -1,0 +1,204 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package entity;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import util.enumeration.BedSizeEnum;
+import util.enumeration.RoomAmenitiesEnum;
+
+/**
+ *
+ * @author Eugene Chua
+ */
+@Entity
+public class RoomTypeEntity implements Serializable {
+
+//attributes
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long roomTypeId;
+    @Column(length = 20, nullable = false)
+    //5 Suits at start
+    //Deluxe, Premier, Family RoomEntity
+    //Junior, Grand Suite
+    private String name;
+    @Column(length = 255)
+    private String description;
+    @Column(nullable = false)
+    private int capacity;
+    @Column(nullable = false)
+    private int totalRooms;
+    @Column(length = 4, nullable = false)
+    private String roomSize; //sqm - to look into using string or int or enum
+    @Column(nullable = false)
+    private BedSizeEnum bedSize;
+    @Column(nullable = false)
+    private List<RoomAmenitiesEnum> roomAmenities;
+    @Column(nullable = false)
+    private boolean roomEnabled;
+    
+    @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
+    private List<RoomEntity> rooms;
+    
+    @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
+    private List<DateEntity> dates;
+    
+    @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
+    private List<ReservationEntity> reservations;
+
+//constructors
+    public RoomTypeEntity() {
+        this.rooms = new ArrayList<>();
+        this.dates = new ArrayList<>();
+        this.reservations = new ArrayList<>();
+        this.roomEnabled = true;
+    }
+
+    public RoomTypeEntity(String name, String description, int capacity, int totalRooms, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities) {
+        this();
+        this.name = name;
+        this.description = description;
+        this.capacity = capacity;
+        this.totalRooms = totalRooms;
+        this.roomSize = roomSize;
+        this.bedSize = bedSize;
+        this.roomAmenities = roomAmenities;
+    }
+    
+ //methods
+    public Long getRoomTypeId() {
+        return roomTypeId;
+    }
+
+    public void setRoomTypeId(Long roomTypeId) {
+        this.roomTypeId = roomTypeId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (roomTypeId != null ? roomTypeId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the roomTypeId fields are not set
+        if (!(object instanceof RoomTypeEntity)) {
+            return false;
+        }
+        RoomTypeEntity other = (RoomTypeEntity) object;
+        if ((this.roomTypeId == null && other.roomTypeId != null) || (this.roomTypeId != null && !this.roomTypeId.equals(other.roomTypeId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.RoomTypeEntity[ id=" + roomTypeId + " ]";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getTotalRooms() {
+        return totalRooms;
+    }
+
+    public void setTotalRooms(int totalRooms) {
+        this.totalRooms = totalRooms;
+    }
+
+    public String getRoomSize() {
+        return roomSize;
+    }
+
+    public void setRoomSize(String roomSize) {
+        this.roomSize = roomSize;
+    }
+
+    public BedSizeEnum getBedSize() {
+        return bedSize;
+    }
+
+    public void setBedSize(BedSizeEnum bedSize) {
+        this.bedSize = bedSize;
+    }
+
+    public List<RoomAmenitiesEnum> getRoomAmenities() {
+        return roomAmenities;
+    }
+
+    public void setRoomAmenities(List<RoomAmenitiesEnum> roomAmenities) {
+        this.roomAmenities = roomAmenities;
+    }
+
+    public boolean isRoomEnabled() {
+        return roomEnabled;
+    }
+
+    public void setRoomEnabled(boolean roomEnabled) {
+        this.roomEnabled = roomEnabled;
+    }
+
+    public List<RoomEntity> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<RoomEntity> rooms) {
+        this.rooms = rooms;
+    }
+
+    public List<DateEntity> getDates() {
+        return dates;
+    }
+
+    public void setDates(List<DateEntity> dates) {
+        this.dates = dates;
+    }
+
+    public List<ReservationEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationEntity> reservations) {
+        this.reservations = reservations;
+    }
+    
+}
