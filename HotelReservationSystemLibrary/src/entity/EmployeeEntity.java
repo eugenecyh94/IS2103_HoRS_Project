@@ -39,8 +39,7 @@ public class EmployeeEntity implements Serializable {
         this.password = password;
     }
 
-    public EmployeeEntity(Long employeeId, String firstName, String lastName, String username, String password, EmployeeAccessRightEnum AccessRightEnum) {
-        this.employeeId = employeeId;
+    public EmployeeEntity(String firstName, String lastName, String username, String password, EmployeeAccessRightEnum AccessRightEnum) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

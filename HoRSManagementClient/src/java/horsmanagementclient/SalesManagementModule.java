@@ -24,7 +24,7 @@ public class SalesManagementModule {
     public void menuSalesManagement() throws InvalidAccessRightException {
 
         if (currentEmployeeEntity.getAccessRightEnum() != EmployeeAccessRightEnum.SALESMANAGER) {
-            throw new InvalidAccessRightException("You don't have SALES MANAGER rights to access the system administration module.");
+            throw new InvalidAccessRightException("You don't have SALES MANAGER rights to access the Sales Management Module.");
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -55,12 +55,14 @@ public class SalesManagementModule {
                     doDeleteRoomRate();
                 } else if (response == 5) {
                     doUpdateRoomRate();
-                } else {
+                } else if (response == 6) {
+                    break;
+                }else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
 
-            if (response == 5) {
+            if (response == 6) {
                 break;
             }
         }

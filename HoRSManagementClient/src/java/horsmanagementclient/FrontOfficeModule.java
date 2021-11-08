@@ -20,23 +20,22 @@ public class FrontOfficeModule {
         this.currentEmployeeEntity = currentEmployeeEntity;
     }
 
-    public void menuSalesManagement() throws InvalidAccessRightException {
+    public void menuFrontOffice() throws InvalidAccessRightException {
 
-        if (currentEmployeeEntity.getAccessRightEnum() != EmployeeAccessRightEnum.SALESMANAGER) {
-            throw new InvalidAccessRightException("You don't have SALES MANAGER rights to access the system administration module.");
+        if (currentEmployeeEntity.getAccessRightEnum() != EmployeeAccessRightEnum.GUESTRELATIONSOFFICER) {
+            throw new InvalidAccessRightException("You don't have GUEST RELATIONS OFFICER rights to access the Front Office Module.");
         }
 
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Merlion Management System :: Sales Management***\n");
-            System.out.println("1: Create New Room Rate");
-            System.out.println("2: View Room Rate Details");
-            System.out.println("3: View All Room Rates");
-            System.out.println("4: Delete Room Rate");
-            System.out.println("5: Update Room Rate");
-            System.out.println("6: Back\n");
+            System.out.println("*** Merlion Management System :: Front Office Module ***\n");
+            System.out.println("1: Walk-In Room Search");
+            System.out.println("2: Walk-In Room Reservation");
+            System.out.println("3: Check-In Guest");
+            System.out.println("4: Check-Out Guest");
+            System.out.println("5: Back\n");
             response = 0;
 
             while (response < 1 || response > 11) {
@@ -66,7 +65,7 @@ public class FrontOfficeModule {
     }
 
     private void doWalkInRoomSearch() {
-
+        
     }
 
     private void doWalkInReserveRoom() {

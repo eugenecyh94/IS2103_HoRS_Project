@@ -29,7 +29,7 @@ public class SystemAdministrationModule {
     public void menuSystemAdministration() throws InvalidAccessRightException {
         
         if (currentEmployeeEntity.getAccessRightEnum() != EmployeeAccessRightEnum.SYSTEMADMIN) {
-            throw new InvalidAccessRightException("You don't have MANAGER rights to access the system administration module.");
+            throw new InvalidAccessRightException("You don't have SYSTEM ADMIN rights to access the System Administration Module.");
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -38,7 +38,7 @@ public class SystemAdministrationModule {
         while (true) {
             System.out.println("*** Merlion Management System :: System Administration ***\n");
             System.out.println("1: Create New Employee");
-            System.out.println("3: View All Employees");
+            System.out.println("2: View All Employees");
             System.out.println("3: Create New Partner");
             System.out.println("4: View All Partners");
             System.out.println("-----------------------");
@@ -82,7 +82,7 @@ public class SystemAdministrationModule {
         newEmployeeEntity.setLastName(scanner.nextLine().trim());
 
         while (true) {
-            System.out.print("Select Access Right (1: Cashier, 2: Manager)> ");
+            System.out.print("Select Access Right (1: Sales Manager, 2: Operations Manager, 3: System Admin, 4: Guest Relations Officer)> ");
             Integer accessRightInt = scanner.nextInt();
 
             if (accessRightInt >= 1 && accessRightInt <= 2) {
@@ -112,10 +112,10 @@ public class SystemAdministrationModule {
         System.out.printf("%8s%20s%20s%15s%20s%20s\n", "Employee ID", "First Name", "Last Name", "Access Right", "Username", "Password");
 
         for (EmployeeEntity employeeEntity : employeeEntities) {
-            System.out.printf("%8s%20s%20s%15s%20s%20s\n", employeeEntity.getEmployeeId().toString(), employeeEntity.getFirstName(), employeeEntity.getLastName(), employeeEntity.getAccessRightEnum().toString(), employeeEntity.getUsername(), employeeEntity.getPassword());
+            System.out.printf("%8s%10s%10s%20s%15s%20s\n", employeeEntity.getEmployeeId().toString(), employeeEntity.getFirstName(), employeeEntity.getLastName(), employeeEntity.getAccessRightEnum().toString(), employeeEntity.getUsername(), employeeEntity.getPassword());
         }
 
-        System.out.print("Press any key to continue...> ");
+        System.out.print("\nPress any key to continue...> ");
         scanner.nextLine();
     }
 
@@ -151,7 +151,7 @@ public class SystemAdministrationModule {
             System.out.printf("%8s%20s%20s%20s\n", partnerEntity.getPartnerId().toString(), partnerEntity.getFirstName(), partnerEntity.getUsername(), partnerEntity.getPassword());
         }
 
-        System.out.print("Press any key to continue...> ");
+        System.out.print("\nPress any key to continue...> ");
         scanner.nextLine();
     }
 }

@@ -62,6 +62,7 @@ public class ManagementMainApp {
                         salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
                         operationsManagementModule = new OperationsManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
+                        frontOfficeModule = new FrontOfficeModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
                         menuMain();
                     }
                     catch(InvalidLoginCredentialException ex) 
@@ -172,7 +173,7 @@ public class ManagementMainApp {
                 {
                     try
                     {
-                        frontOfficeModule.menuSalesManagement();
+                        frontOfficeModule.menuFrontOffice();
                     }
                     catch (InvalidAccessRightException ex)
                     {
