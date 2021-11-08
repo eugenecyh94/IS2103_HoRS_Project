@@ -10,7 +10,8 @@ import java.util.List;
 import javax.ejb.Remote;
 import util.enumeration.BedSizeEnum;
 import util.enumeration.RoomAmenitiesEnum;
-import util.exception.RoomCannotBeDeletedException;
+import util.exception.RoomTypeCannotBeDeletedException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 /**
  *
@@ -19,14 +20,16 @@ import util.exception.RoomCannotBeDeletedException;
 @Remote
 public interface RoomTypeEntitySessionBeanRemote {
 
-    public RoomTypeEntity createNewRoomType(String name, String description, int capacity, int totalRooms, String roomSize, BedSizeEnum bedsize, List<RoomAmenitiesEnum> roomAmenities);
+    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType);
 
-    public RoomTypeEntity retrieveRoomType(String name);
+    public RoomTypeEntity retrieveRoomTypeById(Long roomTypeId)throws RoomTypeCannotBeFoundException;
 
-    public void updateRoomTypeDetails(String name, String newName, String description, int capacity, int totalRooms, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities);
+    public RoomTypeEntity retrieveRoomTypeByName(String name) throws RoomTypeCannotBeFoundException;
 
-    public void deleteRoomType(String name) throws RoomCannotBeDeletedException;
+    public void updateRoomTypeDetails(RoomTypeEntity updatedRoomType);
+
+    public void deleteRoomTypebyID(Long roomTypeID) throws RoomTypeCannotBeDeletedException;
 
     public List<RoomTypeEntity> retrieveAllRoomTypes();
-    
+
 }

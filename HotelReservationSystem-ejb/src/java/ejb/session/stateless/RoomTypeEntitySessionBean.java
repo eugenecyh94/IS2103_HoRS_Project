@@ -1,37 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb.session.stateless;
 
+import entity.ReservationEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import util.enumeration.BedSizeEnum;
-import util.enumeration.RoomAmenitiesEnum;
-import util.exception.RoomCannotBeDeletedException;
+import util.exception.RoomTypeCannotBeDeletedException;
+import util.exception.RoomTypeCannotBeFoundException;
 
-/**
- *
- * @author Eugene Chua
- */
 @Stateless
 public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemote, RoomTypeEntitySessionBeanLocal {
-    
+
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
-    
+
     public RoomTypeEntitySessionBean() {
     }
 
     @Override
-    public RoomTypeEntity createNewRoomType(String name, String description, int capacity, int totalRooms, String roomSize, BedSizeEnum bedsize, List<RoomAmenitiesEnum> roomAmenities) {
-
-        RoomTypeEntity newRoomType = new RoomTypeEntity(name, description, capacity, totalRooms, roomSize, bedsize, roomAmenities);
+    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType) {
 
         em.persist(newRoomType);
         em.flush();
@@ -41,63 +31,76 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     }
 
     @Override
-    public RoomTypeEntity retrieveRoomType(String name) {
+    public RoomTypeEntity retrieveRoomTypeById(Long roomTypeId) throws RoomTypeCannotBeFoundException {
 
-        Query query = em.createQuery("SELECT rt from RoomTypeEntity rt WHERE rt.name = " + "'" + name + "'");
-        RoomTypeEntity roomType = (RoomTypeEntity) query.getSingleResult();
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
+
+        if (roomType == null) {
+            throw new RoomTypeCannotBeFoundException("Room Type does not exist for the entered ID!");
+        }
+
+        roomType.getRoomAmenities().size();
+        roomType.getRooms().size();
+        roomType.getReservations().size();
 
         return roomType;
 
     }
 
     @Override
-    public void updateRoomTypeDetails(String name, String newName, String description, int capacity, int totalRooms, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities) {
+    public RoomTypeEntity retrieveRoomTypeByName(String name) throws RoomTypeCannotBeFoundException {
 
         Query query = em.createQuery("SELECT rt from RoomTypeEntity rt WHERE rt.name = " + "'" + name + "'");
-        RoomTypeEntity roomType = (RoomTypeEntity) query.getSingleResult();
+        try {
+            RoomTypeEntity roomType = (RoomTypeEntity) query.getSingleResult();
+            roomType.getRoomAmenities().size();
+            roomType.getRooms().size();
+            roomType.getReservations().size();
+            return roomType;
+        } catch (NoResultException ex) {
+            throw new RoomTypeCannotBeFoundException("Room Type does not exist for the entered name!");
+        }
 
-        //assumption is on the menu options will be printed for user to edit whatever attribute they want
-        //any attribute that is not edited will be returned as original attribute result.
-        roomType.setName(newName);
-        roomType.setDescription(description);
-        roomType.setCapacity(capacity);
-        roomType.setTotalRooms(totalRooms);
-        roomType.setRoomSize(roomSize);
-        roomType.setBedSize(bedSize);
-        roomType.setRoomAmenities(roomAmenities);
     }
 
     @Override
-    public void deleteRoomType(String name) throws RoomCannotBeDeletedException {
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.name = " + "'" + name + "'");
-        RoomTypeEntity roomType = (RoomTypeEntity) query.getSingleResult();
+    public void updateRoomTypeDetails(RoomTypeEntity updatedRoomType) {
 
-        //Assumption is if room type is being used by room that means room rate is also used
-        //if room type is not used, room rate will be have room type as well therefore no need to loop and disassociate room type from room rate
-        //to check again depending on use case
-        if (roomType.getRooms().isEmpty()) {
-            em.remove(roomType);
-        } else {
-            roomType.setRoomEnabled(false);
-            throw new RoomCannotBeDeletedException("Room type is being used by other rooms, cannot be deleted!\nRoom type is disabled.");
+        em.merge(updatedRoomType);
+
+        //assumption is on the menu options will be printed for user to edit whatever attribute they want
+        //any attribute that is not edited will be returned as original attribute result.
+    }
+
+    @Override
+    public void deleteRoomTypebyID(Long roomTypeID) throws RoomTypeCannotBeDeletedException {
+        RoomTypeEntity roomTypeToBeDeleted = em.find(RoomTypeEntity.class, roomTypeID);
+        Query query = em.createQuery("SELECT rs FROM ReservationEntity rs");
+        List<ReservationEntity> reservations = query.getResultList();
+
+        for (ReservationEntity r : reservations) {
+            if (roomTypeToBeDeleted.equals(r.getRoomType())) {
+                r.getRoomType().setRoomTypeEnabled(false);
+                throw new RoomTypeCannotBeDeletedException("Room type cannot be deleted! Room type is disabled.");
+            } else {
+                em.remove(roomTypeToBeDeleted);
+            }
         }
     }
 
     @Override
     public List<RoomTypeEntity> retrieveAllRoomTypes() {
 
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt");
+        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.roomTypeEnabled = TRUE");
         List<RoomTypeEntity> roomTypes = query.getResultList();
 
-        //assumption is to display just room type name, capacity, size, total rooms
         for (RoomTypeEntity rt : roomTypes) {
-            rt.getName();
-            rt.getCapacity();
-            rt.getRoomSize();
-            rt.getTotalRooms();
+            rt.getRoomAmenities().size();
+            rt.getRooms().size();
+            rt.getReservations().size();
         }
 
         return roomTypes;
     }
-   
+
 }

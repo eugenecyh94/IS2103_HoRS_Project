@@ -1,0 +1,127 @@
+package entity;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import util.enumeration.RateTypeEnum;
+
+@Entity
+public class RoomRateEntity implements Serializable {
+
+    //attributes
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long roomRateId;
+
+    public Long getRoomRateId() {
+        return roomRateId;
+    }
+    @Column(length = 24, nullable = false)
+    private String rateName;
+    @Column(nullable = false)
+    private RateTypeEnum rateType;
+    @Column(nullable = false)
+    private BigDecimal rate;
+    private Date startDate;
+    private Date endDate;
+    @Column(nullable = false)
+    private RoomTypeEntity roomType;
+
+    //constructors
+    public RoomRateEntity() {    
+    }
+
+    public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, Date startDate, Date endDate, RoomTypeEntity roomType) {
+        this.rateName = rateName;
+        this.rateType = rateType;
+        this.rate = rate;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.roomType = roomType;
+    }
+
+    //methods
+    public void setRoomRateId(Long roomRateId) {
+        this.roomRateId = roomRateId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (roomRateId != null ? roomRateId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the roomRateId fields are not set
+        if (!(object instanceof RoomRateEntity)) {
+            return false;
+        }
+        RoomRateEntity other = (RoomRateEntity) object;
+        if ((this.roomRateId == null && other.roomRateId != null) || (this.roomRateId != null && !this.roomRateId.equals(other.roomRateId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.RoomRateEntity[ id=" + roomRateId + " ]";
+    }
+
+    public String getRateName() {
+        return rateName;
+    }
+
+    public void setRateName(String rateName) {
+        this.rateName = rateName;
+    }
+
+    public RateTypeEnum getRateType() {
+        return rateType;
+    }
+
+    public void setRateType(RateTypeEnum rateType) {
+        this.rateType = rateType;
+    }
+
+    public BigDecimal getRate() {
+        return rate;
+    }
+
+    public void setRate(BigDecimal rate) {
+        this.rate = rate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public RoomTypeEntity getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomTypeEntity roomType) {
+        this.roomType = roomType;
+    }
+
+}

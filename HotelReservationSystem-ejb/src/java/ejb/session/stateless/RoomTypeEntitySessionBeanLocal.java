@@ -5,7 +5,11 @@
  */
 package ejb.session.stateless;
 
+import entity.RoomTypeEntity;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.RoomTypeCannotBeDeletedException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 /**
  *
@@ -13,5 +17,17 @@ import javax.ejb.Local;
  */
 @Local
 public interface RoomTypeEntitySessionBeanLocal {
+    
+    public RoomTypeEntity createNewRoomType(RoomTypeEntity newRoomType);
+
+    public RoomTypeEntity retrieveRoomTypeById(Long roomTypeId) throws RoomTypeCannotBeFoundException;
+
+    public RoomTypeEntity retrieveRoomTypeByName(String name) throws RoomTypeCannotBeFoundException;
+
+    public void updateRoomTypeDetails(RoomTypeEntity updatedRoomType);
+
+    public void deleteRoomTypebyID(Long roomTypeID) throws RoomTypeCannotBeDeletedException;
+
+    public List<RoomTypeEntity> retrieveAllRoomTypes();
     
 }

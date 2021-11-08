@@ -1,8 +1,16 @@
 package ejb.session.stateless;
 
+import entity.ReservationEntity;
+import entity.RoomEntity;
+import entity.RoomTypeEntity;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import util.exception.RoomTypeCannotBeDeletedException;
+import util.exception.RoomCannotBeFoundException;
 
 @Stateless
 public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomEntitySessionBeanLocal {
@@ -10,4 +18,110 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
 
+    public RoomEntitySessionBean() {
+    }
+
+    @Override // to amend to only input roomtype object for para later
+    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeID) {
+
+        RoomEntity newRoom = room;
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeID);
+
+        newRoom.setRoomType(roomType);
+        roomType.getRooms().add(newRoom);
+
+        em.persist(newRoom);
+        em.flush();
+
+        return newRoom;
+
+    }
+
+    @Override
+    public RoomEntity retrieveRoomById(Long roomId) throws RoomCannotBeFoundException {
+
+        RoomEntity room = em.find(RoomEntity.class, roomId);
+
+        if (room == null) {
+            throw new RoomCannotBeFoundException("Room does not exist for the entered ID!");
+        }
+
+        room.getReservations().size();
+
+        return room;
+    }
+
+    @Override
+    public RoomEntity retrieveRoomByRoomNumber(String roomNumber) throws RoomCannotBeFoundException {
+
+        Query query = em.createQuery("SELECT r from RoomEntity r WHERE r.roomNumber =: inRoomNumer");
+        query.setParameter("inRoomNumber", roomNumber);
+        try {
+            RoomEntity room = (RoomEntity) query.getSingleResult();
+            room.getReservations().size();
+            return room;
+        } catch (NoResultException ex) {
+            throw new RoomCannotBeFoundException("Room does not exist for the entered Room Number!");
+        }
+
+    }
+
+    @Override
+    public void updateRoomDetails(RoomEntity updatedRoom) {
+
+        em.merge(updatedRoom);
+
+    }
+
+    @Override
+    public void deleteRoombyID(Long roomID) throws RoomCannotBeFoundException {
+
+        RoomEntity roomToBeDeleted = em.find(RoomEntity.class, roomID);
+
+        if (roomToBeDeleted == null) {
+            throw new RoomCannotBeFoundException("Room does not exist for the entered Room Number");
+        }
+
+        RoomTypeEntity roomType = roomToBeDeleted.getRoomType();
+        roomType.getRooms().remove(roomToBeDeleted);
+
+        em.remove(roomToBeDeleted);
+    }
+
+    @Override
+    public List<RoomEntity> retrieveAllRooms() {
+
+        Query query = em.createQuery("SELECT r FROM RoomEntity r");
+        List<RoomEntity> rooms = query.getResultList();
+
+        for (RoomEntity r : rooms) {
+            r.getRoomNumber();
+            r.getRoomType();
+            r.getReservations().size();
+            r.isRoomStatusAvail();
+        }
+
+        return rooms;
+    }
+
+    @Override
+    public List<RoomEntity> retrieveAllRoomsByRoomType(Long roomTypeId) throws RoomCannotBeFoundException {
+
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
+
+        Query query = em.createQuery("SELECT r from RoomEntity r WHERE r.RoomType := inRoomType");
+        query.setParameter("inRoomType", roomType);
+        List<RoomEntity> rooms = query.getResultList();
+
+        if (rooms.isEmpty()) {
+            throw new RoomCannotBeFoundException("Rooms does not exist for Room Type ID entered!");
+        }
+
+        for (RoomEntity r : rooms) {
+            r.getReservations().size();
+        }
+
+        return rooms;
+
+    }
 }

@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,15 +28,20 @@ public class RoomEntity implements Serializable {
     private RoomTypeEntity roomType;
     @Column(length = 4, nullable = false, unique = true)
     private String roomNumber;
-    private boolean roomStatus;
-    //private boolean roomReserved; reference from Visual Para v2
+    @Column(nullable = false)
+    private boolean roomStatusAvail;
+    @Column(nullable = false)
     private boolean roomAllocated;
+    @Column(nullable = false)
     private boolean disabled; //for deletion of room , false = default, not deleted
     
+    private List<ReservationEntity> reservations;
+    
     public RoomEntity() {
-        this.roomStatus = true; // true = available
+        this.roomStatusAvail = true; // true = available
         this.roomAllocated = false; // false = not allocated
         this.disabled = false;
+        this.reservations = new ArrayList<>();
     }
 
     public RoomEntity(RoomTypeEntity roomType, String roomNumber) {
@@ -97,12 +99,12 @@ public class RoomEntity implements Serializable {
         this.roomNumber = roomNumber;
     }
 
-    public boolean isRoomStatus() {
-        return roomStatus;
+    public boolean isRoomStatusAvail() {
+        return roomStatusAvail;
     }
 
-    public void setRoomStatus(boolean roomStatus) {
-        this.roomStatus = roomStatus;
+    public void setRoomStatusAvail(boolean roomStatusAvail) {
+        this.roomStatusAvail = roomStatusAvail;
     }
 
     public boolean isRoomAllocated() {
@@ -119,6 +121,14 @@ public class RoomEntity implements Serializable {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public List<ReservationEntity> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationEntity> reservations) {
+        this.reservations = reservations;
     }
     
 }

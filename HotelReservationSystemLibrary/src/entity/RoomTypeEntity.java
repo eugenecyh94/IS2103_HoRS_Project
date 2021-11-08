@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import util.enumeration.BedSizeEnum;
 import util.enumeration.RoomAmenitiesEnum;
@@ -26,10 +25,7 @@ public class RoomTypeEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roomTypeId;
-    @Column(length = 20, nullable = false)
-    //5 Suits at start
-    //Deluxe, Premier, Family RoomEntity
-    //Junior, Grand Suite
+    @Column(unique = true, length = 20, nullable = false)
     private String name;
     @Column(length = 255)
     private String description;
