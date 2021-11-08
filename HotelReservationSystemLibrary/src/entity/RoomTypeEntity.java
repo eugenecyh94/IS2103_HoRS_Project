@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
@@ -40,8 +35,6 @@ public class RoomTypeEntity implements Serializable {
     private String description;
     @Column(nullable = false)
     private int capacity;
-    @Column(nullable = false)
-    private int totalRooms;
     @Column(length = 4, nullable = false)
     private String roomSize; //sqm - to look into using string or int or enum
     @Column(nullable = false)
@@ -49,37 +42,32 @@ public class RoomTypeEntity implements Serializable {
     @Column(nullable = false)
     private List<RoomAmenitiesEnum> roomAmenities;
     @Column(nullable = false)
-    private boolean roomEnabled;
-    
+    private boolean roomTypeEnabled;
+
     @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
     private List<RoomEntity> rooms;
-    
-    @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
-    private List<DateEntity> dates;
-    
+
     @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
     private List<ReservationEntity> reservations;
 
 //constructors
     public RoomTypeEntity() {
         this.rooms = new ArrayList<>();
-        this.dates = new ArrayList<>();
         this.reservations = new ArrayList<>();
-        this.roomEnabled = true;
+        this.roomTypeEnabled = true;
     }
 
-    public RoomTypeEntity(String name, String description, int capacity, int totalRooms, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities) {
+    public RoomTypeEntity(String name, String description, int capacity, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities) {
         this();
         this.name = name;
         this.description = description;
         this.capacity = capacity;
-        this.totalRooms = totalRooms;
         this.roomSize = roomSize;
         this.bedSize = bedSize;
         this.roomAmenities = roomAmenities;
     }
-    
- //methods
+
+    //methods
     public Long getRoomTypeId() {
         return roomTypeId;
     }
@@ -137,14 +125,6 @@ public class RoomTypeEntity implements Serializable {
         this.capacity = capacity;
     }
 
-    public int getTotalRooms() {
-        return totalRooms;
-    }
-
-    public void setTotalRooms(int totalRooms) {
-        this.totalRooms = totalRooms;
-    }
-
     public String getRoomSize() {
         return roomSize;
     }
@@ -169,12 +149,12 @@ public class RoomTypeEntity implements Serializable {
         this.roomAmenities = roomAmenities;
     }
 
-    public boolean isRoomEnabled() {
-        return roomEnabled;
+    public boolean isRoomTypeEnabled() {
+        return roomTypeEnabled;
     }
 
-    public void setRoomEnabled(boolean roomEnabled) {
-        this.roomEnabled = roomEnabled;
+    public void setRoomTypeEnabled(boolean roomTypeEnabled) {
+        this.roomTypeEnabled = roomTypeEnabled;
     }
 
     public List<RoomEntity> getRooms() {
@@ -185,14 +165,6 @@ public class RoomTypeEntity implements Serializable {
         this.rooms = rooms;
     }
 
-    public List<DateEntity> getDates() {
-        return dates;
-    }
-
-    public void setDates(List<DateEntity> dates) {
-        this.dates = dates;
-    }
-
     public List<ReservationEntity> getReservations() {
         return reservations;
     }
@@ -200,5 +172,5 @@ public class RoomTypeEntity implements Serializable {
     public void setReservations(List<ReservationEntity> reservations) {
         this.reservations = reservations;
     }
-    
+
 }
