@@ -30,7 +30,7 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     }
 
     @Override
-    public RoomRateEntity RetrieveRoomRateById(Long roomRateId) {
+    public RoomRateEntity retrieveRoomRateById(Long roomRateId) {
 
         RoomRateEntity roomRate = em.find(RoomRateEntity.class, roomRateId);
 
@@ -39,7 +39,7 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     }
 
     @Override
-    public List<RoomRateEntity> RetrieveRoomRateByRoomType(Long roomTypeId) throws RoomCannotBeFoundException {
+    public List<RoomRateEntity> retrieveRoomRateByRoomType(Long roomTypeId) throws RoomCannotBeFoundException {
 
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
 

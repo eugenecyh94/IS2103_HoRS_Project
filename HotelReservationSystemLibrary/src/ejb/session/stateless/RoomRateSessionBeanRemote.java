@@ -19,9 +19,9 @@ public interface RoomRateSessionBeanRemote {
 
     public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate);
 
-    public RoomRateEntity RetrieveRoomRateById(Long roomRateId);
+    public RoomRateEntity retrieveRoomRateById(Long roomRateId);
 
-    public List<RoomRateEntity> RetrieveRoomRateByRoomType(Long roomTypeId) throws RoomCannotBeFoundException;
+    public List<RoomRateEntity> retrieveRoomRateByRoomType(Long roomTypeId) throws RoomCannotBeFoundException;
 
     public void updateRoomRate(RoomRateEntity roomRate);
 
