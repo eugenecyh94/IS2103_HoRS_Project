@@ -5,18 +5,13 @@ import entity.EmployeeEntity;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
 import util.exception.InvalidAccessRightException;
-import ejb.session.stateless.RoomEntitySessionBeanRemote;
 import ejb.session.stateless.RoomRateSessionBeanRemote;
 import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import util.enumeration.BedSizeEnum;
 import util.enumeration.RateTypeEnum;
 import util.exception.RoomTypeCannotBeFoundException;
 

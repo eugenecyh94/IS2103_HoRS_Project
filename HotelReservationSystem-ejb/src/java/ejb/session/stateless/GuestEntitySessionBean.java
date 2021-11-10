@@ -9,8 +9,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import util.enumeration.GuestNotFoundException;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.ReservationCannotBeFoundException;
 
 @Stateless
 public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, GuestEntitySessionBeanLocal {
@@ -18,17 +19,18 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
 
+    private ReservationEntitySessionBeanLocal reservationEntitySessionBeanLocal;
     public GuestEntitySessionBean() {
     }
 
        
     @Override
-    public Long registerAsGuest (GuestEntity newGuestEntity)
+    public GuestEntity registerAsGuest (GuestEntity newGuestEntity)
     {
         em.persist(newGuestEntity);
         em.flush();
         
-        return newGuestEntity.getGuestId();
+        return newGuestEntity;
     }
     
     @Override
@@ -84,13 +86,14 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
         }
     }
     
-    public List<ReservationEntity> viewAllReservations(Long guestId) {
-        
-        
+    public List<ReservationEntity> viewAllReservations(Long guestId) throws GuestNotFoundException {
+        List<ReservationEntity> reservationEntities = reservationEntitySessionBeanLocal.retrieveAllReservationsByGuestId(guestId);
+        return reservationEntities;
     }
     
-    public ReservationEntity viewMyReservation (Long guesId, Long bookingId) {
-        
+    public ReservationEntity viewMyReservation (Long bookingId) throws ReservationCannotBeFoundException {
+        ReservationEntity reservationEntity = reservationEntitySessionBeanLocal.retrieveReservationById(bookingId);
+        return reservationEntity;
     }
     
     

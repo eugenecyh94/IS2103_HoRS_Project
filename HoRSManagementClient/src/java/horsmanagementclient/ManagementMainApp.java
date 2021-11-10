@@ -62,7 +62,7 @@ public class ManagementMainApp {
                         salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
                         operationsManagementModule = new OperationsManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
-                        frontOfficeModule = new FrontOfficeModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
+                        frontOfficeModule = new FrontOfficeModule(currentEmployeeEntity);
                         menuMain();
                     }
                     catch(InvalidLoginCredentialException ex) 

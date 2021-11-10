@@ -23,7 +23,7 @@ public interface ReservationEntitySessionBeanRemote {
 
     public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationCannotBeFoundException;
 
-    public List<ReservationEntity> retrieveAllReservationsByGuestId(String guestId) throws GuestNotFoundException;
+    public List<ReservationEntity> retrieveAllReservationsByGuestId(Long guestId) throws GuestNotFoundException;
 
     public List<ReservationEntity> retrieveAllReservationsByDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate);
     

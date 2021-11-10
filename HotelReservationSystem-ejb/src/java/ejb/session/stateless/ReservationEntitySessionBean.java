@@ -49,7 +49,7 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
 
     //how about retrieving reservation detail by passport number and guest id?
     @Override
-    public List<ReservationEntity> retrieveAllReservationsByGuestId(String guestId) throws GuestNotFoundException {
+    public List<ReservationEntity> retrieveAllReservationsByGuestId(Long guestId) throws GuestNotFoundException {
 
         GuestEntity guest = em.find(GuestEntity.class, guestId);
 

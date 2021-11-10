@@ -10,9 +10,7 @@ import entity.ReservationEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
 import util.exception.InvalidAccessRightException;
@@ -20,8 +18,7 @@ import util.exception.NoRoomTypeAvailableException;
 import util.exception.RoomTypeCannotBeFoundException;
 
 public class FrontOfficeModule {
-
-    private EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote;
+    
     private ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote;
     private SearchSessionBeanRemote searchSessionBeanRemote;
     private RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote;
@@ -32,8 +29,7 @@ public class FrontOfficeModule {
     public FrontOfficeModule() {
     }
 
-    public FrontOfficeModule(EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity) {
-        this.employeeEntitySessionBeanRemote = employeeEntitySessionBeanRemote;
+    public FrontOfficeModule(EmployeeEntity currentEmployeeEntity) {
         this.currentEmployeeEntity = currentEmployeeEntity;
     }
 
@@ -123,7 +119,7 @@ public class FrontOfficeModule {
     private void doWalkInReserveRoom() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("*** Merlion Management System :: Front Office Module :: Walk-In Search Room  ***\n");
+        System.out.println("*** Merlion Management System :: Front Office Module :: Walk-In Reserve Room  ***\n");
 
         System.out.println("Enter the check in Date (dd/mm/yyyy): ");
         String sDate = sc.nextLine().trim();
@@ -155,7 +151,7 @@ public class FrontOfficeModule {
                 System.out.printf("%2s%20s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
             }
 
-            System.out.println("Enter the # of the number you wish to book: ");
+            System.out.println("Enter the # of the Room Type you wish to book: ");
             int input = sc.nextInt();
             while (true) {
                 if (input > 0 && input < j) {
