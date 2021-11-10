@@ -8,7 +8,7 @@ import util.exception.RoomCannotBeFoundException;
 @Local
 public interface RoomEntitySessionBeanLocal {
 
-    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeID);
+    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeId);
 
     public RoomEntity retrieveRoomById(Long roomId) throws RoomCannotBeFoundException;
 

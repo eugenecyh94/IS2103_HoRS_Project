@@ -296,7 +296,7 @@ public class OperationsManagementModule {
         Long roomTypeId;
 
         while (true) {
-            System.out.println("Enter RoomType Id: ");
+            System.out.println("Enter Room Type ID: ");
             roomTypeId = sc.nextLong();
             try {
                 roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(roomTypeId);
