@@ -12,6 +12,8 @@ import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import util.enumeration.BedSizeEnum;
@@ -25,6 +27,8 @@ public class SalesManagementModule {
     private RoomRateSessionBeanRemote roomRateSessionBeanRemote;
 
     private EmployeeEntity currentEmployeeEntity;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public SalesManagementModule() {
     }
@@ -78,7 +82,7 @@ public class SalesManagementModule {
 
     private void doCreateNewRoomRate() {
         System.out.println("*** Merlion Management System :: Sales Management :: Create Room Rate ***\n");
-        
+
         RoomRateEntity roomRateEntity = new RoomRateEntity();
         Scanner sc = new Scanner(System.in);
 
@@ -126,16 +130,14 @@ public class SalesManagementModule {
 
         if (roomRateEntity.getRateType().equals(RateTypeEnum.PEAK) || roomRateEntity.getRateType().equals(RateTypeEnum.PROMOTION)) {
             while (true) {
-                try {
-                    System.out.println("Enter Start Date (dd/MM/yyyy): ");
-                    String sDate = sc.nextLine().trim();
-                    roomRateEntity.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(sDate));
-                    System.out.println("Enter End Date (dd/MM/yyyy): ");
-                    sDate = sc.nextLine().trim();
-                    roomRateEntity.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(sDate));
-                } catch (ParseException ex) {
-                    System.out.println("Invalid Date Try Again!");
-                }
+
+                System.out.println("Enter Start Date (dd/MM/yyyy): ");
+                String sDate = sc.nextLine().trim();
+                roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
+                System.out.println("Enter End Date (dd/MM/yyyy): ");
+                sDate = sc.nextLine().trim();
+                roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
+
             }
         }
 
@@ -264,16 +266,13 @@ public class SalesManagementModule {
             System.out.println("Change Room Rate Dates? y/n");
             if (sc.nextLine().trim().equals('y')) {
                 while (true) {
-                    try {
-                        System.out.println("Enter Start Date (dd/MM/yyyy): ");
-                        String sDate = sc.nextLine().trim();
-                        roomRateEntity.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse(sDate));
-                        System.out.println("Enter End Date (dd/MM/yyyy): ");
-                        sDate = sc.nextLine().trim();
-                        roomRateEntity.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse(sDate));
-                    } catch (ParseException ex) {
-                        System.out.println("Invalid Date Try Again!");
-                    }
+
+                    System.out.println("Enter Start Date (dd/MM/yyyy): ");
+                    String sDate = sc.nextLine().trim();
+                    roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
+                    System.out.println("Enter End Date (dd/MM/yyyy): ");
+                    sDate = sc.nextLine().trim();
+                    roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
                 }
             }
         }
