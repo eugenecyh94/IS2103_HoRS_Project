@@ -1,6 +1,5 @@
 package ejb.session.stateless;
 
-import entity.ReservationEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
@@ -9,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import util.exception.RoomTypeCannotBeDeletedException;
 import util.exception.RoomCannotBeFoundException;
 
 @Stateless
@@ -21,11 +19,11 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     public RoomEntitySessionBean() {
     }
 
-    @Override // to amend to only input roomtype object for para later
-    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeID) {
+    @Override //commmented methods are in case we want to only associate the room ty[e with rooms in container
+    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeId) {
 
         RoomEntity newRoom = room;
-        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeID);
+        RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
 
         newRoom.setRoomType(roomType);
         roomType.getRooms().add(newRoom);
@@ -43,7 +41,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         RoomEntity room = em.find(RoomEntity.class, roomId);
 
         if (room == null) {
-            throw new RoomCannotBeFoundException("Room does not exist for the entered ID!");
+            throw new RoomCannotBeFoundException("Room does not exists for the entered ID!");
         }
 
         room.getReservations().size();
@@ -61,7 +59,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             room.getReservations().size();
             return room;
         } catch (NoResultException ex) {
-            throw new RoomCannotBeFoundException("Room does not exist for the entered Room Number!");
+            throw new RoomCannotBeFoundException("Room does not exists for the entered Room Number!");
         }
 
     }
@@ -79,7 +77,7 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         RoomEntity roomToBeDeleted = em.find(RoomEntity.class, roomID);
 
         if (roomToBeDeleted == null) {
-            throw new RoomCannotBeFoundException("Room does not exist for the entered Room Number");
+            throw new RoomCannotBeFoundException("Room does not exists for the entered Room Number");
         }
 
         RoomTypeEntity roomType = roomToBeDeleted.getRoomType();

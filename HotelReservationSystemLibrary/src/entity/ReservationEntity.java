@@ -7,8 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,11 +30,9 @@ public class ReservationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
     @Column(nullable = false)
-    private Date checkInDate;
+    private LocalDate checkInDate;
     @Column(nullable = false)
-    private Date checkOutDate;
-    @Column(nullable = false)
-    private int numOfDays;
+    private LocalDate checkOutDate;
     @Column(nullable = false)
     private int numOfAdults;
     @Column(nullable = false)
@@ -55,10 +52,9 @@ public class ReservationEntity implements Serializable {
     public ReservationEntity() {
     }
 
-    public ReservationEntity(Date checkInDate, Date checkOutDate, int numOfAdults, int numOfRooms, RoomTypeEntity roomType, GuestEntity guest) {
+    public ReservationEntity(LocalDate checkInDate, LocalDate checkOutDate, int numOfAdults, int numOfRooms, RoomTypeEntity roomType, GuestEntity guest) {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
-        this.numOfDays = (int)(TimeUnit.MILLISECONDS.toDays(checkOutDate.getTime() - checkInDate.getTime()));
         this.numOfAdults = numOfAdults;
         this.numOfRooms = numOfRooms;
         this.roomType = roomType;
@@ -99,28 +95,20 @@ public class ReservationEntity implements Serializable {
         return "entity.ReservationEntity[ id=" + reservationId + " ]";
     }
 
-    public Date getCheckInDate() {
+    public LocalDate getCheckInDate() {
         return checkInDate;
     }
 
-    public void setCheckInDate(Date checkInDate) {
+    public void setCheckInDate(LocalDate checkInDate) {
         this.checkInDate = checkInDate;
     }
 
-    public Date getCheckOutDate() {
+    public LocalDate getCheckOutDate() {
         return checkOutDate;
     }
 
-    public void setCheckOutDate(Date checkOutDate) {
+    public void setCheckOutDate(LocalDate checkOutDate) {
         this.checkOutDate = checkOutDate;
-    }
-
-    public int getNumOfDays() {
-        return numOfDays;
-    }
-
-    public void setNumOfDays(int numOfDays) {
-        this.numOfDays = numOfDays;
     }
 
     public int getNumOfAdults() {

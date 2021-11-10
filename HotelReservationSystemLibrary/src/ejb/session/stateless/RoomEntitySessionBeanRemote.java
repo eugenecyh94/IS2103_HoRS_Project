@@ -17,7 +17,7 @@ import util.exception.RoomCannotBeFoundException;
 @Remote
 public interface RoomEntitySessionBeanRemote {
 
-    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeID);
+    public RoomEntity createNewRoom(RoomEntity room, Long roomTypeId);
 
     public RoomEntity retrieveRoomById(Long roomId) throws RoomCannotBeFoundException;
 

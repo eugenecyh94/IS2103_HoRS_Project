@@ -36,7 +36,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
 
         if (roomType == null) {
-            throw new RoomTypeCannotBeFoundException("Room Type does not exist for the entered ID!");
+            throw new RoomTypeCannotBeFoundException("Room Type does not exists for the entered ID!");
         }
 
         roomType.getRoomAmenities().size();
@@ -50,7 +50,8 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @Override
     public RoomTypeEntity retrieveRoomTypeByName(String name) throws RoomTypeCannotBeFoundException {
 
-        Query query = em.createQuery("SELECT rt from RoomTypeEntity rt WHERE rt.name = " + "'" + name + "'");
+        Query query = em.createQuery("SELECT rt from RoomTypeEntity rt WHERE rt.name := inRoomTypeName ");
+        query.setParameter("inRoomTypeName", name);
         try {
             RoomTypeEntity roomType = (RoomTypeEntity) query.getSingleResult();
             roomType.getRoomAmenities().size();
@@ -58,7 +59,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
             roomType.getReservations().size();
             return roomType;
         } catch (NoResultException ex) {
-            throw new RoomTypeCannotBeFoundException("Room Type does not exist for the entered name!");
+            throw new RoomTypeCannotBeFoundException("Room Type does not exists for the entered name!");
         }
 
     }
