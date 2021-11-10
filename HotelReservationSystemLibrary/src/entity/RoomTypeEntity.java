@@ -39,6 +39,8 @@ public class RoomTypeEntity implements Serializable {
     private List<RoomAmenitiesEnum> roomAmenities;
     @Column(nullable = false)
     private boolean roomTypeEnabled;
+    @Column(nullable = false)
+    private int priority;
 
     @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
     private List<RoomEntity> rooms;
