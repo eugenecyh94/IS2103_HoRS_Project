@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,18 +19,16 @@ public class RoomRateEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomRateId;
-
-    public Long getRoomRateId() {
-        return roomRateId;
-    }
     @Column(length = 24, nullable = false)
     private String rateName;
     @Column(nullable = false)
     private RateTypeEnum rateType;
     @Column(nullable = false)
     private BigDecimal rate;
-    private Date startDate;
-    private Date endDate;
+    @Column(nullable = false)
+    private LocalDate startDate;
+    @Column(nullable = false)
+    private LocalDate endDate;
     @Column(nullable = false)
     private RoomTypeEntity roomType;
 
@@ -37,7 +36,7 @@ public class RoomRateEntity implements Serializable {
     public RoomRateEntity() {    
     }
 
-    public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, Date startDate, Date endDate, RoomTypeEntity roomType) {
+    public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, LocalDate startDate, LocalDate endDate, RoomTypeEntity roomType) {
         this.rateName = rateName;
         this.rateType = rateType;
         this.rate = rate;
@@ -47,6 +46,10 @@ public class RoomRateEntity implements Serializable {
     }
 
     //methods
+    public Long getRoomRateId() {
+        return roomRateId;
+    }
+
     public void setRoomRateId(Long roomRateId) {
         this.roomRateId = roomRateId;
     }
@@ -100,19 +103,19 @@ public class RoomRateEntity implements Serializable {
         this.rate = rate;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

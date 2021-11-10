@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.RoomRateEntity;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.RoomCannotBeFoundException;
@@ -20,4 +21,5 @@ public interface RoomRateSessionBeanLocal {
 
     public List<RoomRateEntity> retrieveAllRoomRates();
 
+    public RoomRateEntity calculateDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online);
 }
