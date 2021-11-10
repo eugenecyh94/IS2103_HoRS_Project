@@ -1,19 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb.session.stateless;
 
 import entity.RoomRateEntity;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.RoomCannotBeFoundException;
 
-/**
- *
- * @author Eugene Chua
- */
 @Remote
 public interface RoomRateSessionBeanRemote {
 
@@ -28,5 +20,7 @@ public interface RoomRateSessionBeanRemote {
     public void deleteRoomRate(Long roomRateId);
 
     public List<RoomRateEntity> retrieveAllRoomRates();
+
+    public RoomRateEntity calculateDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online);
     
 }

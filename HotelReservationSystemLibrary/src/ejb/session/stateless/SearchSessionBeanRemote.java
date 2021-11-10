@@ -17,6 +17,8 @@ import util.exception.NoRoomTypeAvailableException;
 @Remote
 public interface SearchSessionBeanRemote {
 
-    public List<String> searchAvailableRoomTypes(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException;
+    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException;
+
+    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException;
     
 }
