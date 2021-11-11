@@ -31,5 +31,6 @@ public interface GuestEntitySessionBeanLocal {
     public ReservationEntity viewMyReservation(Long bookingId) throws ReservationCannotBeFoundException;
 
     public GuestEntity registerAsGuest(GuestEntity newGuestEntity);
-    
+
+    public GuestEntity retrieveGuestByPassportNumber(String passportNumber) throws GuestNotFoundException;
 }

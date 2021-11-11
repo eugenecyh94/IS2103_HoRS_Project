@@ -5,6 +5,7 @@
  */
 package ejb.session.ws;
 
+import ejb.session.stateless.GuestEntitySessionBeanLocal;
 import ejb.session.stateless.PartnerEntitySessionBeanLocal;
 import ejb.session.stateless.ReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
@@ -20,6 +21,7 @@ import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.NoRoomTypeAvailableException;
 import util.exception.PartnerNotFoundException;
@@ -33,6 +35,9 @@ import util.exception.RoomTypeCannotBeFoundException;
 @WebService(serviceName = "PartnerEntityWebService")
 @Stateless()
 public class PartnerEntityWebService {
+
+    @EJB
+    private GuestEntitySessionBeanLocal guestEntitySessionBeanLocal;
 
     @EJB
     private RoomTypeEntitySessionBeanLocal roomTypeEntitySessionBeanLocal;
@@ -54,6 +59,8 @@ public class PartnerEntityWebService {
         return partnerEntity;
     }
 
+    @WebMethod(operationName = "retrieveGuestByPassportNumer")
+    pulic 
     @WebMethod(operationName = "partnerSearchRoom")
     public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException {
         
@@ -65,14 +72,14 @@ public class PartnerEntityWebService {
     }
 
     @WebMethod(operationName = "partnerReserveRoom")
-    public ReservationEntity partnerReserveRoom(@WebParam(name = "reservationEntity") ReservationEntity reservationEntity, @WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate,@WebParam(name = "partnerId") Long partnerId) throws PartnerNotFoundException {
+    public ReservationEntity partnerReserveRoom(@WebParam(name = "reservationEntity") ReservationEntity reservationEntity, @WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate,@WebParam(name = "guestId") Long guestId) throws GuestNotFoundException {
         LocalDate checkInDate = LocalDate.parse(checkinDate, formatter);
         LocalDate checkOutDate = LocalDate.parse(checkoutDate, formatter);
         
         reservationEntity.setCheckInDate(checkInDate);
         reservationEntity.setCheckOutDate(checkOutDate);
         
-        reservationEntity = reservationEntitySessionBeanLocal.createNewPartnerReservation(reservationEntity, partnerId);
+        reservationEntity = reservationEntitySessionBeanLocal.createNewGuestReservation(reservationEntity, guestId);
         return reservationEntity;
     }
 

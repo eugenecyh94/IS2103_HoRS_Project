@@ -50,6 +50,21 @@ public class GuestEntitySessionBean implements GuestEntitySessionBeanRemote, Gue
     
     
     @Override
+    public GuestEntity retrieveGuestByPassportNumber(String passportNumber) throws GuestNotFoundException {
+        Query query = em.createQuery("SELECT s FROM GuestEntity s WHERE s.passportNumber = :inPassportNumber");
+        query.setParameter("inPassportNumber", passportNumber);
+        
+        try
+        {
+            return (GuestEntity)query.getSingleResult();
+        }
+        catch(NoResultException | NonUniqueResultException ex)
+        {
+            throw new GuestNotFoundException("Guest with passport number :  " + passportNumber + " does not exist!");
+        }
+    }
+    
+    @Override
     public GuestEntity retrieveGuestByUsername(String username) throws GuestNotFoundException {
         Query query = em.createQuery("SELECT s FROM GuestEntity s WHERE s.username = :inUsername");
         query.setParameter("inUsername", username);

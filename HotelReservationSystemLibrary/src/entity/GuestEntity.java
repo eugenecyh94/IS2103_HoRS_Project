@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +45,7 @@ public class GuestEntity implements Serializable {
     @Column(nullable = false)
     private boolean registered;
     
-    @OneToMany(mappedBy = "guest")
+    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY)
     private List<ReservationEntity> reservations;
 
 //constructors

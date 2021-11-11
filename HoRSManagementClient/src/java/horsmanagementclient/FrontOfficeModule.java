@@ -18,7 +18,7 @@ import util.exception.NoRoomTypeAvailableException;
 import util.exception.RoomTypeCannotBeFoundException;
 
 public class FrontOfficeModule {
-    
+
     private ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote;
     private SearchSessionBeanRemote searchSessionBeanRemote;
     private RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote;
@@ -172,11 +172,11 @@ public class FrontOfficeModule {
                     System.out.println("The number of Adults has to be greater than 0!");
                 }
             }
-            
-            
-            
+
             GuestEntity guestEntity = new GuestEntity();
 
+            //get passport and try to retrieve user
+            //if guest exisit in system use it, else 
             System.out.println("Enter First Name");
             guestEntity.setFirstName(sc.nextLine().trim());
             System.out.println("Enter Last Name");
@@ -187,12 +187,12 @@ public class FrontOfficeModule {
             guestEntity.setEmail(sc.nextLine().trim());
             System.out.println("Enter mobile number");
             guestEntity.setMobileNumber(sc.nextLine().trim());
-            
+
             ReservationEntity reservationEntity = new ReservationEntity(checkinDate, checkoutDate, numAdults, numRooms, roomTypeEntity, guestEntity);
-           
+
             reservationEntity = reservationEntitySessionBeanRemote.createNewGuestReservation(reservationEntity, guestEntity.getGuestId());
             System.out.println("Reservation Created Successfully: Reservation ID: " + reservationEntity.getReservationId());
-            
+
         } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException | GuestNotFoundException ex) {
             System.out.println("Error occured: " + ex.getMessage());
         }
@@ -204,8 +204,7 @@ public class FrontOfficeModule {
 
         System.out.println("Enter the Booking ID: ");
         Long bookingId = sc.nextLong();
-        
-        
+
         System.out.println("Checked In Successfully: Room number for your booking is: ");
     }
 
