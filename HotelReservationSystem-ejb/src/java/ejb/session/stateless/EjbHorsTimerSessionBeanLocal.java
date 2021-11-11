@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import java.time.LocalDate;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +14,10 @@ import javax.ejb.Local;
  */
 @Local
 public interface EjbHorsTimerSessionBeanLocal {
-    
+
+    public void automatedRoomAllocation();
+
+    public void manualRoomAllocation(LocalDate date);
+
+    public void deleteExceptionReport(Long exceptionReportId);
 }
