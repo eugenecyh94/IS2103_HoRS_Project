@@ -1,5 +1,6 @@
 package horsmanagementclient;
 
+import ejb.session.stateless.GuestEntitySessionBeanRemote;
 import ejb.session.stateless.ReservationEntitySessionBeanRemote;
 import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
 import ejb.session.stateless.SearchSessionBeanRemote;
@@ -22,6 +23,7 @@ public class FrontOfficeModule {
     private ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote;
     private SearchSessionBeanRemote searchSessionBeanRemote;
     private RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote;
+    private GuestEntitySessionBeanRemote guestEntitySessionBeanRemote;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private EmployeeEntity currentEmployeeEntity;
@@ -173,20 +175,27 @@ public class FrontOfficeModule {
                 }
             }
 
-            GuestEntity guestEntity = new GuestEntity();
+            GuestEntity guestEntity;
 
-            //get passport and try to retrieve user
-            //if guest exisit in system use it, else 
-            System.out.println("Enter First Name");
-            guestEntity.setFirstName(sc.nextLine().trim());
-            System.out.println("Enter Last Name");
-            guestEntity.setLastName(sc.nextLine().trim());
-            System.out.println("Enter Passport Number");
-            guestEntity.setPassportNumber(sc.nextLine().trim());
-            System.out.println("Enter email");
-            guestEntity.setEmail(sc.nextLine().trim());
-            System.out.println("Enter mobile number");
-            guestEntity.setMobileNumber(sc.nextLine().trim());
+            System.out.println("Enter the Passport number of the guest: ");
+            String passportNumber = sc.nextLine();
+
+            try {
+                guestEntity = guestEntitySessionBeanRemote.retrieveGuestByPassportNumber(passportNumber);
+            } catch (GuestNotFoundException ex) {
+                
+                guestEntity= new GuestEntity();
+                System.out.println("Enter First Name");
+                guestEntity.setFirstName(sc.nextLine().trim());
+                System.out.println("Enter Last Name");
+                guestEntity.setLastName(sc.nextLine().trim());
+                System.out.println("Enter Passport Number");
+                guestEntity.setPassportNumber(sc.nextLine().trim());
+                System.out.println("Enter email");
+                guestEntity.setEmail(sc.nextLine().trim());
+                System.out.println("Enter mobile number");
+                guestEntity.setMobileNumber(sc.nextLine().trim());
+            }
 
             ReservationEntity reservationEntity = new ReservationEntity(checkinDate, checkoutDate, numAdults, numRooms, roomTypeEntity, guestEntity);
 

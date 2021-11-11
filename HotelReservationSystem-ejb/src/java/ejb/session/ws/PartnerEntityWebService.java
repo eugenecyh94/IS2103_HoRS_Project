@@ -60,7 +60,7 @@ public class PartnerEntityWebService {
         return partnerEntity;
     }
 
-    @WebMethod(operationName = "retrieveGuestByPassportNumer")
+    @WebMethod(operationName = "retrieveGuestByPassportNumber")
     public GuestEntity retrieveGuestByPassportNumer(@WebParam(name = "passportNumber") String passportNumber) throws GuestNotFoundException {
         
         GuestEntity guestEntity = guestEntitySessionBeanLocal.retrieveGuestByPassportNumber(passportNumber);

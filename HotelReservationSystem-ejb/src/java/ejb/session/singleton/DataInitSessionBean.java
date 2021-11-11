@@ -34,7 +34,7 @@ public class DataInitSessionBean {
     public void postConstruct() {
         try
         {
-            employeeEntitySessionBeanLocal.retrieveEmployeeByUsername("manager");
+            employeeEntitySessionBeanLocal.retrieveEmployeeByUsername("admin");
         }
         catch(EmployeeNotFoundException ex)
         {
