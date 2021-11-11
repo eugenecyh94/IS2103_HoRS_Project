@@ -44,6 +44,7 @@ public class ReservationEntity implements Serializable {
     private RoomTypeEntity roomType;
     
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private GuestEntity guest;
 
 //construtors

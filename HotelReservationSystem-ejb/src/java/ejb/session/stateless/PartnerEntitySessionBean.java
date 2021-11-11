@@ -97,9 +97,10 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanRemote,
     
     @Override
     public PartnerEntity addParnterReservation(ReservationEntity reservationEntity, Long partnerId) throws PartnerNotFoundException{
-        PartnerEntity partnerEntity = retrievePartnerByPartnerId(partnerId);
         
+        PartnerEntity partnerEntity = retrievePartnerByPartnerId(partnerId);
         partnerEntity.getPartnerReservations().add(reservationEntity);
+        
         return partnerEntity;
     }
 }

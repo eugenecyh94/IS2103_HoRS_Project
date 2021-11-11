@@ -39,23 +39,6 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
         }
 
     }
-    
-    public ReservationEntity createNewPartnerReservation(ReservationEntity reservation, Long partnerId) throws PartnerNotFoundException{
-
-        PartnerEntity partnerEntity = em.find(PartnerEntity.class, partnerId);
-        if (partnerEntity != null) {
-            partnerEntity.getPartnerReservations().add(reservation);
-            em.persist(reservation);
-            em.flush();
-            return reservation;
-        }
-        
-        else{ 
-            throw new PartnerNotFoundException("Partner with the ID Not Found!");
-        }
-
-    }
-
 
     @Override
     public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationCannotBeFoundException {

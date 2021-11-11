@@ -33,5 +33,4 @@ public interface ReservationEntitySessionBeanLocal {
 
     public ReservationEntity createNewGuestReservation(ReservationEntity reservation, Long guestId) throws GuestNotFoundException;
 
-    public ReservationEntity createNewPartnerReservation(ReservationEntity reservation, Long partnerId) throws PartnerNotFoundException;
 }
