@@ -49,7 +49,7 @@ public class DataInitSessionBean {
     public void postConstruct() { 
         try 
         { 
-            employeeEntitySessionBeanLocal.retrieveEmployeeByUsername("admin"); 
+            employeeEntitySessionBeanLocal.retrieveEmployeeByUsername("sysadmin"); 
         } 
         catch(EmployeeNotFoundException ex) 
         { 
@@ -66,8 +66,7 @@ public class DataInitSessionBean {
         RoomTypeEntity deluxeRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Deluxe Room", "Deluxue Room Description", 2, "20sqm" , BedSizeEnum.SINGLE, new ArrayList<RoomAmenitiesEnum>(), "Premier Rooom")); 
         RoomTypeEntity premierRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Premier Room", "Premier Room Description", 2, "22sqm" , BedSizeEnum.SUPERSINGLE, new ArrayList<RoomAmenitiesEnum>(), "Family Room")); 
         RoomTypeEntity familyRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Family Room", "Family Room Description", 4, "24sqm" , BedSizeEnum.QUEEN, new ArrayList<RoomAmenitiesEnum>(), "Junior Suite")); 
-        RoomTypeEntity juniorSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Junior Suite", "Junior Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<RoomAmenitiesEnum>(), "Grande Suite")); 
-        RoomTypeEntity gradeSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Junior Suite", "Junior Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<RoomAmenitiesEnum>(), null)); 
+        RoomTypeEntity gradeSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Junior Suite", "Junior Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<RoomAmenitiesEnum>(), "Premier Room")); 
     } 
         
 }

@@ -136,7 +136,7 @@ public class OperationsManagementModule {
             System.out.println("6: MINIBAR");
             System.out.println("7: LCDTV");
             System.out.println("8: TVSPEAKER");
-            System.err.println("9: Done");
+            System.out.println("9: Done");
 
             Integer amenityInteger = sc.nextInt();
 
@@ -160,11 +160,11 @@ public class OperationsManagementModule {
         Integer response = 0;
 
         System.out.println("*** Merlion Management System :: Operations Management :: View RoomType Details ***\n");
-        System.out.print("Enter RoomType Name> ");
-        String roomTypeName = sc.nextLine().trim();
-
+        System.out.print("Enter RoomType ID ");
+        //String roomTypeName = sc.nextLine().trim();
+        Long roomTypeId = sc.nextLong();
         try {
-            RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeByName(roomTypeName);
+            RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(roomTypeId);
             System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
             System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
             System.out.println("------------------------");
@@ -281,10 +281,10 @@ public class OperationsManagementModule {
             System.out.println("here");
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
         System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
-        roomTypeEntities.forEach(roomTypeEntity -> {
+        /*roomTypeEntities.forEach(roomTypeEntity -> {
             System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
-        });
-        } catch (RoomTypeCannotBeFoundException ex) {
+        });*/
+        } catch (Exception ex) {
             System.out.println("Error occured: " + ex.getMessage());
         }
         System.out.println("");

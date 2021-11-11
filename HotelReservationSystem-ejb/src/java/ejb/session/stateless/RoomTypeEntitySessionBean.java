@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.RoomTypeCannotBeDeletedException;
@@ -19,6 +18,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     private EntityManager em;
 
     public RoomTypeEntitySessionBean() {
+        
     }
 
     @Override
@@ -93,11 +93,11 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @Override
     public List<RoomTypeEntity> retrieveAllRoomTypes() throws RoomTypeCannotBeFoundException {
 
-        try {
-            Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.roomTypeEnabled = TRUE");          
-            List<RoomTypeEntity> roomTypes = query.getResultList();
+        Query query = em.createQuery("SELECT r FROM RoomTypeEntity r");
+        //query.setParameter(":value", Boolean.FALSE);
+        //List<RoomTypeEntity> roomTypes = query.getResultList();
 
-            if (roomTypes.size() > 0) {
+        /*if (roomTypes != null) {
                 for (RoomTypeEntity rt : roomTypes) {
                     System.out.println("Error reading");
                     rt.getRoomAmenities().size();
@@ -107,10 +107,13 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
                 }
             } else {
                 throw new RoomTypeCannotBeFoundException("No Room Types");
-            }
-            return roomTypes;
-        } catch (NoResultException | NonUniqueResultException ex) {
-            throw new RoomTypeCannotBeFoundException("No Room Types");
-        }
+            }*/
+        return query.getResultList();
+
     }
+
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
 }
