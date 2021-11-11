@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.NoRoomTypeAvailableException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 @Stateless
 public class SearchSessionBean implements SearchSessionBeanRemote, SearchSessionBeanLocal {
@@ -32,7 +33,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     }
 
 @Override
-    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException {
+    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException{
 
         List<String> availableRoomTypeAndRatePerNight = new ArrayList<>();
         List<RoomTypeEntity> roomTypes = roomTypeEntitySessionBeanLocal.retrieveAllRoomTypes();
@@ -81,7 +82,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     }
 
     @Override
-    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException {
+    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException {
 
         List<String> availableRoomTypeAndRatePerNight = new ArrayList<>();
         List<RoomTypeEntity> roomTypes = roomTypeEntitySessionBeanLocal.retrieveAllRoomTypes();

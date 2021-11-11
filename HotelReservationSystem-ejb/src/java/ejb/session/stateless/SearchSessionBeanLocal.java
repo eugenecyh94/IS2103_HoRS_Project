@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.NoRoomTypeAvailableException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 /**
  *
@@ -17,8 +18,8 @@ import util.exception.NoRoomTypeAvailableException;
 @Local
 public interface SearchSessionBeanLocal {
 
-    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException;
+    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException;
 
-    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException;
+    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException;
 
 }
