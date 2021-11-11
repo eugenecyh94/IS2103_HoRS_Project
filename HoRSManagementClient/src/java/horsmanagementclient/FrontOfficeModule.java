@@ -1,6 +1,5 @@
 package horsmanagementclient;
 
-import ejb.session.stateless.EmployeeEntitySessionBeanRemote;
 import ejb.session.stateless.ReservationEntitySessionBeanRemote;
 import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
 import ejb.session.stateless.SearchSessionBeanRemote;

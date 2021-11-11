@@ -1,6 +1,8 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,9 +25,12 @@ public class PartnerEntity implements Serializable {
     private String username;
     @Column(nullable = false, length = 8)
     private String password;
+    
+    private List<ReservationEntity> partnerReservations;
 
 //constructors
     public PartnerEntity() {
+        partnerReservations = new ArrayList<>();
     }
 
     public PartnerEntity(String firstName, String lastName, String username, String password) {
@@ -99,6 +104,20 @@ public class PartnerEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the partnerReservations
+     */
+    public List<ReservationEntity> getPartnerReservations() {
+        return partnerReservations;
+    }
+
+    /**
+     * @param partnerReservations the partnerReservations to set
+     */
+    public void setPartnerReservations(List<ReservationEntity> partnerReservations) {
+        this.partnerReservations = partnerReservations;
     }
     
 }

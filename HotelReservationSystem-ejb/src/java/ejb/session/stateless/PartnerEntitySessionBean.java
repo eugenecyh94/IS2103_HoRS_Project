@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.PartnerEntity;
+import entity.ReservationEntity;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -92,5 +93,13 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanRemote,
         {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
         }
+    }
+    
+    @Override
+    public PartnerEntity addParnterReservation(ReservationEntity reservationEntity, Long partnerId) throws PartnerNotFoundException{
+        PartnerEntity partnerEntity = retrievePartnerByPartnerId(partnerId);
+        
+        partnerEntity.getPartnerReservations().add(reservationEntity);
+        return partnerEntity;
     }
 }

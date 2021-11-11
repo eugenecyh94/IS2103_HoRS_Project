@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Remote;
 import util.exception.GuestNotFoundException;
+import util.exception.PartnerNotFoundException;
 import util.exception.ReservationCannotBeFoundException;
 
 /**
@@ -28,5 +29,7 @@ public interface ReservationEntitySessionBeanRemote {
     public List<ReservationEntity> retrieveAllReservationsBySearchDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate);
 
     public List<ReservationEntity> retrieveAllReservationsByCheckInDate(LocalDate reservationCheckInDate);
+    
+    public List<ReservationEntity> retrieveAllReservationsByPartnerId(Long partnerId) throws PartnerNotFoundException;
     
 }

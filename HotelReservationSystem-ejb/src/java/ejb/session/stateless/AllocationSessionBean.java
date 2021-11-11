@@ -76,18 +76,18 @@ public class AllocationSessionBean implements AllocationSessionBeanRemote, Alloc
                         + roomsAvailableForAllocation.get(0).getRoomType().getName()
                         + "!");
             } else {
-                throw new RoomAllocationNotUpgradedException("Reserved Room Type is unavailble and upgrades are unavailable!");
+                throw new RoomAllocationNotUpgradedException("Reserved Room Type is unavailable and upgrades are unavailable!");
             }
         }
-        
+
         //allocation if the rooms for original room type are available
         for (int i = 0; i < numOfRoomsRequired; i++) {
-                    roomsAvailableForAllocation.get(i).setRoomAllocated(true);
-                    roomsAvailableForAllocation.get(i).setCurrentReservation(reservation);
-                    roomsAllocatedToGuest.add(roomsAvailableForAllocation.get(i));
+            roomsAvailableForAllocation.get(i).setRoomAllocated(true);
+            roomsAvailableForAllocation.get(i).setCurrentReservation(reservation);
+            roomsAllocatedToGuest.add(roomsAvailableForAllocation.get(i));
         }
 
         return roomsAllocatedToGuest;
     }
-    
+
 }

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.GuestNotFoundException;
+import util.exception.PartnerNotFoundException;
 import util.exception.ReservationCannotBeFoundException;
 
 /**
@@ -29,4 +30,6 @@ public interface ReservationEntitySessionBeanLocal {
     public List<ReservationEntity> retrieveAllReservationsBySearchDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate);
 
     public List<ReservationEntity> retrieveAllReservationsByCheckInDate(LocalDate reservationCheckInDate);
+
+    public List<ReservationEntity> retrieveAllReservationsByPartnerId(Long partnerId) throws PartnerNotFoundException;
 }

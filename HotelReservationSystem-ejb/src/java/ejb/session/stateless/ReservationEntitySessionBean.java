@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.GuestEntity;
+import entity.PartnerEntity;
 import entity.ReservationEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.GuestNotFoundException;
+import util.exception.PartnerNotFoundException;
 import util.exception.ReservationCannotBeFoundException;
 
 @Stateless
@@ -57,12 +59,21 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
             throw new GuestNotFoundException("Guest does not exists for the entered ID!");
         }
 
-        Query query = em.createQuery("SELECT rs FROM ReservationEntity rs WHERE rs.guest := inGuest");
-        query.setParameter("inGuest", guest);
-        List<ReservationEntity> reservations = query.getResultList();
-        reservations.size();
+        return guest.getReservations();
 
-        return reservations;
+    }
+    
+    //used in webservice to retreive all the reservations made by a partner
+    @Override
+    public List<ReservationEntity> retrieveAllReservationsByPartnerId(Long partnerId) throws PartnerNotFoundException {
+
+        PartnerEntity partner = em.find(PartnerEntity.class, partnerId);
+
+        if (partner == null) {
+            throw new PartnerNotFoundException("Partner does not exist for the entered ID!");
+        }
+
+        return partner.getPartnerReservations();
 
     }
 
