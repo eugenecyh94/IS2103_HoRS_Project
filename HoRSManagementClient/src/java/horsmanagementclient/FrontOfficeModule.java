@@ -173,6 +173,8 @@ public class FrontOfficeModule {
                 }
             }
             
+            
+            
             GuestEntity guestEntity = new GuestEntity();
 
             System.out.println("Enter First Name");
