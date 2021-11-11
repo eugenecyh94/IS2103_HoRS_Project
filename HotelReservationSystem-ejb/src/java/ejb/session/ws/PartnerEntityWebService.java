@@ -75,7 +75,7 @@ public class PartnerEntityWebService {
     }
     
     @WebMethod(operationName = "partnerSearchRoom")
-    public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException {
+    public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException{
         
         LocalDate checkInDate = LocalDate.parse(checkinDate, formatter);
         LocalDate checkOutDate = LocalDate.parse(checkoutDate, formatter);

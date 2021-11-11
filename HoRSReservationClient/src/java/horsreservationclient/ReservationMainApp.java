@@ -191,7 +191,7 @@ public class ReservationMainApp {
             while (i < availableRooms.size()) {
                 System.out.printf("%20s%20s\n", availableRooms.get(i++), availableRooms.get(i++));
             }
-        } catch (NoRoomTypeAvailableException ex) {
+        } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
             System.out.println("Error occured: " + ex.getMessage());
         }
         System.out.println("");

@@ -49,7 +49,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
         
         for (ReservationEntity rs : reservations) {
             try {
-                List<RoomEntity> roomsAllocated = allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
+                allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
             } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
                 String exceptionString = new String("Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage());
                 exceptionReport.getExceptionDetails().add(exceptionString);
@@ -68,7 +68,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
         
         for (ReservationEntity rs : reservations) {
             try {
-                List<RoomEntity> roomsAllocated = allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
+                allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
             } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
                 String exceptionString = new String("Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage());
                 exceptionReport.getExceptionDetails().add(exceptionString);

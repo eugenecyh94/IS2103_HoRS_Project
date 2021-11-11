@@ -18,6 +18,6 @@ import util.exception.RoomAllocationUpgradedException;
 @Local
 public interface AllocationSessionBeanLocal {
     
-       public List<RoomEntity> allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, RoomAllocationNotUpgradedException;
+       public void allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, RoomAllocationNotUpgradedException;
     
 }

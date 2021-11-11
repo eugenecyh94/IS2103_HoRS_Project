@@ -31,7 +31,7 @@ public class RoomTypeEntity implements Serializable {
     private String description;
     @Column(nullable = false)
     private int capacity;
-    @Column(length = 4, nullable = false)
+    @Column(length = 10, nullable = false)
     private String roomSize; //sqm - to look into using string or int or enum
     @Column(nullable = false)
     private BedSizeEnum bedSize;
@@ -39,8 +39,8 @@ public class RoomTypeEntity implements Serializable {
     private List<RoomAmenitiesEnum> roomAmenities;
     @Column(nullable = false)
     private Boolean roomTypeEnabled;
-    @Column(nullable = false)
-    private int priority;
+    @Column(nullable = false, length = 16)
+    private String nextHigherRoomType;
 
     @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
     private List<RoomEntity> rooms;
@@ -56,7 +56,7 @@ public class RoomTypeEntity implements Serializable {
         this.roomTypeEnabled = Boolean.FALSE;
     }
 
-    public RoomTypeEntity(String name, String description, int capacity, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities) {
+    public RoomTypeEntity(String name, String description, int capacity, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities, String priority) {
         this();
         this.name = name;
         this.description = description;
@@ -64,7 +64,10 @@ public class RoomTypeEntity implements Serializable {
         this.roomSize = roomSize;
         this.bedSize = bedSize;
         this.roomAmenities = roomAmenities;
+        this.nextHigherRoomType = priority;
     }
+    
+    
 
     //methods
     public Long getRoomTypeId() {
@@ -172,12 +175,20 @@ public class RoomTypeEntity implements Serializable {
         this.reservations = reservations;
     }
 
-    public int getPriority() {
-        return priority;
+    /**
+     * @return the priority
+     */
+    public String getNextHigherRoomType() {
+        return nextHigherRoomType;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    /**
+     * @param nextHigherRoomType the priority to set
+     */
+    public void setNextHigherRoomType(String nextHigherRoomType) {
+        this.nextHigherRoomType = nextHigherRoomType;
     }
+
+    
 
 }
