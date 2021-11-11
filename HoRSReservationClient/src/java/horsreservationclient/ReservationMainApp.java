@@ -75,7 +75,7 @@ public class ReservationMainApp {
                 } else if (currentGuestEntity != null && response == 1) {
                     doSearchHotelRoom();
                 } else if (currentGuestEntity != null && response == 2) {
-                    doReserveHotelRoom(currentGuestEntity);
+                    doReserveHotelRoom();
                 } else if (currentGuestEntity != null && response == 3) {
                     doViewMyReservationDetails();
                 } else if (currentGuestEntity != null && response == 4) {
@@ -197,7 +197,7 @@ public class ReservationMainApp {
         System.out.println("");
     }
 
-    private void doReserveHotelRoom(GuestEntity guestEntity) {
+    private void doReserveHotelRoom() {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("*** Merlion Reservation System :: Reserve Room  ***\n");
@@ -255,11 +255,11 @@ public class ReservationMainApp {
             }
 
             ReservationEntity reservationEntity = new ReservationEntity(checkinDate, checkoutDate, numAdults, numRooms, roomTypeEntity, currentGuestEntity);
-
-            reservationEntity = reservationEntitySessionBeanRemote.createNewReservation(reservationEntity);
+            
+            reservationEntity = reservationEntitySessionBeanRemote.createNewGuestReservation(reservationEntity, currentGuestEntity.getGuestId());
             System.out.println("Reservation Created Successfully: Reservation ID: " + reservationEntity.getReservationId());
 
-        } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
+        } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException | GuestNotFoundException ex) {
             System.out.println("Error Occured: " + ex.getMessage());
         }
     }
@@ -283,7 +283,6 @@ public class ReservationMainApp {
     }
 
     private void doViewAllMyReservations() {
-        Scanner sc = new Scanner(System.in);
 
         System.out.println("*** Merlion Reservation System :: View All My Reservations  ***\n");
 

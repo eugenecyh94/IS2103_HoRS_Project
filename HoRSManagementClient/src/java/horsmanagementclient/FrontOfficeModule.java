@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
+import util.exception.GuestNotFoundException;
 import util.exception.InvalidAccessRightException;
 import util.exception.NoRoomTypeAvailableException;
 import util.exception.RoomTypeCannotBeFoundException;
@@ -187,10 +188,10 @@ public class FrontOfficeModule {
             
             ReservationEntity reservationEntity = new ReservationEntity(checkinDate, checkoutDate, numAdults, numRooms, roomTypeEntity, guestEntity);
            
-            reservationEntity = reservationEntitySessionBeanRemote.createNewReservation(reservationEntity);
+            reservationEntity = reservationEntitySessionBeanRemote.createNewGuestReservation(reservationEntity, guestEntity.getGuestId());
             System.out.println("Reservation Created Successfully: Reservation ID: " + reservationEntity.getReservationId());
             
-        } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
+        } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException | GuestNotFoundException ex) {
             System.out.println("Error occured: " + ex.getMessage());
         }
 

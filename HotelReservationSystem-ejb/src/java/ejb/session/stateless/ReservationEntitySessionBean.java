@@ -24,14 +24,38 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
     }
 
     @Override // to amend to only input reservationtype object for para later
-    public ReservationEntity createNewReservation(ReservationEntity reservation) {
+    public ReservationEntity createNewGuestReservation(ReservationEntity reservation, Long guestId) throws GuestNotFoundException{
 
-        em.persist(reservation);
-        em.flush();
-
-        return reservation;
+        GuestEntity guestEntity = em.find(GuestEntity.class, guestId);
+        if (guestEntity != null) {
+            guestEntity.getReservations().add(reservation);
+            em.persist(reservation);
+            em.flush();
+            return reservation;
+        }
+        
+        else{ 
+            throw new GuestNotFoundException("Guest with the ID Not Found!");
+        }
 
     }
+    
+    public ReservationEntity createNewPartnerReservation(ReservationEntity reservation, Long partnerId) throws PartnerNotFoundException{
+
+        PartnerEntity partnerEntity = em.find(PartnerEntity.class, partnerId);
+        if (partnerEntity != null) {
+            partnerEntity.getPartnerReservations().add(reservation);
+            em.persist(reservation);
+            em.flush();
+            return reservation;
+        }
+        
+        else{ 
+            throw new PartnerNotFoundException("Partner with the ID Not Found!");
+        }
+
+    }
+
 
     @Override
     public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationCannotBeFoundException {
@@ -62,7 +86,7 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
         return guest.getReservations();
 
     }
-    
+
     //used in webservice to retreive all the reservations made by a partner
     @Override
     public List<ReservationEntity> retrieveAllReservationsByPartnerId(Long partnerId) throws PartnerNotFoundException {
@@ -80,21 +104,21 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
     //used for room allocation session bean, only check in date queried
     @Override
     public List<ReservationEntity> retrieveAllReservationsByCheckInDate(LocalDate reservationCheckInDate) {
-        
+
         Query query = em.createQuery("SELECT rs FROM ReservationEntity rs");
         List<ReservationEntity> reservations = query.getResultList();
         List<ReservationEntity> dateFilteredReservations = new ArrayList<>();
-        
+
         for (ReservationEntity rs : reservations) {
-            if(rs.getCheckInDate().isEqual(reservationCheckInDate)){
+            if (rs.getCheckInDate().isEqual(reservationCheckInDate)) {
                 dateFilteredReservations.add(rs);
             }
         }
-        
+
         return dateFilteredReservations;
-        
+
     }
-    
+
     //used for room searching in search session bean, check in and check out date queried
     @Override
     public List<ReservationEntity> retrieveAllReservationsBySearchDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate) {

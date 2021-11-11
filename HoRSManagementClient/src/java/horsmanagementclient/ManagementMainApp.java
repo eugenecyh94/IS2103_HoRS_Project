@@ -120,7 +120,7 @@ public class ManagementMainApp {
         
         while(true)
         {
-            System.out.println("*** Merlion Management System ***\n");
+            System.out.println("*** Merlion Management System :: Main Menu***\n");
             System.out.println("You are logged in as " + currentEmployeeEntity.getFirstName() + " " + currentEmployeeEntity.getLastName() + " with " + currentEmployeeEntity.getAccessRightEnum().toString() + " rights\n");
             System.out.println("1: Operations Management");
             System.out.println("2: System Administration");

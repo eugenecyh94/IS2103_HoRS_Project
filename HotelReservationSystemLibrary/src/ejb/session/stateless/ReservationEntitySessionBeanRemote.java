@@ -20,7 +20,7 @@ import util.exception.ReservationCannotBeFoundException;
 @Remote
 public interface ReservationEntitySessionBeanRemote {
 
-    public ReservationEntity createNewReservation(ReservationEntity reservation);
+     public ReservationEntity createNewGuestReservation(ReservationEntity reservation, Long guestId) throws GuestNotFoundException;
 
     public ReservationEntity retrieveReservationById(Long reservationId) throws ReservationCannotBeFoundException;
 
@@ -31,5 +31,7 @@ public interface ReservationEntitySessionBeanRemote {
     public List<ReservationEntity> retrieveAllReservationsByCheckInDate(LocalDate reservationCheckInDate);
     
     public List<ReservationEntity> retrieveAllReservationsByPartnerId(Long partnerId) throws PartnerNotFoundException;
+    
+    public ReservationEntity createNewPartnerReservation(ReservationEntity reservation, Long partnerId) throws PartnerNotFoundException;
     
 }

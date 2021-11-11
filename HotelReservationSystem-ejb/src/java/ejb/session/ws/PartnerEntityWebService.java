@@ -7,10 +7,13 @@ package ejb.session.ws;
 
 import ejb.session.stateless.PartnerEntitySessionBeanLocal;
 import ejb.session.stateless.ReservationEntitySessionBeanLocal;
+import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
 import ejb.session.stateless.SearchSessionBeanLocal;
 import entity.PartnerEntity;
 import entity.ReservationEntity;
+import entity.RoomTypeEntity;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
@@ -21,6 +24,7 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.NoRoomTypeAvailableException;
 import util.exception.PartnerNotFoundException;
 import util.exception.ReservationCannotBeFoundException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 /**
  *
@@ -31,6 +35,9 @@ import util.exception.ReservationCannotBeFoundException;
 public class PartnerEntityWebService {
 
     @EJB
+    private RoomTypeEntitySessionBeanLocal roomTypeEntitySessionBeanLocal;
+
+    @EJB
     private ReservationEntitySessionBeanLocal reservationEntitySessionBeanLocal;
 
     @EJB
@@ -38,7 +45,9 @@ public class PartnerEntityWebService {
 
     @EJB
     private PartnerEntitySessionBeanLocal partnerEntitySessionBeanLocal;
+    
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     @WebMethod(operationName = "partnerLogin")
     public PartnerEntity partnerLogin(@WebParam(name = "username") String username, @WebParam(name = "password") String password) throws InvalidLoginCredentialException {
         PartnerEntity partnerEntity = partnerEntitySessionBeanLocal.partnerLogin(username, password);
@@ -46,14 +55,24 @@ public class PartnerEntityWebService {
     }
 
     @WebMethod(operationName = "partnerSearchRoom")
-    public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") LocalDate checkinDate, @WebParam(name = "checkoutDate") LocalDate checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException {
-        List<String> availableRooms = searchSessionBeanLocal.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, guestNumberOfRooms);
+    public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException {
+        
+        LocalDate checkInDate = LocalDate.parse(checkinDate, formatter);
+        LocalDate checkOutDate = LocalDate.parse(checkoutDate, formatter);
+        List<String> availableRooms = searchSessionBeanLocal.searchAvailableRoomTypesOnline(checkInDate, checkOutDate, guestNumberOfRooms);
+        
         return availableRooms;
     }
 
     @WebMethod(operationName = "partnerReserveRoom")
-    public ReservationEntity partnerReserveRoom(@WebParam(name = "reservationEntity") ReservationEntity reservationEntity) {
-        reservationEntity = reservationEntitySessionBeanLocal.createNewReservation(reservationEntity);
+    public ReservationEntity partnerReserveRoom(@WebParam(name = "reservationEntity") ReservationEntity reservationEntity, @WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate,@WebParam(name = "partnerId") Long partnerId) throws PartnerNotFoundException {
+        LocalDate checkInDate = LocalDate.parse(checkinDate, formatter);
+        LocalDate checkOutDate = LocalDate.parse(checkoutDate, formatter);
+        
+        reservationEntity.setCheckInDate(checkInDate);
+        reservationEntity.setCheckOutDate(checkOutDate);
+        
+        reservationEntity = reservationEntitySessionBeanLocal.createNewPartnerReservation(reservationEntity, partnerId);
         return reservationEntity;
     }
 
@@ -69,4 +88,11 @@ public class PartnerEntityWebService {
         return reservationEntitys;
                 
     }
+    
+    @WebMethod(operationName = "retreiveRoomTypeEntityByName")
+    public RoomTypeEntity retreiveRoomTypeEntityByName (@WebParam(name = "roomTypeName") String roomTypeName) throws RoomTypeCannotBeFoundException {
+        RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanLocal.retrieveRoomTypeByName(roomTypeName);
+        return roomTypeEntity;
+    }
+            
 }

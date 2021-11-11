@@ -40,12 +40,10 @@ public class ReservationEntity implements Serializable {
     @Column(nullable = false)
     private BigDecimal totalAmount;
     //is a bookingMode attribute necessary? only affects the normal / published rate, which we can filter in sb
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RoomTypeEntity roomType;
     
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private GuestEntity guest;
 
 //construtors
@@ -59,6 +57,14 @@ public class ReservationEntity implements Serializable {
         this.numOfRooms = numOfRooms;
         this.roomType = roomType;
         this.guest = guest;
+    }
+    
+    public ReservationEntity(LocalDate checkInDate, LocalDate checkOutDate, int numOfAdults, int numOfRooms, RoomTypeEntity roomType) {
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.numOfAdults = numOfAdults;
+        this.numOfRooms = numOfRooms;
+        this.roomType = roomType;
     }
     
 //methods    
