@@ -277,14 +277,17 @@ public class OperationsManagementModule {
     private void doViewAllRoomTypes() {
         System.out.println("*** Merlion Management System :: Operations Management :: View All RoomTypes ***\n");
 
+        try {
+            System.out.println("here");
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
         System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
-
         roomTypeEntities.forEach(roomTypeEntity -> {
             System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
         });
-
-        System.err.println("");
+        } catch (RoomTypeCannotBeFoundException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+        }
+        System.out.println("");
     }
 
     private void doCreateNewRoomEntity() {

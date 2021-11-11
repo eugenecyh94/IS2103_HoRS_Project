@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.RoomTypeCannotBeDeletedException;
@@ -90,18 +91,26 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     }
 
     @Override
-    public List<RoomTypeEntity> retrieveAllRoomTypes() {
+    public List<RoomTypeEntity> retrieveAllRoomTypes() throws RoomTypeCannotBeFoundException {
 
-        Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.roomTypeEnabled = TRUE");
-        List<RoomTypeEntity> roomTypes = query.getResultList();
+        try {
+            Query query = em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.roomTypeEnabled = TRUE");          
+            List<RoomTypeEntity> roomTypes = query.getResultList();
 
-        for (RoomTypeEntity rt : roomTypes) {
-            rt.getRoomAmenities().size();
-            rt.getRooms().size();
-            rt.getReservations().size();
+            if (roomTypes.size() > 0) {
+                for (RoomTypeEntity rt : roomTypes) {
+                    System.out.println("Error reading");
+                    rt.getRoomAmenities().size();
+                    rt.getRooms().size();
+                    rt.getReservations().size();
+                    System.out.println("No Error Reading");
+                }
+            } else {
+                throw new RoomTypeCannotBeFoundException("No Room Types");
+            }
+            return roomTypes;
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new RoomTypeCannotBeFoundException("No Room Types");
         }
-
-        return roomTypes;
     }
-
 }

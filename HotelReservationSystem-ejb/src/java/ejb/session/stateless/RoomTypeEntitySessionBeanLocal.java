@@ -28,6 +28,6 @@ public interface RoomTypeEntitySessionBeanLocal {
 
     public void deleteRoomTypebyID(Long roomTypeID) throws RoomTypeCannotBeDeletedException;
 
-    public List<RoomTypeEntity> retrieveAllRoomTypes();
+    public List<RoomTypeEntity> retrieveAllRoomTypes() throws RoomTypeCannotBeFoundException;
     
 }
