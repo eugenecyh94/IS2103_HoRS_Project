@@ -30,7 +30,7 @@ public class RoomRateEntity implements Serializable {
     private LocalDate startDate;
     @Column(nullable = false)
     private LocalDate endDate;
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
 
     //constructors

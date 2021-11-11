@@ -10,6 +10,7 @@ import ejb.session.stateless.PartnerEntitySessionBeanLocal;
 import ejb.session.stateless.ReservationEntitySessionBeanLocal;
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal;
 import ejb.session.stateless.SearchSessionBeanLocal;
+import entity.GuestEntity;
 import entity.PartnerEntity;
 import entity.ReservationEntity;
 import entity.RoomTypeEntity;
@@ -60,7 +61,19 @@ public class PartnerEntityWebService {
     }
 
     @WebMethod(operationName = "retrieveGuestByPassportNumer")
-    pulic 
+    public GuestEntity retrieveGuestByPassportNumer(@WebParam(name = "passportNumber") String passportNumber) throws GuestNotFoundException {
+        
+        GuestEntity guestEntity = guestEntitySessionBeanLocal.retrieveGuestByPassportNumber(passportNumber);
+        return guestEntity;
+    }
+    
+    @WebMethod(operationName = "addPartnerReservation")
+    public PartnerEntity addPartnerReservation(@WebParam(name ="reservationEntity") Long reservationEntityId, @WebParam(name = "partnerId") Long partnerId) throws ReservationCannotBeFoundException, PartnerNotFoundException {
+        
+        PartnerEntity partnerEntity = partnerEntitySessionBeanLocal.addParnterReservation(reservationEntityId, partnerId);
+        return partnerEntity;
+    }
+    
     @WebMethod(operationName = "partnerSearchRoom")
     public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException {
         

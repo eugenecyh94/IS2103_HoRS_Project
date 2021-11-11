@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.PartnerEntity;
 import entity.ReservationEntity;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -11,13 +12,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.PartnerNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.ReservationCannotBeFoundException;
 
 
 @Stateless
 public class PartnerEntitySessionBean implements PartnerEntitySessionBeanRemote, PartnerEntitySessionBeanLocal {
 
+    @EJB
+    private ReservationEntitySessionBeanLocal reservationEntitySessionBeanLocal;
+
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
+    
 
     public PartnerEntitySessionBean() {
     }
@@ -96,8 +102,9 @@ public class PartnerEntitySessionBean implements PartnerEntitySessionBeanRemote,
     }
     
     @Override
-    public PartnerEntity addParnterReservation(ReservationEntity reservationEntity, Long partnerId) throws PartnerNotFoundException{
+    public PartnerEntity addParnterReservation(Long reservationEntityId, Long partnerId) throws ReservationCannotBeFoundException,PartnerNotFoundException{
         
+        ReservationEntity reservationEntity = reservationEntitySessionBeanLocal.retrieveReservationById(reservationEntityId);
         PartnerEntity partnerEntity = retrievePartnerByPartnerId(partnerId);
         partnerEntity.getPartnerReservations().add(reservationEntity);
         
