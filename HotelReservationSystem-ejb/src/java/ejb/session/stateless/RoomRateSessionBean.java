@@ -84,7 +84,7 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     }
 
     @Override
-    public RoomRateEntity calculateDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online) {
+    public RoomRateEntity selectDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online) {
 
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
 
@@ -92,17 +92,15 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
         query.setParameter("inRoomType", roomType);
 
         List<RoomRateEntity> roomRates = query.getResultList();
-        RoomRateEntity selectedRoomRate = roomRates.get(0);
+        RoomRateEntity selectedRoomRate = new RoomRateEntity();
 
         for (RoomRateEntity rr : roomRates) {
             if (rr.getRateType() == RateTypeEnum.PROMOTION) {
-                if ((dailyDate.isAfter(rr.getStartDate()) || dailyDate.isEqual(rr.getStartDate()))
-                        && (dailyDate.isBefore(rr.getEndDate()) || dailyDate.isEqual(rr.getEndDate()))) {
+                if (!(dailyDate.isBefore(rr.getStartDate()) || dailyDate.isAfter(rr.getEndDate()))) {
                     selectedRoomRate = rr;
                 }
             } else if (rr.getRateType() == RateTypeEnum.PEAK) {
-                if ((dailyDate.isAfter(rr.getStartDate()) || dailyDate.isEqual(rr.getStartDate()))
-                        && (dailyDate.isBefore(rr.getEndDate()) || dailyDate.isEqual(rr.getEndDate()))
+                if (!(dailyDate.isBefore(rr.getStartDate()) || dailyDate.isAfter(rr.getEndDate()))
                         && selectedRoomRate.getRateType() != RateTypeEnum.PROMOTION) {
                     selectedRoomRate = rr;
                 }

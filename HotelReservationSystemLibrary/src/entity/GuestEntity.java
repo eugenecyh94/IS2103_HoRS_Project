@@ -42,7 +42,7 @@ public class GuestEntity implements Serializable {
     @Column(nullable = false, length = 8, unique = true)
     private String password;
     @Column(nullable = false)
-    private Boolean registered;
+    private boolean registered;
     
     @OneToMany(mappedBy = "guest")
     private List<ReservationEntity> reservations;
@@ -50,7 +50,7 @@ public class GuestEntity implements Serializable {
 //constructors
     public GuestEntity() {
         this.reservations = new ArrayList<>();
-        registered = Boolean.FALSE;
+        this.registered = false;
     }
 
     public GuestEntity(String firstName, String lastName, String passportNumber, String email, String mobileNumber, String userName, String password) {
@@ -162,17 +162,15 @@ public class GuestEntity implements Serializable {
         this.reservations = reservations;
     }
 
-    /**
-     * @return the registered
-     */
-    public Boolean getRegistered() {
+    public void setRegistered(Boolean registered) {
+        this.setRegistered((boolean) registered);
+    }
+
+    public boolean isRegistered() {
         return registered;
     }
 
-    /**
-     * @param registered the registered to set
-     */
-    public void setRegistered(Boolean registered) {
+    public void setRegistered(boolean registered) {
         this.registered = registered;
     }
     

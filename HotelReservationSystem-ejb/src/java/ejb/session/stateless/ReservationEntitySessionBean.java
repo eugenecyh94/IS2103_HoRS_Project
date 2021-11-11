@@ -66,25 +66,44 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
 
     }
 
-    //used for room searching in search session bean
+    //used for room allocation session bean, only check in date queried
     @Override
-    public List<ReservationEntity> retrieveAllReservationsByDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate) {
+    public List<ReservationEntity> retrieveAllReservationsByCheckInDate(LocalDate reservationCheckInDate) {
+        
+        Query query = em.createQuery("SELECT rs FROM ReservationEntity rs");
+        List<ReservationEntity> reservations = query.getResultList();
+        List<ReservationEntity> dateFilteredReservations = new ArrayList<>();
+        
+        for (ReservationEntity rs : reservations) {
+            if(rs.getCheckInDate().isEqual(reservationCheckInDate)){
+                dateFilteredReservations.add(rs);
+            }
+        }
+        
+        return dateFilteredReservations;
+        
+    }
+    
+    //used for room searching in search session bean, check in and check out date queried
+    @Override
+    public List<ReservationEntity> retrieveAllReservationsBySearchDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate) {
 
         Query query = em.createQuery("SELECT rs FROM ReservationEntity rs");
         List<ReservationEntity> reservations = query.getResultList();
-        reservations.size();
-        
         List<ReservationEntity> dateFilteredReservations = new ArrayList<>();
-        
-        for(ReservationEntity rs : reservations){
-            if((guestCheckOutDate.isEqual(rs.getCheckOutDate()) || guestCheckOutDate.isBefore(rs.getCheckOutDate())) && 
-                    (guestCheckInDate.isEqual(rs.getCheckOutDate())||guestCheckInDate.isAfter(rs.getCheckOutDate()))) {
-                rs.getRoomType();
-                rs.getGuest();
-                dateFilteredReservations.add(rs);
+
+        for (LocalDate dailyDate = guestCheckInDate; dailyDate.isEqual(guestCheckOutDate); dailyDate.plusDays(1)) {
+            for (ReservationEntity rs : reservations) {
+                if (!(dailyDate.isBefore(rs.getCheckInDate()) || dailyDate.isAfter(rs.getCheckOutDate()))) {
+                    if (!dateFilteredReservations.contains(rs)) {
+                        rs.getRoomType();
+                        rs.getGuest();
+                        dateFilteredReservations.add(rs);
+                    }
                 }
-        }        
-        
+            }
+        }
         return dateFilteredReservations;
     }
+
 }

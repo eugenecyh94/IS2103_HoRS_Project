@@ -21,6 +21,6 @@ public interface RoomRateSessionBeanRemote {
 
     public List<RoomRateEntity> retrieveAllRoomRates();
 
-    public RoomRateEntity calculateDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online);
+    public RoomRateEntity selectDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online);
     
 }

@@ -45,7 +45,7 @@ public class RoomTypeEntity implements Serializable {
     @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
     private List<RoomEntity> rooms;
 
-    @OneToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
     private List<ReservationEntity> reservations;
 
 //constructors
@@ -169,6 +169,14 @@ public class RoomTypeEntity implements Serializable {
 
     public void setReservations(List<ReservationEntity> reservations) {
         this.reservations = reservations;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
 }

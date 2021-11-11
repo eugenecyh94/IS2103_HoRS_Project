@@ -5,7 +5,11 @@
  */
 package ejb.session.stateless;
 
+import entity.RoomEntity;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.RoomAllocationNotUpgradedException;
+import util.exception.RoomAllocationUpgradedException;
 
 /**
  *
@@ -13,5 +17,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface AllocationSessionBeanLocal {
+    
+       public List<RoomEntity> allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, RoomAllocationNotUpgradedException;
     
 }

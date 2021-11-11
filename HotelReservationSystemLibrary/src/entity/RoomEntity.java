@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -34,14 +35,14 @@ public class RoomEntity implements Serializable {
     private boolean roomAllocated;
     @Column(nullable = false)
     private boolean disabled; //for deletion of room , false = default, not deleted
-    
-    private List<ReservationEntity> reservations;
+    private ReservationEntity currentReservation; //check in = set, check out = null
+    //@OneToMany(fetch = FetchType.LAZY)
+    //private List<ReservationEntity> reservations;
     
     public RoomEntity() {
         this.roomStatusAvail = true; // true = available
         this.roomAllocated = false; // false = not allocated
         this.disabled = false;
-        this.reservations = new ArrayList<>();
     }
 
     public RoomEntity(RoomTypeEntity roomType, String roomNumber) {
@@ -123,12 +124,12 @@ public class RoomEntity implements Serializable {
         this.disabled = disabled;
     }
 
-    public List<ReservationEntity> getReservations() {
-        return reservations;
+    public ReservationEntity getCurrentReservation() {
+        return currentReservation;
     }
 
-    public void setReservations(List<ReservationEntity> reservations) {
-        this.reservations = reservations;
+    public void setCurrentReservation(ReservationEntity currentReservation) {
+        this.currentReservation = currentReservation;
     }
     
 }

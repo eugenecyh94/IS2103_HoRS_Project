@@ -25,6 +25,8 @@ public interface ReservationEntitySessionBeanRemote {
 
     public List<ReservationEntity> retrieveAllReservationsByGuestId(Long guestId) throws GuestNotFoundException;
 
-    public List<ReservationEntity> retrieveAllReservationsByDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate);
+    public List<ReservationEntity> retrieveAllReservationsBySearchDates(LocalDate guestCheckInDate, LocalDate guestCheckOutDate);
+
+    public List<ReservationEntity> retrieveAllReservationsByCheckInDate(LocalDate reservationCheckInDate);
     
 }

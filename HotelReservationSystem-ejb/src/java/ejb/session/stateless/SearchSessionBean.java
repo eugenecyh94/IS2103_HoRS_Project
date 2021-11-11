@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb.session.stateless;
 
 import entity.ReservationEntity;
@@ -18,10 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.NoRoomTypeAvailableException;
 
-/**
- *
- * @author Eugene Chua
- */
 @Stateless
 public class SearchSessionBean implements SearchSessionBeanRemote, SearchSessionBeanLocal {
 
@@ -40,13 +31,13 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     public SearchSessionBean() {
     }
 
-    @Override
+@Override
     public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException {
 
         List<String> availableRoomTypeAndRatePerNight = new ArrayList<>();
         List<RoomTypeEntity> roomTypes = roomTypeEntitySessionBeanLocal.retrieveAllRoomTypes();
         List<RoomEntity> rooms = roomEntitySessionBeanLocal.retrieveAllRooms();
-        List<ReservationEntity> dateFilteredreservations = reservationEntitySessionBeanLocal.retrieveAllReservationsByDates(checkInDate, checkOutDate);
+        List<ReservationEntity> dateFilteredreservations = reservationEntitySessionBeanLocal.retrieveAllReservationsBySearchDates(checkInDate, checkOutDate);
 
         //Main logic to search available rooms and respective rate
         for (RoomTypeEntity rt : roomTypes) {
@@ -63,9 +54,9 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
             for (LocalDate dailyDate = checkInDate; dailyDate.isEqual(checkOutDate); dailyDate.plusDays(1)) {
                 int dailyAvailableRooms = totalRoomsAvailable;
                 //parameter for calculate rate is false, as search is done in front counter - refer to roomratesessionbean
-                periodRoomTypeRates.add(roomRateSessionBeanLocal.calculateDailyRoomRate(dailyDate, rt.getRoomTypeId(), false).getRate()); 
+                periodRoomTypeRates.add(roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), false).getRate()); 
                 for (ReservationEntity rs : dateFilteredreservations) {
-                    if (rs.getRoomType().equals(rt) && !dailyDate.isAfter(rs.getCheckOutDate())) {
+                    if (rs.getRoomType().equals(rt) && !(dailyDate.isBefore(rs.getCheckInDate()) || dailyDate.isAfter(rs.getCheckOutDate()))) {
                         dailyAvailableRooms -= rs.getNumOfRooms();
                     }
                 }
@@ -76,7 +67,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
             }
 
             //if avail rooms > guest required number of rooms
-            if ((periodAvailableRooms >= guestNumberOfRooms) && (periodAvailableRooms != 0)) {
+            if ((periodAvailableRooms >= guestNumberOfRooms) && (periodAvailableRooms > 0)) {
                 availableRoomTypeAndRatePerNight.add(rt.getName());
                 availableRoomTypeAndRatePerNight.add("SGD " + periodRoomTypeRates.toString()); //can change to per night if neccessary;
             }
@@ -95,7 +86,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
         List<String> availableRoomTypeAndRatePerNight = new ArrayList<>();
         List<RoomTypeEntity> roomTypes = roomTypeEntitySessionBeanLocal.retrieveAllRoomTypes();
         List<RoomEntity> rooms = roomEntitySessionBeanLocal.retrieveAllRooms();
-        List<ReservationEntity> dateFilteredreservations = reservationEntitySessionBeanLocal.retrieveAllReservationsByDates(checkInDate, checkOutDate);
+        List<ReservationEntity> dateFilteredreservations = reservationEntitySessionBeanLocal.retrieveAllReservationsBySearchDates(checkInDate, checkOutDate);
 
         //Main logic to search available rooms and respective rate
         for (RoomTypeEntity rt : roomTypes) {
@@ -112,9 +103,9 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
             for (LocalDate dailyDate = checkInDate; dailyDate.isEqual(checkOutDate); dailyDate.plusDays(1)) {
                 int dailyAvailableRooms = totalRoomsAvailable;
                 //parameter for calculate rate is true, as search is done online - refer to roomratesessionbean
-                periodRoomTypeRates.add(roomRateSessionBeanLocal.calculateDailyRoomRate(dailyDate, rt.getRoomTypeId(), true).getRate()); 
+                periodRoomTypeRates.add(roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), true).getRate()); 
                 for (ReservationEntity rs : dateFilteredreservations) {
-                    if (rs.getRoomType().equals(rt) && !dailyDate.isAfter(rs.getCheckOutDate())) {
+                    if (rs.getRoomType().equals(rt) && !(dailyDate.isBefore(rs.getCheckInDate()) || dailyDate.isAfter(rs.getCheckOutDate()))) {
                         dailyAvailableRooms -= rs.getNumOfRooms();
                     }
                 }
@@ -123,9 +114,9 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
                     periodAvailableRooms = dailyAvailableRooms;
                 }
             }
-
+   
             //if avail rooms > guest required number of rooms
-            if ((periodAvailableRooms >= guestNumberOfRooms) && (periodAvailableRooms != 0)) {
+            if ((periodAvailableRooms >= guestNumberOfRooms) && (periodAvailableRooms > 0)) {
                 availableRoomTypeAndRatePerNight.add(rt.getName());
                 availableRoomTypeAndRatePerNight.add("SGD " + periodRoomTypeRates.toString()); //can change to per night if neccessary;
             }
@@ -137,6 +128,5 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
 
         return availableRoomTypeAndRatePerNight;
     }
-
     
 }

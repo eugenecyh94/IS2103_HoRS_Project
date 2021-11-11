@@ -44,8 +44,6 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
             throw new RoomCannotBeFoundException("Room does not exists for the entered ID!");
         }
 
-        room.getReservations().size();
-
         return room;
     }
 
@@ -56,7 +54,6 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         query.setParameter("inRoomNumber", roomNumber);
         try {
             RoomEntity room = (RoomEntity) query.getSingleResult();
-            room.getReservations().size();
             return room;
         } catch (NoResultException ex) {
             throw new RoomCannotBeFoundException("Room does not exists for the entered Room Number!");
@@ -95,7 +92,6 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         for (RoomEntity r : rooms) {
             r.getRoomNumber();
             r.getRoomType();
-            r.getReservations().size();
             r.isRoomStatusAvail();
         }
 
@@ -113,10 +109,6 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
         if (rooms.isEmpty()) {
             throw new RoomCannotBeFoundException("Rooms does not exist for Room Type ID entered!");
-        }
-
-        for (RoomEntity r : rooms) {
-            r.getReservations().size();
         }
 
         return rooms;

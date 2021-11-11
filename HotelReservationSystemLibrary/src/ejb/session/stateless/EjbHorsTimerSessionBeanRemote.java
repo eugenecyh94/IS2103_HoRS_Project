@@ -5,13 +5,13 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author Eugene Chua
  */
-@Local
-public interface EjbTimerSessionBeanLocal {
+@Remote
+public interface EjbHorsTimerSessionBeanRemote {
     
 }
