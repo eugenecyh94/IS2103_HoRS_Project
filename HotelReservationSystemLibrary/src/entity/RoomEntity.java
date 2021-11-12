@@ -27,7 +27,7 @@ public class RoomEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
-    @Column(length = 4, nullable = false, unique = true)
+    @Column(length = 4, nullable = false, unique = true) // need to validate minimum
     private String roomNumber;
     @Column(nullable = false)
     private boolean roomStatusAvail;

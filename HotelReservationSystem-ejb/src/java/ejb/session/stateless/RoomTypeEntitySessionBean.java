@@ -103,7 +103,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     }
 
     @Override
-    public List<RoomTypeEntity> retrieveAllRoomTypes() throws RoomTypeCannotBeFoundException {
+    public List<RoomTypeEntity> retrieveAllRoomTypes() {
 
         Query query = em.createQuery("SELECT r FROM RoomTypeEntity r");
        
