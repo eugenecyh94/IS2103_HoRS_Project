@@ -196,7 +196,7 @@ public class OperationsManagementModule {
 
         String higherRoom = "";
         System.out.print("Enter next higher room type (leave blank and enter if no next higher room type)> ");
-        higherRoom = sc.nextLine().toUpperCase().trim();
+        higherRoom = sc.nextLine().trim();
         if (higherRoom.length() > 0) {
             roomTypeEntity.setNextHigherRoomType(higherRoom);
         } else {
@@ -322,7 +322,7 @@ public class OperationsManagementModule {
         }
 
         System.out.print("Enter next higher room Type (blank if no change)> ");
-        input = sc.nextLine().toUpperCase().trim();
+        input = sc.nextLine().trim();
         if (input.length() > 0) {
             roomTypeEntity.setNextHigherRoomType(input);
         }
