@@ -39,7 +39,7 @@ public class GuestEntity implements Serializable {
     @Column(nullable = false, length = 128, unique = true)
     private String mobileNumber;
     @Column(nullable = false, length = 16, unique = true)
-    private String userName;
+    private String username;
     @Column(nullable = false, length = 8, unique = true)
     private String password;
     @Column(nullable = false)
@@ -61,7 +61,7 @@ public class GuestEntity implements Serializable {
         this.passportNumber = passportNumber;
         this.email = email;
         this.mobileNumber = mobileNumber;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
     }
     
@@ -139,12 +139,12 @@ public class GuestEntity implements Serializable {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
