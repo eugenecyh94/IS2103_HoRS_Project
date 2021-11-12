@@ -26,15 +26,20 @@ public class RoomRateEntity implements Serializable {
     private RateTypeEnum rateType;
     @Column(nullable = false)
     private BigDecimal rate;
-    @Column(nullable = false)
     private LocalDate startDate;
-    @Column(nullable = false)
     private LocalDate endDate;
     @JoinColumn(nullable = false)
     private RoomTypeEntity roomType;
 
     //constructors
-    public RoomRateEntity() {    
+    public RoomRateEntity() {
+    }
+
+    public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, RoomTypeEntity roomType) {
+        this.rateName = rateName;
+        this.rateType = rateType;
+        this.rate = rate;
+        this.roomType = roomType;
     }
 
     public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, LocalDate startDate, LocalDate endDate, RoomTypeEntity roomType) {
