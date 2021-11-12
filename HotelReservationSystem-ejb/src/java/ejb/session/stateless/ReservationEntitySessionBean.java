@@ -65,6 +65,10 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
         if (guest == null) {
             throw new GuestNotFoundException("Guest does not exists for the entered ID!");
         }
+        
+        for(ReservationEntity reservationEntity : guest.getReservations()){
+            reservationEntity.getRoomType();
+        }
 
         return guest.getReservations();
 

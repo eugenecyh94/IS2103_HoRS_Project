@@ -50,7 +50,7 @@ public class ReservationMainApp {
                 System.out.println("2: Reserve Hotel Room");
                 System.out.println("3: View My Reservation Details");
                 System.out.println("4: View All My Reservations");
-                System.out.println("5: Exit ");
+                System.out.println("5: Logout ");
             } else {
                 System.out.println("1: Guest Login");
                 System.out.println("2: Register as Guest");
@@ -81,7 +81,7 @@ public class ReservationMainApp {
                 } else if (currentGuestEntity != null && response == 4) {
                     doViewAllMyReservations();
                 } else if (currentGuestEntity != null && response == 5) {
-                    break;
+                    currentGuestEntity = null;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
@@ -135,18 +135,17 @@ public class ReservationMainApp {
         guestEntity.setMobileNumber(sc.nextLine().trim());
 
         String username;
-        while (true) {
-            System.out.println("Enter Username: ");
-            username = sc.nextLine().trim();
 
-            try {
-                guestEntitySessionBeanRemote.retrieveGuestByUsername(username);
-                System.out.println("Username Already Exists, choose Another Username!");
-            } catch (GuestNotFoundException ex) {
-                guestEntity.setUserName(username);
-                break;
-            }
+        System.out.println("Enter Username: ");
+        username = sc.nextLine().trim();
+
+        try {
+            guestEntitySessionBeanRemote.retrieveGuestByUsername(username);
+            System.out.println("Username Already Exists, choose Another Username!");
+        } catch (GuestNotFoundException ex) {
+            System.out.println("Welcome to Merlion Reservation System!");
         }
+        guestEntity.setUsername(username);
 
         System.out.println("Enter Password: ");
         String password = sc.nextLine().trim();
@@ -154,7 +153,7 @@ public class ReservationMainApp {
         guestEntity.setRegistered(Boolean.TRUE);
 
         currentGuestEntity = guestEntitySessionBeanRemote.registerAsGuest(guestEntity);
-        System.out.println("New Guest Registered with ID: " + guestEntity.getGuestId());
+        System.out.println("New Guest Registered with ID: " + currentGuestEntity.getGuestId());
 
     }
 
@@ -255,7 +254,7 @@ public class ReservationMainApp {
             }
 
             ReservationEntity reservationEntity = new ReservationEntity(checkinDate, checkoutDate, numAdults, numRooms, roomTypeEntity, currentGuestEntity);
-            
+
             reservationEntity = reservationEntitySessionBeanRemote.createNewGuestReservation(reservationEntity, currentGuestEntity.getGuestId());
             System.out.println("Reservation Created Successfully: Reservation ID: " + reservationEntity.getReservationId());
 
