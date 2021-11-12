@@ -3,7 +3,6 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,6 +39,15 @@ public class RoomRateEntity implements Serializable {
         this.rateType = rateType;
         this.rate = rate;
         this.roomType = roomType;
+    }
+
+    public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, RoomTypeEntity roomType, LocalDate startDate, LocalDate endDate) {
+        this.rateName = rateName;
+        this.rateType = rateType;
+        this.rate = rate;
+        this.roomType = roomType;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, LocalDate startDate, LocalDate endDate, RoomTypeEntity roomType) {

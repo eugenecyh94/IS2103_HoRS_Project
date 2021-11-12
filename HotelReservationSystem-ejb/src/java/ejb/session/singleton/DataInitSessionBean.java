@@ -14,8 +14,6 @@ import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity; 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList; 
 import javax.annotation.PostConstruct; 
 import javax.ejb.EJB; 
@@ -44,8 +42,6 @@ public class DataInitSessionBean {
     RoomRateSessionBeanLocal roomRateSessionBeanLocal; 
     @EJB 
     RoomEntitySessionBeanLocal roomEntitySessionBeanLocal; 
-    
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     public DataInitSessionBean() { 
     } 

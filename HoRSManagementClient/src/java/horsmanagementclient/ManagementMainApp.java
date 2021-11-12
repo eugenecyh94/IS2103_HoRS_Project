@@ -3,7 +3,6 @@ package horsmanagementclient;
 import ejb.session.stateless.GuestEntitySessionBeanRemote;
 import entity.EmployeeEntity;
 import java.util.Scanner;
-import javax.ejb.EJB;
 import util.exception.InvalidLoginCredentialException;
 import ejb.session.stateless.EmployeeEntitySessionBeanRemote;
 import ejb.session.stateless.PartnerEntitySessionBeanRemote;
