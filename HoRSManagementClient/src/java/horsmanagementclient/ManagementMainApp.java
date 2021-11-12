@@ -10,6 +10,7 @@ import ejb.session.stateless.PartnerEntitySessionBeanRemote;
 import util.exception.InvalidAccessRightException;
 import ejb.session.stateless.RoomEntitySessionBeanRemote;
 import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
+import util.enumeration.EmployeeAccessRightEnum;
 
 
 public class ManagementMainApp {
@@ -66,9 +67,18 @@ public class ManagementMainApp {
                         operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
                         frontOfficeModule = new FrontOfficeModule(currentEmployeeEntity);
-                        menuMain();
+                        
+                        if(currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.OPSMANAGER)) {
+                            operationsManagementModule.menuOperationsManagement();
+                        } else if(currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.SYSTEMADMIN)) {
+                            systemAdministrationModule.menuSystemAdministration();
+                        } else if(currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.SALESMANAGER)) {
+                            salesManagementModule.menuSalesManagement();
+                        } else if(currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.GUESTRELATIONSOFFICER)) {
+                            frontOfficeModule.menuFrontOffice();
+                        }
                     }
-                    catch(InvalidLoginCredentialException ex) 
+                    catch(InvalidLoginCredentialException | InvalidAccessRightException ex) 
                     {
                         System.out.println("Invalid login credential: " + ex.getMessage() + "\n");
                     }
@@ -111,92 +121,6 @@ public class ManagementMainApp {
         else
         {
             throw new InvalidLoginCredentialException("Missing login credential!");
-        }
-    }
-    
-    
-    
-    private void menuMain()
-    {
-        Scanner scanner = new Scanner(System.in);
-        Integer response = 0;
-        
-        while(true)
-        {
-            System.out.println("*** Merlion Management System :: Main Menu***\n");
-            System.out.println("You are logged in as " + currentEmployeeEntity.getFirstName() + " " + currentEmployeeEntity.getLastName() + " with " + currentEmployeeEntity.getAccessRightEnum().toString() + " rights\n");
-            System.out.println("1: Operations Management");
-            System.out.println("2: System Administration");
-            System.out.println("3: Sales Management");
-            System.out.println("4: Front Office");
-            System.out.println("5: Logout\n");
-            response = 0;
-            
-            while(response < 1 || response > 4)
-            {
-                System.out.print("> ");
-
-                response = scanner.nextInt();
-
-                if(response == 1)
-                {
-                    try
-                    {
-                        operationsManagementModule.menuOperationsManagement();
-                    }
-                    catch (InvalidAccessRightException ex)
-                    {
-                        System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
-                    }
-                    
-                }
-                else if(response == 2)
-                {
-                    try
-                    {
-                        systemAdministrationModule.menuSystemAdministration();
-                    }
-                    catch (InvalidAccessRightException ex)
-                    {
-                        System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
-                    }
-                }
-                else if(response == 3)
-                {
-                    try
-                    {
-                        salesManagementModule.menuSalesManagement();
-                    }
-                    catch (InvalidAccessRightException ex)
-                    {
-                        System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
-                    }
-                }
-                else if(response == 4)
-                {
-                    try
-                    {
-                        frontOfficeModule.menuFrontOffice();
-                    }
-                    catch (InvalidAccessRightException ex)
-                    {
-                        System.out.println("Invalid option, please try again!: " + ex.getMessage() + "\n");
-                    }
-                }
-                else if (response == 5)
-                {
-                    break;
-                }
-                else
-                {
-                    System.out.println("Invalid option, please try again!\n");                
-                }
-            }
-            
-            if(response == 5)
-            {
-                break;
-            }
         }
     }
 }
