@@ -37,7 +37,7 @@ public class RoomTypeEntity implements Serializable {
     @Column(nullable = false)
     private List<String> roomAmenities;
     @Column(nullable = false)
-    private Boolean roomTypeEnabled;
+    private boolean roomTypeEnabled;
     @Column(nullable = false, length = 16)
     private String nextHigherRoomType;
 
@@ -52,7 +52,7 @@ public class RoomTypeEntity implements Serializable {
         this.rooms = new ArrayList<>();
         this.reservations = new ArrayList<>();
         this.roomAmenities = new ArrayList<>();
-        this.roomTypeEnabled = Boolean.FALSE;
+        this.roomTypeEnabled = true;
     }
 
     public RoomTypeEntity(String name, String description, int capacity, String roomSize, BedSizeEnum bedSize, List<String> roomAmenities, String priority) {

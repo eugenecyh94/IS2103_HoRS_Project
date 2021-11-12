@@ -1,6 +1,5 @@
 package horsmanagementclient;
 
-import ejb.session.stateless.EmployeeEntitySessionBeanRemote;
 import entity.EmployeeEntity;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
@@ -344,7 +343,7 @@ public class OperationsManagementModule {
                 roomTypeEntitySessionBeanRemote.deleteRoomTypebyID(roomTypeEntity.getRoomTypeId());
                 System.out.println("RoomType deleted successfully!\n");
             } catch (RoomTypeCannotBeDeletedException ex) {
-                System.out.println("An error has occurred while deleting the RoomType: " + ex.getMessage() + "\n");
+                System.out.println("Room cannot be deleted: " + ex.getMessage() + "\n");
             }
         } else {
             System.out.println("RoomType NOT deleted!\n");
@@ -357,10 +356,10 @@ public class OperationsManagementModule {
         try {
             System.out.println("here");
             List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-            System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
-            /*roomTypeEntities.forEach(roomTypeEntity -> {
-            System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
-        });*/
+            System.out.printf("%8s%20s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
+            roomTypeEntities.forEach(roomTypeEntity -> {
+            System.out.printf("%8s%20s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
+        });
         } catch (Exception ex) {
             System.out.println("Error occured: " + ex.getMessage());
         }

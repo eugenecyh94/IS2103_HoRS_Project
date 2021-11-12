@@ -1,6 +1,8 @@
 package ejb.session.stateless;
 
 import entity.ReservationEntity;
+import entity.RoomEntity;
+import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -18,7 +20,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     private EntityManager em;
 
     public RoomTypeEntitySessionBean() {
-        
+
     }
 
     @Override
@@ -77,37 +79,34 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @Override
     public void deleteRoomTypebyID(Long roomTypeID) throws RoomTypeCannotBeDeletedException {
         RoomTypeEntity roomTypeToBeDeleted = em.find(RoomTypeEntity.class, roomTypeID);
-        Query query = em.createQuery("SELECT rs FROM ReservationEntity rs");
-        List<ReservationEntity> reservations = query.getResultList();
 
-        for (ReservationEntity r : reservations) {
-            if (roomTypeToBeDeleted.equals(r.getRoomType())) {
-                r.getRoomType().setRoomTypeEnabled(false);
-                throw new RoomTypeCannotBeDeletedException("Room type cannot be deleted! Room type is disabled.");
-            } else {
-                em.remove(roomTypeToBeDeleted);
-            }
+        //query reservations
+        Query query = em.createQuery("SELECT rs FROM ReservationEntity rs WHERE rs.roomType = :inRoomType")
+                .setParameter("inRoomType", roomTypeToBeDeleted);
+        List<ReservationEntity> reservations = query.getResultList();
+        Query query1 = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomType = :inRoomType")
+                .setParameter("inRoomType", roomTypeToBeDeleted);
+        List<RoomEntity> rooms = query1.getResultList();
+        Query query2 = em.createQuery("SELECT rr FROM RoomRateEntity rr WHERE rr.roomType = :inRoomType")
+                .setParameter("inRoomType", roomTypeToBeDeleted);
+        List<RoomRateEntity> roomRates = query2.getResultList();
+
+        if (reservations.isEmpty() && rooms.isEmpty() && roomRates.isEmpty()) {
+            em.remove(roomTypeToBeDeleted);
+            System.out.println("Test Message: Room Deleted");
+        } else {
+            System.out.println("Test Message: Room Disabled");
+            roomTypeToBeDeleted.setRoomTypeEnabled(false);
+            throw new RoomTypeCannotBeDeletedException("Room is Disabled");
         }
+
     }
 
     @Override
     public List<RoomTypeEntity> retrieveAllRoomTypes() throws RoomTypeCannotBeFoundException {
 
         Query query = em.createQuery("SELECT r FROM RoomTypeEntity r");
-        //query.setParameter(":value", Boolean.FALSE);
-        //List<RoomTypeEntity> roomTypes = query.getResultList();
-
-        /*if (roomTypes != null) {
-                for (RoomTypeEntity rt : roomTypes) {
-                    System.out.println("Error reading");
-                    rt.getRoomAmenities().size();
-                    rt.getRooms().size();
-                    rt.getReservations().size();
-                    System.out.println("No Error Reading");
-                }
-            } else {
-                throw new RoomTypeCannotBeFoundException("No Room Types");
-            }*/
+       
         return query.getResultList();
 
     }

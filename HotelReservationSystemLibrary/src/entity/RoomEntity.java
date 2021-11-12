@@ -36,8 +36,6 @@ public class RoomEntity implements Serializable {
     @Column(nullable = false)
     private boolean disabled; //for deletion of room , false = default, not deleted
     private ReservationEntity currentReservation; //check in = set, check out = null
-    //@OneToMany(fetch = FetchType.LAZY)
-    //private List<ReservationEntity> reservations;
     
     public RoomEntity() {
         this.roomStatusAvail = true; // true = available

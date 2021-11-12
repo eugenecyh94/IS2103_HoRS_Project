@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import util.enumeration.RateTypeEnum;
 
 @Entity
@@ -27,7 +28,7 @@ public class RoomRateEntity implements Serializable {
     private BigDecimal rate;
     private LocalDate startDate;
     private LocalDate endDate;
-    @JoinColumn(nullable = false)
+    @OneToOne(optional = false)
     private RoomTypeEntity roomType;
 
     //constructors
