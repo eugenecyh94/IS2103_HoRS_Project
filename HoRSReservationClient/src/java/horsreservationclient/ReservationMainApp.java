@@ -139,11 +139,13 @@ public class ReservationMainApp {
         System.out.println("Enter Username: ");
         username = sc.nextLine().trim();
 
-        try {
-            guestEntitySessionBeanRemote.retrieveGuestByUsername(username);
-            System.out.println("Username Already Exists, choose Another Username!");
-        } catch (GuestNotFoundException ex) {
-            System.out.println("Welcome to Merlion Reservation System!");
+        while (true) {
+            try {
+                guestEntitySessionBeanRemote.retrieveGuestByUsername(username);
+                System.out.println("Username Already Exists, choose Another Username!");
+            } catch (GuestNotFoundException ex) {
+                break;
+            }
         }
         guestEntity.setUsername(username);
 
@@ -153,7 +155,7 @@ public class ReservationMainApp {
         guestEntity.setRegistered(Boolean.TRUE);
 
         currentGuestEntity = guestEntitySessionBeanRemote.registerAsGuest(guestEntity);
-        System.out.println("New Guest Registered with ID: " + currentGuestEntity.getGuestId());
+        System.out.println("New Guest Registered with ID: " + currentGuestEntity.getGuestId() + "\n");
 
     }
 
@@ -186,12 +188,11 @@ public class ReservationMainApp {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms);
             System.out.printf("%20s%20s\n", "Room Type", "Room Rate");
 
-            int i = 0;
-            while (i < availableRooms.size()) {
-                System.out.printf("%20s%20s\n", availableRooms.get(i++), availableRooms.get(i++));
+            for (int i = 0; i < availableRooms.size(); i++) {
+                System.out.printf(/*"%20s%20s\n", */availableRooms.get(i)/*, availableRooms.get(i++)*/);
             }
         } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
-            System.out.println("Error occured: " + ex.getMessage());
+            System.out.println(ex.getMessage());
         }
         System.out.println("");
     }

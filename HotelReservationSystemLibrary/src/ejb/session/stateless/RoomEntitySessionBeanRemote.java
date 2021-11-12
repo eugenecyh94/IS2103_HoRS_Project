@@ -30,5 +30,7 @@ public interface RoomEntitySessionBeanRemote {
     public List<RoomEntity> retrieveAllRooms();
 
     public List<RoomEntity> retrieveAllRoomsByRoomType(Long roomTypeId) throws RoomCannotBeFoundException;
+
+    public List<RoomEntity> retrieveAllAvailableRooms();
     
 }

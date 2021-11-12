@@ -105,7 +105,7 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @Override
     public List<RoomTypeEntity> retrieveAllRoomTypes() {
 
-        Query query = em.createQuery("SELECT r FROM RoomTypeEntity r");
+        Query query = em.createQuery("SELECT r FROM RoomTypeEntity r WHERE r.roomTypeEnabled = TRUE");
        
         return query.getResultList();
 

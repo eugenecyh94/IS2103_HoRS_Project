@@ -500,7 +500,7 @@ public class OperationsManagementModule {
             System.out.printf("%8s%20s%20s%20s\n", roomEntity.getRoomId().toString(), roomEntity.getRoomNumber(), roomEntity.isRoomStatusAvail(), roomEntity.isRoomAllocated());
         });
 
-        System.err.println("");
+        System.out.println("");
     }
 
     private void doViewExceptionReport() {

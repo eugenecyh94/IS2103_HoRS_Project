@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.RoomCannotBeFoundException;
+import util.exception.RoomRateCannotBeFoundException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 @Local
 public interface RoomRateSessionBeanLocal {
 
-    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate);
+    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate) throws RoomTypeCannotBeFoundException;
 
     public RoomRateEntity retrieveRoomRateById(Long roomRateId);
 
@@ -21,5 +23,5 @@ public interface RoomRateSessionBeanLocal {
 
     public List<RoomRateEntity> retrieveAllRoomRates();
 
-    public RoomRateEntity selectDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online);
+    public RoomRateEntity selectDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online) throws RoomRateCannotBeFoundException;
 }

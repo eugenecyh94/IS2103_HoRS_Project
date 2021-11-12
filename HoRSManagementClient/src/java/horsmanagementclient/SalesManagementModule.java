@@ -217,71 +217,68 @@ public class SalesManagementModule {
 
         System.out.println("*** RoomTypes ***\n");
 
-        try {
-            List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-            System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
+        //removed try-catch block here as no exception is thrown and caught 
+        List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
+        System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
 
-            roomTypeEntities.forEach(roomTypeEntity -> {
-                System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
-            });
+        roomTypeEntities.forEach(roomTypeEntity -> {
+            System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
+        });
 
-            System.out.println("");
+        System.out.println("");
 
-            System.out.println("Enter the Room Type ID (0 if no change): ");
-            Long newRoomTypeId = sc.nextLong();
-            if (newRoomTypeId > 0) {
-                while (true) {
-                    try {
-                        RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(newRoomTypeId);
-                        roomRateEntity.setRoomType(roomTypeEntity);
-                        break;
-                    } catch (RoomTypeCannotBeFoundException ex) {
-                        System.out.println("Invalid Choice: " + ex.getMessage());
-                    }
+        System.out.println("Enter the Room Type ID (0 if no change): ");
+        Long newRoomTypeId = sc.nextLong();
+        if (newRoomTypeId > 0) {
+            while (true) {
+                try {
+                    RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(newRoomTypeId);
+                    roomRateEntity.setRoomType(roomTypeEntity);
+                    break;
+                } catch (RoomTypeCannotBeFoundException ex) {
+                    System.out.println("Invalid Choice: " + ex.getMessage());
                 }
             }
-            System.out.println("Change Room Rate Type? y/n");
-
-            if (sc.nextLine().trim().equals('y')) {
-                while (true) {
-                    System.out.print("1: Select Room Rate Type 1: PUBLISHED, 2: NORMAL, 3: PEAK, 4: PROMOTION> ");
-                    Integer roomRateInt = sc.nextInt();
-
-                    if (roomRateInt >= 1 && roomRateInt <= 4) {
-                        roomRateEntity.setRateType(RateTypeEnum.values()[roomRateInt]);
-
-                        break;
-                    } else {
-                        System.out.println("Invalid option, please try again!\n");
-                    }
-                }
-            }
-            System.out.println("Change Room Rate per night? y/n");
-            if (sc.nextLine().trim().equals('y')) {
-                System.out.println("Enter the Room Rate per night : ");
-                roomRateEntity.setRate(sc.nextBigDecimal());
-            }
-
-            if (roomRateEntity.getRateType().equals(RateTypeEnum.PEAK) || roomRateEntity.getRateType().equals(RateTypeEnum.PROMOTION)) {
-                System.out.println("Change Room Rate Dates? y/n");
-                if (sc.nextLine().trim().equals('y')) {
-                    while (true) {
-
-                        System.out.println("Enter Start Date (dd/MM/yyyy): ");
-                        String sDate = sc.nextLine().trim();
-                        roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
-                        System.out.println("Enter End Date (dd/MM/yyyy): ");
-                        sDate = sc.nextLine().trim();
-                        roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
-                    }
-                }
-            }
-
-            roomRateSessionBeanRemote.updateRoomRate(roomRateEntity);
-            System.out.println("Room Rate Updated Successfully!");
-        } catch (RoomTypeCannotBeFoundException ex) {
-            System.out.println("Error occured: " + ex.getMessage());
         }
+        System.out.println("Change Room Rate Type? y/n");
+
+        if (sc.nextLine().trim().equals('y')) {
+            while (true) {
+                System.out.print("1: Select Room Rate Type 1: PUBLISHED, 2: NORMAL, 3: PEAK, 4: PROMOTION> ");
+                Integer roomRateInt = sc.nextInt();
+
+                if (roomRateInt >= 1 && roomRateInt <= 4) {
+                    roomRateEntity.setRateType(RateTypeEnum.values()[roomRateInt]);
+
+                    break;
+                } else {
+                    System.out.println("Invalid option, please try again!\n");
+                }
+            }
+        }
+        System.out.println("Change Room Rate per night? y/n");
+        if (sc.nextLine().trim().equals('y')) {
+            System.out.println("Enter the Room Rate per night : ");
+            roomRateEntity.setRate(sc.nextBigDecimal());
+        }
+
+        if (roomRateEntity.getRateType().equals(RateTypeEnum.PEAK) || roomRateEntity.getRateType().equals(RateTypeEnum.PROMOTION)) {
+            System.out.println("Change Room Rate Dates? y/n");
+            if (sc.nextLine().trim().equals('y')) {
+                while (true) {
+
+                    System.out.println("Enter Start Date (dd/MM/yyyy): ");
+                    String sDate = sc.nextLine().trim();
+                    roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
+                    System.out.println("Enter End Date (dd/MM/yyyy): ");
+                    sDate = sc.nextLine().trim();
+                    roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
+                }
+            }
+        }
+
+        roomRateSessionBeanRemote.updateRoomRate(roomRateEntity);
+        System.out.println("Room Rate Updated Successfully!");
 
     }
 }

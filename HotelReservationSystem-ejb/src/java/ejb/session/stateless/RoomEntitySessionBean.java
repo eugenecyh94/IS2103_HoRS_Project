@@ -89,9 +89,27 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
         Query query = em.createQuery("SELECT r FROM RoomEntity r");
         List<RoomEntity> rooms = query.getResultList();
+        
+        for(RoomEntity r : rooms) {
+            r.getRoomType();
+        }
 
         return rooms;
     }
+    
+    @Override
+    public List<RoomEntity> retrieveAllAvailableRooms() {
+
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomStatusAvail = TRUE");
+        List<RoomEntity> rooms = query.getResultList();
+        
+        for(RoomEntity r : rooms) {
+            r.getRoomType();
+        }
+
+        return rooms;
+    }
+
 
     @Override
     public List<RoomEntity> retrieveAllRoomsByRoomType(Long roomTypeId) throws RoomCannotBeFoundException {

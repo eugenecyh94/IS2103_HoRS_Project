@@ -12,6 +12,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.enumeration.RateTypeEnum;
 import util.exception.RoomCannotBeFoundException;
+import util.exception.RoomRateCannotBeFoundException;
+import util.exception.RoomTypeCannotBeFoundException;
 
 @Stateless
 public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateSessionBeanLocal {
@@ -23,8 +25,12 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     }
 
     @Override
-    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate) {
+    public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate) throws RoomTypeCannotBeFoundException{
 
+        if(em.find(RoomTypeEntity.class, newRoomRate.getRoomType().getRoomTypeId()) == null){
+            throw new RoomTypeCannotBeFoundException("Room Type entered for rate is invalid!");
+        }
+        
         em.persist(newRoomRate);
         em.flush();
 
@@ -84,17 +90,23 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     }
 
     @Override
-    public RoomRateEntity selectDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online) {
+    public RoomRateEntity selectDailyRoomRate(LocalDate dailyDate, Long roomTypeId, boolean online) throws RoomRateCannotBeFoundException {
 
         RoomTypeEntity roomType = em.find(RoomTypeEntity.class, roomTypeId);
 
-        Query query = em.createQuery("SELECT rr from RoomRateEntity rr WHERE rr.roomType := inRoomType");
+        Query query = em.createQuery("SELECT rr from RoomRateEntity rr WHERE rr.roomType = :inRoomType");
         query.setParameter("inRoomType", roomType);
-
+        
         List<RoomRateEntity> roomRates = query.getResultList();
+        
+        if(roomRates.isEmpty()){
+            throw new RoomRateCannotBeFoundException("No daily room rate found!");
+        }
+        
         RoomRateEntity selectedRoomRate = new RoomRateEntity();
 
         for (RoomRateEntity rr : roomRates) {
+            rr.getRoomType();
             if (rr.getRateType() == RateTypeEnum.PROMOTION) {
                 if (!(dailyDate.isBefore(rr.getStartDate()) || dailyDate.isAfter(rr.getEndDate()))) {
                     selectedRoomRate = rr;

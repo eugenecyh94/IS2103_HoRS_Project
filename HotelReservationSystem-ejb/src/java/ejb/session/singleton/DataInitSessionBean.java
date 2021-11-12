@@ -24,6 +24,7 @@ import util.enumeration.BedSizeEnum;
 import util.enumeration.EmployeeAccessRightEnum; 
 import util.enumeration.RateTypeEnum;
 import util.exception.EmployeeNotFoundException; 
+import util.exception.RoomTypeCannotBeFoundException;
  
 /** 
  * 
@@ -70,6 +71,7 @@ public class DataInitSessionBean {
         RoomTypeEntity juniorSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Junior Suite", "Junior Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<String>(), "Grand Suite")); 
         RoomTypeEntity grandSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Grand Suite", "Grand Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<String>(), "None")); 
         
+        try{
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Deluxe Room Published",RateTypeEnum.PUBLISHED,new BigDecimal("100"),deluxeRoom));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Deluxe Room Normal",RateTypeEnum.NORMAL,new BigDecimal("50"),deluxeRoom));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Premier Room Published",RateTypeEnum.PUBLISHED,new BigDecimal("200"),premierRoom));
@@ -80,7 +82,9 @@ public class DataInitSessionBean {
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Junior Suite Published",RateTypeEnum.NORMAL,new BigDecimal("400"),juniorSuite));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Grand Suite Published",RateTypeEnum.PUBLISHED,new BigDecimal("500"),grandSuite));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Grand Suite Published",RateTypeEnum.NORMAL,new BigDecimal("250"),grandSuite));
-        
+        } catch (RoomTypeCannotBeFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
         roomEntitySessionBeanLocal.createNewRoom(new RoomEntity("0101"), deluxeRoom.getRoomTypeId());
         roomEntitySessionBeanLocal.createNewRoom(new RoomEntity("0201"), deluxeRoom.getRoomTypeId());
         roomEntitySessionBeanLocal.createNewRoom(new RoomEntity("0301"), deluxeRoom.getRoomTypeId());
