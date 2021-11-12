@@ -17,15 +17,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import util.enumeration.BedSizeEnum;
-import util.enumeration.RoomAmenitiesEnum;
 import util.exception.RoomCannotBeFoundException;
 import util.exception.RoomTypeCannotBeDeletedException;
 import util.exception.RoomTypeCannotBeFoundException;
 
 public class OperationsManagementModule {
 
-    private RoomEntitySessionBeanRemote roomSessionBeanRemote;
-    private EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote;
     private RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote;
     private RoomEntitySessionBeanRemote roomEntitySessionBeanRemote;
 
@@ -34,8 +31,9 @@ public class OperationsManagementModule {
     public OperationsManagementModule() {
     }
 
-    public OperationsManagementModule(EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity) {
-        this.employeeEntitySessionBeanRemote = employeeEntitySessionBeanRemote;
+    public OperationsManagementModule(RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, RoomEntitySessionBeanRemote roomEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity) {
+        this.roomTypeEntitySessionBeanRemote = roomTypeEntitySessionBeanRemote;
+        this.roomEntitySessionBeanRemote = roomEntitySessionBeanRemote;
         this.currentEmployeeEntity = currentEmployeeEntity;
     }
 
@@ -62,7 +60,7 @@ public class OperationsManagementModule {
             System.out.println("8: Back\n");
             response = 0;
 
-            while (response < 1 || response > 11) {
+            while (response < 1 || response > 8) {
                 System.out.print("> ");
 
                 response = sc.nextInt();
@@ -88,7 +86,7 @@ public class OperationsManagementModule {
                 }
             }
 
-            if (response == 11) {
+            if (response == 8) {
                 break;
             }
         }
@@ -99,22 +97,46 @@ public class OperationsManagementModule {
         RoomTypeEntity roomTypeEntity = new RoomTypeEntity();
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enter the Room Type Name: ");
-        roomTypeEntity.setName(sc.nextLine().trim());
+        String name = "";
+        while (name.length() < 1) {
+            System.out.println("Enter the Room Type Name: ");
+            name = sc.nextLine().trim();
+            if (name.length() > 0) {
+                roomTypeEntity.setName(name);
+            } else {
+                System.out.println("Invalid option, please try again!\n");
+            }
+        }
 
-        System.out.println("Enter the Room Type Description: ");
-        roomTypeEntity.setDescription(sc.nextLine().trim());
+        String description = "";
+        while (description.length() < 1) {
+            System.out.println("Enter the Room Type Description: ");
+            description = sc.nextLine().trim();
+            if (description.length() > 0) {
+                roomTypeEntity.setDescription(description);
+            } else {
+                System.out.println("Invalid option, please try again!\n");
+            }
+        }
 
-        System.out.println("Enter the Room Type Size: ");
-        roomTypeEntity.setRoomSize(sc.nextLine().trim());
+        String size = "";
+        while (size.length() < 1) {
+            System.out.println("Enter the Room Type Size: ");
+            size = sc.nextLine().trim();
+            if (size.length() > 0) {
+                roomTypeEntity.setRoomSize(size);
+            } else {
+                System.out.println("Invalid option, please try again!\n");
+            }
+        }
 
         while (true) {
             System.out.print("1: Select Bed Size 1: SINGLE, 2: SUPERSINGLE, 3: QUEEN, 4: KING > ");
             Integer bedSizeInt = sc.nextInt();
+            sc.nextLine();
 
             if (bedSizeInt >= 1 && bedSizeInt <= 4) {
-                roomTypeEntity.setBedSize(BedSizeEnum.values()[bedSizeInt]);
-
+                roomTypeEntity.setBedSize(BedSizeEnum.values()[bedSizeInt - 1]);
                 break;
             } else {
                 System.out.println("Invalid option, please try again!\n");
@@ -123,8 +145,9 @@ public class OperationsManagementModule {
 
         System.out.println("Enter the Room Type Capacity: ");
         roomTypeEntity.setCapacity(sc.nextInt());
+        sc.nextLine();
 
-        List<RoomAmenitiesEnum> roomAmenities = new ArrayList<>();
+        List<String> roomAmenities = new ArrayList<>();
 
         while (true) {
             System.out.println("Enter Room Type Amenities: ");
@@ -141,7 +164,26 @@ public class OperationsManagementModule {
             Integer amenityInteger = sc.nextInt();
 
             if (amenityInteger >= 1 && amenityInteger <= 8) {
-                roomAmenities.add(RoomAmenitiesEnum.values()[amenityInteger]);
+                switch (amenityInteger) {
+                    case 1:
+                        roomAmenities.add("WIFI");
+                    case 2:
+                        roomAmenities.add("BATHTUB");
+                    case 3:
+                        roomAmenities.add("BATHROOMAMENITIES");
+                    case 4:
+                        roomAmenities.add("HAIRDRYER");
+                    case 5:
+                        roomAmenities.add("LAUNDRY SERVICE");
+                    case 6:
+                        roomAmenities.add("MINIBAR");
+                    case 7:
+                        roomAmenities.add("LCDTV");
+                    case 8:
+                        roomAmenities.add("TVSPEAKER");
+                    case 9:
+                        break;
+                }
             } else if (amenityInteger == 9) {
                 break;
             } else {
@@ -149,7 +191,17 @@ public class OperationsManagementModule {
             }
         }
 
+        sc.nextLine();
         roomTypeEntity.setRoomAmenities(roomAmenities);
+
+        String higherRoom = "";
+        System.out.print("Enter next higher room type (leave blank and enter if no next higher room type)> ");
+        higherRoom = sc.nextLine().toUpperCase().trim();
+        if (higherRoom.length() > 0) {
+            roomTypeEntity.setNextHigherRoomType(higherRoom);
+        } else {
+            roomTypeEntity.setNextHigherRoomType("NONE");
+        }
 
         RoomTypeEntity newRoomTypeEntity = roomTypeEntitySessionBeanRemote.createNewRoomType(roomTypeEntity);
         System.out.println("New Room Type Entity created Successfully with ID: " + newRoomTypeEntity.getRoomTypeId());
@@ -160,7 +212,7 @@ public class OperationsManagementModule {
         Integer response = 0;
 
         System.out.println("*** Merlion Management System :: Operations Management :: View RoomType Details ***\n");
-        System.out.print("Enter RoomType ID ");
+        System.out.print("Enter RoomType ID: ");
         //String roomTypeName = sc.nextLine().trim();
         Long roomTypeId = sc.nextLong();
         try {
@@ -207,7 +259,7 @@ public class OperationsManagementModule {
             roomTypeEntity.setCapacity(capacity);
         }
 
-        List<RoomAmenitiesEnum> roomAmenities = new ArrayList<>();
+        List<String> roomAmenities = new ArrayList<>();
 
         while (true) {
             System.out.println("Enter Room Type Amenities: ");
@@ -225,7 +277,26 @@ public class OperationsManagementModule {
             Integer amenityInteger = sc.nextInt();
 
             if (amenityInteger >= 1 && amenityInteger <= 8) {
-                roomAmenities.add(RoomAmenitiesEnum.values()[amenityInteger]);
+                switch (amenityInteger) {
+                    case 1:
+                        roomAmenities.add("WIFI");
+                    case 2:
+                        roomAmenities.add("BATHTUB");
+                    case 3:
+                        roomAmenities.add("BATHROOMAMENITIES");
+                    case 4:
+                        roomAmenities.add("HAIRDRYER");
+                    case 5:
+                        roomAmenities.add("LAUNDRY SERVICE");
+                    case 6:
+                        roomAmenities.add("MINIBAR");
+                    case 7:
+                        roomAmenities.add("LCDTV");
+                    case 8:
+                        roomAmenities.add("TVSPEAKER");
+                    case 9:
+                        break;
+                }
             } else if (amenityInteger == 9) {
                 roomTypeEntity.setRoomAmenities(roomAmenities);
                 break;
@@ -250,6 +321,12 @@ public class OperationsManagementModule {
             }
         }
 
+        System.out.print("Enter next higher room Type (blank if no change)> ");
+        input = sc.nextLine().toUpperCase().trim();
+        if (input.length() > 0) {
+            roomTypeEntity.setNextHigherRoomType(input);
+        }
+
         roomTypeEntitySessionBeanRemote.updateRoomTypeDetails(roomTypeEntity);
         System.out.println("RoomType updated successfully!\n");
     }
@@ -260,7 +337,7 @@ public class OperationsManagementModule {
 
         System.out.println("*** Merlion Management System :: Operations Management :: View RoomType Details :: Delete RoomType ***\n");
         System.out.printf("Confirm Delete RoomType %s (RoomType ID: %d) (Enter 'Y' to Delete)> ", roomTypeEntity.getName(), roomTypeEntity.getRoomTypeId());
-        input = sc.nextLine().trim();
+        input = sc.nextLine().trim().toUpperCase();
 
         if (input.equals("Y")) {
             try {
@@ -279,9 +356,9 @@ public class OperationsManagementModule {
 
         try {
             System.out.println("here");
-        List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-        System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
-        /*roomTypeEntities.forEach(roomTypeEntity -> {
+            List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
+            System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
+            /*roomTypeEntities.forEach(roomTypeEntity -> {
             System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
         });*/
         } catch (Exception ex) {
@@ -314,7 +391,7 @@ public class OperationsManagementModule {
         System.out.println("Enter Room Number");
         newRoomEntity.setRoomNumber(sc.nextLine().trim());
 
-        newRoomEntity = roomSessionBeanRemote.createNewRoom(newRoomEntity, roomTypeId);
+        newRoomEntity = roomEntitySessionBeanRemote.createNewRoom(newRoomEntity, roomTypeId);
         System.out.print("New Room Created Successfully with ID:" + newRoomEntity.getRoomId());
 
     }
@@ -371,14 +448,14 @@ public class OperationsManagementModule {
             }
         }
 
-        System.out.print("Enter Room Status: Current Status is " + roomEntity.isRoomStatusAvail() +" (y for available, n for unavailable)> ");
+        System.out.print("Enter Room Status: Current Status is " + roomEntity.isRoomStatusAvail() + " (y for available, n for unavailable)> ");
         if (sc.next().equals('y')) {
             roomEntity.setRoomStatusAvail(!roomEntity.isRoomStatusAvail());
-            System.out.println("Room Status changed to "+ roomEntity.isRoomStatusAvail());
+            System.out.println("Room Status changed to " + roomEntity.isRoomStatusAvail());
         }
 
         roomEntitySessionBeanRemote.updateRoomDetails(roomEntity);
-        System.out.println ("Room updated successfully!\n");
+        System.out.println("Room updated successfully!\n");
     }
 
     private RoomTypeEntitySessionBeanRemote lookupRoomTypeEntitySessionBeanRemote() {
@@ -396,7 +473,7 @@ public class OperationsManagementModule {
         String input;
 
         System.out.println("*** Merlion Management System :: Operations Management :: View Room Details :: Delete Room ***\n");
-        System.out.printf("Confirm Delete Room %s (Room ID: %d) (Enter 'y' to Delete)> ",  roomEntity.getRoomNumber(),roomEntity.getRoomId());
+        System.out.printf("Confirm Delete Room %s (Room ID: %d) (Enter 'y' to Delete)> ", roomEntity.getRoomNumber(), roomEntity.getRoomId());
         input = sc.nextLine().trim();
 
         if (input.equals("y")) {
@@ -425,6 +502,6 @@ public class OperationsManagementModule {
     }
 
     private void doViewExceptionReport() {
-        
+
     }
 }

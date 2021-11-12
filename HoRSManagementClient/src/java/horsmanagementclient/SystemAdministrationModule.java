@@ -85,7 +85,7 @@ public class SystemAdministrationModule {
             System.out.print("Select Access Right (1: Sales Manager, 2: Operations Manager, 3: System Admin, 4: Guest Relations Officer)> ");
             Integer accessRightInt = scanner.nextInt();
 
-            if (accessRightInt >= 1 && accessRightInt <= 2) {
+            if (accessRightInt > 1 && accessRightInt < 4) {
                 newEmployeeEntity.setAccessRightEnum(EmployeeAccessRightEnum.values()[accessRightInt - 1]);
                 break;
             } else {

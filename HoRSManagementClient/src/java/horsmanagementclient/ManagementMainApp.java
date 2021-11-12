@@ -9,14 +9,16 @@ import ejb.session.stateless.EmployeeEntitySessionBeanRemote;
 import ejb.session.stateless.PartnerEntitySessionBeanRemote;
 import util.exception.InvalidAccessRightException;
 import ejb.session.stateless.RoomEntitySessionBeanRemote;
+import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
 
 
 public class ManagementMainApp {
 
-    private RoomEntitySessionBeanRemote roomSessionBeanRemote;
+    private RoomEntitySessionBeanRemote roomEntitySessionBeanRemote;
     private EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote;
     private PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote;
     private GuestEntitySessionBeanRemote guestEntitySessionBeanRemote;
+    private RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote;
     
     private SystemAdministrationModule systemAdministrationModule;
     private OperationsManagementModule operationsManagementModule;
@@ -27,8 +29,9 @@ public class ManagementMainApp {
     public ManagementMainApp() {
     }
 
-    public ManagementMainApp(RoomEntitySessionBeanRemote roomSessionBeanRemote, EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote) {
-        this.roomSessionBeanRemote = roomSessionBeanRemote;
+    public ManagementMainApp(RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote,RoomEntitySessionBeanRemote roomEntitySessionBeanRemote, EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote) {
+        this.roomTypeEntitySessionBeanRemote = roomTypeEntitySessionBeanRemote;
+        this.roomEntitySessionBeanRemote = roomEntitySessionBeanRemote;
         this.employeeEntitySessionBeanRemote = employeeEntitySessionBeanRemote;
         this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
         this.partnerEntitySessionBeanRemote = partnerEntitySessionBeanRemote;
@@ -60,7 +63,7 @@ public class ManagementMainApp {
                         System.out.println("Login successful!\n");
                         
                         salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
-                        operationsManagementModule = new OperationsManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity);
+                        operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
                         frontOfficeModule = new FrontOfficeModule(currentEmployeeEntity);
                         menuMain();

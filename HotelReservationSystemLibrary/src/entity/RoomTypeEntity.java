@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import util.enumeration.BedSizeEnum;
-import util.enumeration.RoomAmenitiesEnum;
 
 /**
  *
@@ -36,10 +35,10 @@ public class RoomTypeEntity implements Serializable {
     @Column(nullable = false)
     private BedSizeEnum bedSize;
     @Column(nullable = false)
-    private List<RoomAmenitiesEnum> roomAmenities;
+    private List<String> roomAmenities;
     @Column(nullable = false)
     private Boolean roomTypeEnabled;
-    @Column(length = 16)
+    @Column(nullable = false, length = 16)
     private String nextHigherRoomType;
 
     @OneToMany(mappedBy = "roomType", fetch = FetchType.LAZY)
@@ -56,7 +55,7 @@ public class RoomTypeEntity implements Serializable {
         this.roomTypeEnabled = Boolean.FALSE;
     }
 
-    public RoomTypeEntity(String name, String description, int capacity, String roomSize, BedSizeEnum bedSize, List<RoomAmenitiesEnum> roomAmenities, String priority) {
+    public RoomTypeEntity(String name, String description, int capacity, String roomSize, BedSizeEnum bedSize, List<String> roomAmenities, String priority) {
         this();
         this.name = name;
         this.description = description;
@@ -143,11 +142,11 @@ public class RoomTypeEntity implements Serializable {
         this.bedSize = bedSize;
     }
 
-    public List<RoomAmenitiesEnum> getRoomAmenities() {
+    public List<String> getRoomAmenities() {
         return roomAmenities;
     }
 
-    public void setRoomAmenities(List<RoomAmenitiesEnum> roomAmenities) {
+    public void setRoomAmenities(List<String> roomAmenities) {
         this.roomAmenities = roomAmenities;
     }
 

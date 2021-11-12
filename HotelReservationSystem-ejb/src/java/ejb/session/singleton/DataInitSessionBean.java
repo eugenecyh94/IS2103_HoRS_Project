@@ -10,7 +10,6 @@ import ejb.session.stateless.RoomEntitySessionBeanLocal;
 import ejb.session.stateless.RoomRateSessionBeanLocal; 
 import ejb.session.stateless.RoomTypeEntitySessionBeanLocal; 
 import entity.EmployeeEntity; 
-import entity.RoomEntity; 
 import entity.RoomTypeEntity; 
 import java.util.ArrayList; 
 import javax.annotation.PostConstruct; 
@@ -20,7 +19,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Startup; 
 import util.enumeration.BedSizeEnum; 
 import util.enumeration.EmployeeAccessRightEnum; 
-import util.enumeration.RoomAmenitiesEnum; 
 import util.exception.EmployeeNotFoundException; 
  
 /** 
@@ -63,10 +61,10 @@ public class DataInitSessionBean {
         employeeEntitySessionBeanLocal.createNewEmployee(new EmployeeEntity("Eugene", "Chua", "salesmanager", "password", EmployeeAccessRightEnum.SALESMANAGER)); 
         employeeEntitySessionBeanLocal.createNewEmployee(new EmployeeEntity("Yunus", "Ali", "guestrelo", "password", EmployeeAccessRightEnum.GUESTRELATIONSOFFICER)); 
         
-        RoomTypeEntity deluxeRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Deluxe Room", "Deluxue Room Description", 2, "20sqm" , BedSizeEnum.SINGLE, new ArrayList<RoomAmenitiesEnum>(), "Premier Rooom")); 
-        RoomTypeEntity premierRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Premier Room", "Premier Room Description", 2, "22sqm" , BedSizeEnum.SUPERSINGLE, new ArrayList<RoomAmenitiesEnum>(), "Family Room")); 
-        RoomTypeEntity familyRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Family Room", "Family Room Description", 4, "24sqm" , BedSizeEnum.QUEEN, new ArrayList<RoomAmenitiesEnum>(), "Junior Suite")); 
-        RoomTypeEntity gradeSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Junior Suite", "Junior Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<RoomAmenitiesEnum>(), "Premier Room")); 
+        RoomTypeEntity deluxeRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Deluxe Room", "Deluxue Room Description", 2, "20sqm" , BedSizeEnum.SINGLE, new ArrayList<String>(), "Premier Rooom")); 
+        RoomTypeEntity premierRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Premier Room", "Premier Room Description", 2, "22sqm" , BedSizeEnum.SUPERSINGLE, new ArrayList<String>(), "Family Room")); 
+        RoomTypeEntity familyRoom = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Family Room", "Family Room Description", 4, "24sqm" , BedSizeEnum.QUEEN, new ArrayList<String>(), "Junior Suite")); 
+        RoomTypeEntity gradeSuite = roomTypeEntitySessionBeanLocal.createNewRoomType(new RoomTypeEntity("Junior Suite", "Junior Suite Description", 4, "26sqm" , BedSizeEnum.KING, new ArrayList<String>(), "Premier Room")); 
     } 
         
 }
