@@ -37,6 +37,13 @@ public class RoomRateEntity implements Serializable {
     public RoomRateEntity() {    
     }
 
+    public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, RoomTypeEntity roomType) {
+        this.rateName = rateName;
+        this.rateType = rateType;
+        this.rate = rate;
+        this.roomType = roomType;
+    }
+
     public RoomRateEntity(String rateName, RateTypeEnum rateType, BigDecimal rate, LocalDate startDate, LocalDate endDate, RoomTypeEntity roomType) {
         this.rateName = rateName;
         this.rateType = rateType;
