@@ -92,8 +92,18 @@ public class FrontOfficeModule {
         sDate = sc.nextLine().trim();
         LocalDate checkoutDate = LocalDate.parse(sDate, formatter);
 
-        int numRooms;
+        int numAdults;
+        while (true) {
+            System.out.println("Enter the number of Adults: ");
+            numAdults = sc.nextInt();
+            if (numAdults > 0) {
+                break;
+            } else {
+                System.out.println("The number of Adults has to be greater than 0!");
+            }
+        }
 
+        int numRooms;
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
             numRooms = sc.nextInt();
@@ -103,9 +113,8 @@ public class FrontOfficeModule {
                 System.err.println("The number of rooms has to be greater than 0!");
             }
         }
-
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms);
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
             System.out.printf("%20s%20s\n", "Room Type", "Room Rate");
 
             int i = 0;
@@ -131,21 +140,31 @@ public class FrontOfficeModule {
         sDate = sc.nextLine().trim();
         LocalDate checkoutDate = LocalDate.parse(sDate, formatter);
 
-        int numRooms;
+        int numAdults;
+        while (true) {
+            System.out.println("Enter the number of Adults: ");
+            numAdults = sc.nextInt();
+            if (numAdults > 0) {
+                break;
+            } else {
+                System.out.println("The number of Adults has to be greater than 0!");
+            }
+        }
 
+        int numRooms;
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
             numRooms = sc.nextInt();
             if (numRooms > 0) {
                 break;
             } else {
-                System.out.println("The number of rooms has to be greater than 0!");
+                System.err.println("The number of rooms has to be greater than 0!");
             }
         }
-
+        
         RoomTypeEntity roomTypeEntity;
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms);
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
             System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
 
             int i = 0, j = 1;
@@ -164,17 +183,6 @@ public class FrontOfficeModule {
                 }
             }
 
-            int numAdults;
-            while (true) {
-                System.out.println("Enter the number of Adults: ");
-                numAdults = sc.nextInt();
-                if (numAdults > 0) {
-                    break;
-                } else {
-                    System.out.println("The number of Adults has to be greater than 0!");
-                }
-            }
-
             GuestEntity guestEntity;
 
             System.out.println("Enter the Passport number of the guest: ");
@@ -183,8 +191,8 @@ public class FrontOfficeModule {
             try {
                 guestEntity = guestEntitySessionBeanRemote.retrieveGuestByPassportNumber(passportNumber);
             } catch (GuestNotFoundException ex) {
-                
-                guestEntity= new GuestEntity();
+
+                guestEntity = new GuestEntity();
                 System.out.println("Enter First Name");
                 guestEntity.setFirstName(sc.nextLine().trim());
                 System.out.println("Enter Last Name");

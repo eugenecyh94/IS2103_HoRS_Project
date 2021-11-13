@@ -40,7 +40,7 @@ public class GuestEntity implements Serializable {
     private String mobileNumber;
     @Column(nullable = false, length = 16, unique = true)
     private String username;
-    @Column(nullable = false, length = 8, unique = true)
+    @Column(nullable = false, length = 8)
     private String password;
     @Column(nullable = false)
     private boolean registered;

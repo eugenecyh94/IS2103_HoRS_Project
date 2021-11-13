@@ -18,8 +18,8 @@ import util.exception.RoomTypeCannotBeFoundException;
 @Local
 public interface SearchSessionBeanLocal {
 
-    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException;
+    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms, int numberOfAdults) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException;
 
-    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException;
+    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms, int numberOfAdults) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException;
 
 }

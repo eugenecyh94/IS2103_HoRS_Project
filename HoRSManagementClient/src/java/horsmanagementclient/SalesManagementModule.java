@@ -206,7 +206,7 @@ public class SalesManagementModule {
 
         System.out.println("*** Merlion Management System :: Sales Management :: View RoomRate Details :: Delete RoomRate ***\n");
         System.out.printf("Confirm Delete RoomRate %s (RoomRate ID: %d) (Enter 'Y' to Delete)> ", roomRateEntity.getRateName(), roomRateEntity.getRoomRateId());
-        input = sc.nextLine().trim();
+        input = sc.nextLine().trim().toUpperCase();
 
         if (input.equals("Y")) {
 

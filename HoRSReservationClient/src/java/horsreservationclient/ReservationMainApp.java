@@ -7,6 +7,7 @@ import ejb.session.stateless.SearchSessionBeanRemote;
 import entity.GuestEntity;
 import entity.ReservationEntity;
 import entity.RoomTypeEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -168,25 +169,57 @@ public class ReservationMainApp {
         String sDate = sc.nextLine().trim();
         LocalDate checkinDate = LocalDate.parse(sDate, formatter);
 
-        System.out.println("Enter the check out Date (dd/MM/yyyy): ");
-        sDate = sc.nextLine().trim();
-        LocalDate checkoutDate = LocalDate.parse(sDate, formatter);
+        LocalDate checkoutDate;
 
+ while (true) {
+            System.out.println("Enter the check out Date (dd/MM/yyyy): ");
+            sDate = sc.nextLine().trim();
+            checkoutDate = LocalDate.parse(sDate, formatter);
+
+            if (checkoutDate.isBefore(checkinDate)) {
+                System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+            } else {
+                break;
+            }
+        }
+
+        int totalDays = 0;
+
+        for (LocalDate dailyDate = checkinDate; dailyDate.isBefore(checkoutDate); dailyDate = dailyDate.plusDays(1)) {
+            totalDays += 1;
+        }
+
+        String totalDaysInString = new String();
+        BigDecimal totalDaysInBd = new BigDecimal(totalDaysInString.valueOf(totalDays));
+        System.out.println("\nTotal Nights of Stay = " + totalDaysInBd.toString() + "\n");
+
+        int numAdults;
+        while (true) {
+            System.out.println("Enter the number of Adults: ");
+            numAdults = sc.nextInt();
+            if (numAdults > 0) {
+                break;
+            } else {
+                System.out.println("The number of Adults has to be greater than 0!");
+            }
+        }
+        
         int numRooms;
-
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
             numRooms = sc.nextInt();
             if (numRooms > 0) {
                 break;
             } else {
-                System.err.println("The number of rooms has to be greater than 0!");
+                System.out.println("The number of rooms has to be greater than 0!");
             }
         }
 
+        System.out.println("\n"); //for formatting
+        
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms);
-            System.out.printf("%20s%30s\n", "Room Type", "Average Room Rate per night");
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms, numAdults);
+            System.out.printf("%20s%30s\n", "Room Type", "Average Room Rate/Night(SGD)");
 
             for (int i = 0; i < availableRooms.size(); i++) {
                 System.out.printf("%20s%30s\n", availableRooms.get(i), availableRooms.get(i += 1));
@@ -206,12 +239,42 @@ public class ReservationMainApp {
         String sDate = sc.nextLine().trim();
         LocalDate checkinDate = LocalDate.parse(sDate, formatter);
 
-        System.out.println("Enter the check out Date (dd/MM/yyyy): ");
-        sDate = sc.nextLine().trim();
-        LocalDate checkoutDate = LocalDate.parse(sDate, formatter);
+        LocalDate checkoutDate;
 
+        while (true) {
+            System.out.println("Enter the check out Date (dd/MM/yyyy): ");
+            sDate = sc.nextLine().trim();
+            checkoutDate = LocalDate.parse(sDate, formatter);
+
+            if (checkoutDate.isBefore(checkinDate)) {
+                System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+            } else {
+                break;
+            }
+        }
+
+        int totalDays = 0;
+
+        for (LocalDate dailyDate = checkinDate; dailyDate.isBefore(checkoutDate); dailyDate = dailyDate.plusDays(1)) {
+            totalDays += 1;
+        }
+
+        String totalDaysInString = new String();
+        BigDecimal totalDaysInBd = new BigDecimal(totalDaysInString.valueOf(totalDays));
+        System.out.println("\nTotal Nights of Stay = " + totalDaysInBd.toString() + "\n");
+
+        int numAdults;
+        while (true) {
+            System.out.println("Enter the number of Adults: ");
+            numAdults = sc.nextInt();
+            if (numAdults > 0) {
+                break;
+            } else {
+                System.out.println("The number of Adults has to be greater than 0!");
+            }
+        }
+        
         int numRooms;
-
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
             numRooms = sc.nextInt();
@@ -221,11 +284,15 @@ public class ReservationMainApp {
                 System.out.println("The number of rooms has to be greater than 0!");
             }
         }
+        String totalRoomsInString = new String();
+        BigDecimal totalRoomsInBd = new BigDecimal(totalRoomsInString.valueOf(numRooms));
+
+        System.out.println("\n"); //for formatting
 
         RoomTypeEntity roomTypeEntity;
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms);
-            System.out.printf("%2s%20s%30s\n", "#", "Room Type", "Average Room Rate per night");
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms, numAdults);
+            System.out.printf("%2s%20s%30s\n", "#", "Room Type", "Average Room Rate/Night(SGD)");
 
             int i = 0, j = 1;
             while (i < availableRooms.size()) {
@@ -234,11 +301,13 @@ public class ReservationMainApp {
 
             System.out.println("Enter the # of the Room Type you wish to book: ");
             int input = 0;
+            String dailyRateOfChosenRoom = "";
             while (true) {
                 input = sc.nextInt();
                 if (input > 0 && input <= j) {
                     try {
                         roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeByName(availableRooms.get(((input - 1) * 2)));
+                        dailyRateOfChosenRoom = availableRooms.get(((input - 1) * 2) + 1);
                         break;
                     } catch (RoomTypeCannotBeFoundException ex) {
                         System.out.println("Invalid choice try again, please enter the # of the Room Type you wish to book again: ");
@@ -247,22 +316,29 @@ public class ReservationMainApp {
                     System.out.println("Invalid choice try again, please enter the # of the Room Type you wish to book again: ");
                 }
             }
+            
+            BigDecimal dailyRateofChosenRoomInBd = new BigDecimal(dailyRateOfChosenRoom);
+            BigDecimal totalAmountInBd = dailyRateofChosenRoomInBd.multiply(totalDaysInBd).multiply(totalRoomsInBd);
 
-            int numAdults;
-            while (true) {
-                System.out.println("Enter the number of Adults: ");
-                numAdults = sc.nextInt();
-                if (numAdults > 0) {
-                    break;
-                } else {
-                    System.out.println("The number of Adults has to be greater than 0!");
-                }
-            }
+            System.out.println("Total Amount for " + roomTypeEntity.getName() + " from " 
+                    + checkinDate.toString() + " to " + checkoutDate.toString() + " is SGD"
+                    + totalAmountInBd.toString());
 
             ReservationEntity reservationEntity = new ReservationEntity(checkinDate, checkoutDate, numAdults, numRooms, roomTypeEntity, currentGuestEntity);
 
-            reservationEntity = reservationEntitySessionBeanRemote.createNewGuestReservation(reservationEntity, currentGuestEntity.getGuestId());
-            System.out.println("Reservation Created Successfully: Reservation ID: " + reservationEntity.getReservationId());
+            reservationEntity.setTotalAmount(totalAmountInBd);
+
+            String confirmation = "";
+            System.out.printf("Confirm Reservation? (Enter 'Y' to confirm)> ");
+            sc.nextLine();
+            confirmation = sc.nextLine().trim().toUpperCase();
+
+            if (confirmation.equals("Y")) {
+                reservationEntity = reservationEntitySessionBeanRemote.createNewGuestReservation(reservationEntity, currentGuestEntity.getGuestId());
+                System.out.println("Reservation Created Successfully: Reservation ID: " + reservationEntity.getReservationId());
+            } else {
+                System.out.println("Reservation cancelled!");
+            }
 
         } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException | GuestNotFoundException ex) {
             System.out.println("Error Occured: " + ex.getMessage());

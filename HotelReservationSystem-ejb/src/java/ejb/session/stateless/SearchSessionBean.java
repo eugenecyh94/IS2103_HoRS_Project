@@ -36,7 +36,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     }
 
     @Override
-    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException {
+    public List<String> searchAvailableRoomTypesWalkIn(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms, int numberOfAdults) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException {
 
         List<String> availableRoomTypeAndRatePerNight = new ArrayList<>();
         List<RoomTypeEntity> roomTypes = roomTypeEntitySessionBeanLocal.retrieveAllRoomTypes();
@@ -44,6 +44,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
 
         List<ReservationEntity> dateFilteredreservations = reservationEntitySessionBeanLocal.retrieveAllReservationsBySearchDates(checkInDate, checkOutDate);
 
+        //for debug
         System.out.println("For debugging: roomTypes and room check");
         for (RoomTypeEntity rt : roomTypes) {
             System.out.println("" + rt.getName());
@@ -61,7 +62,15 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
         }
 
         //Main logic to search available rooms and respective rate
+        List<RoomTypeEntity> capacityFilteredRoomTypes = new ArrayList<>();
+
         for (RoomTypeEntity rt : roomTypes) {
+            if (rt.getCapacity() >= numberOfAdults) {
+                capacityFilteredRoomTypes.add(rt);
+            }
+        }
+
+        for (RoomTypeEntity rt : capacityFilteredRoomTypes) {
             int totalRoomsAvailable = 0;
             for (RoomEntity r : rooms) {
                 r.getRoomType();
@@ -97,23 +106,23 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
                     periodAvailableRooms = dailyAvailableRooms;
                 }
             }
-            System.out.println("For debugging: periodRoomsAvailable = "  + rt.getName() + " " + periodAvailableRooms);
-            System.out.println("For debugging: periodRoomRate = "  + rt.getName() + " " + periodRoomTypeRate.toString());
+            System.out.println("For debugging: periodRoomsAvailable = " + rt.getName() + " " + periodAvailableRooms);
+            System.out.println("For debugging: periodRoomRate = " + rt.getName() + " " + periodRoomTypeRate.toString());
             //if avail rooms > guest required number of rooms
             if (periodAvailableRooms >= guestNumberOfRooms && !periodRoomTypeRate.equals(new BigDecimal("0"))) {
                 String totalDaysInString = new String();
                 BigDecimal totalDaysInBd = new BigDecimal(totalDaysInString.valueOf(totalDays));
                 availableRoomTypeAndRatePerNight.add(rt.getName());
-                availableRoomTypeAndRatePerNight.add("SGD " + periodRoomTypeRate.divide(totalDaysInBd, 2 , RoundingMode.CEILING).toString()); //can change to per night if neccessary;
+                availableRoomTypeAndRatePerNight.add(periodRoomTypeRate.divide(totalDaysInBd, 2, RoundingMode.CEILING).toString()); //can change to per night if neccessary;
             }
         }
 
         if (availableRoomTypeAndRatePerNight.isEmpty()) {
             throw new NoRoomTypeAvailableException("No Room Type is available for this period!");
         }
-        
+
         System.out.println("For debugging: List returned");
-        for(String s : availableRoomTypeAndRatePerNight) {
+        for (String s : availableRoomTypeAndRatePerNight) {
             System.out.println(s);
         }
 
@@ -121,14 +130,14 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
     }
 
     @Override
-    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException {
-
+    public List<String> searchAvailableRoomTypesOnline(LocalDate checkInDate, LocalDate checkOutDate, int guestNumberOfRooms, int numberOfAdults) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException {
         List<String> availableRoomTypeAndRatePerNight = new ArrayList<>();
         List<RoomTypeEntity> roomTypes = roomTypeEntitySessionBeanLocal.retrieveAllRoomTypes();
         List<RoomEntity> rooms = roomEntitySessionBeanLocal.retrieveAllAvailableRooms();
 
         List<ReservationEntity> dateFilteredreservations = reservationEntitySessionBeanLocal.retrieveAllReservationsBySearchDates(checkInDate, checkOutDate);
 
+        //for debug
         System.out.println("For debugging: roomTypes and room check");
         for (RoomTypeEntity rt : roomTypes) {
             System.out.println("" + rt.getName());
@@ -146,7 +155,15 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
         }
 
         //Main logic to search available rooms and respective rate
+        List<RoomTypeEntity> capacityFilteredRoomTypes = new ArrayList<>();
+
         for (RoomTypeEntity rt : roomTypes) {
+            if (rt.getCapacity() >= numberOfAdults) {
+                capacityFilteredRoomTypes.add(rt);
+            }
+        }
+
+        for (RoomTypeEntity rt : capacityFilteredRoomTypes) {
             int totalRoomsAvailable = 0;
             for (RoomEntity r : rooms) {
                 r.getRoomType();
@@ -182,23 +199,23 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
                     periodAvailableRooms = dailyAvailableRooms;
                 }
             }
-            System.out.println("For debugging: periodRoomsAvailable = "  + rt.getName() + " " + periodAvailableRooms);
-            System.out.println("For debugging: periodRoomRate = "  + rt.getName() + " " + periodRoomTypeRate.toString());
+            System.out.println("For debugging: periodRoomsAvailable = " + rt.getName() + " " + periodAvailableRooms);
+            System.out.println("For debugging: periodRoomRate = " + rt.getName() + " " + periodRoomTypeRate.toString());
             //if avail rooms > guest required number of rooms
             if (periodAvailableRooms >= guestNumberOfRooms && !periodRoomTypeRate.equals(new BigDecimal("0"))) {
                 String totalDaysInString = new String();
                 BigDecimal totalDaysInBd = new BigDecimal(totalDaysInString.valueOf(totalDays));
                 availableRoomTypeAndRatePerNight.add(rt.getName());
-                availableRoomTypeAndRatePerNight.add("SGD " + periodRoomTypeRate.divide(totalDaysInBd, 2 , RoundingMode.CEILING).toString()); //can change to per night if neccessary;
+                availableRoomTypeAndRatePerNight.add(periodRoomTypeRate.divide(totalDaysInBd, 2, RoundingMode.CEILING).toString()); //can change to per night if neccessary;
             }
         }
 
         if (availableRoomTypeAndRatePerNight.isEmpty()) {
             throw new NoRoomTypeAvailableException("No Room Type is available for this period!");
         }
-        
+
         System.out.println("For debugging: List returned");
-        for(String s : availableRoomTypeAndRatePerNight) {
+        for (String s : availableRoomTypeAndRatePerNight) {
             System.out.println(s);
         }
 
