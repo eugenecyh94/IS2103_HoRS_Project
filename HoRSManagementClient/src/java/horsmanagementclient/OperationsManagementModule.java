@@ -16,6 +16,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import util.enumeration.BedSizeEnum;
+import util.exception.RoomCannotBeDeletedException;
 import util.exception.RoomCannotBeFoundException;
 import util.exception.RoomTypeCannotBeDeletedException;
 import util.exception.RoomTypeCannotBeFoundException;
@@ -499,7 +500,7 @@ public class OperationsManagementModule {
             try {
                 roomEntitySessionBeanRemote.deleteRoombyID(roomEntity.getRoomId());
                 System.out.println("Room deleted successfully!\n");
-            } catch (RoomCannotBeFoundException ex) {
+            } catch (RoomCannotBeFoundException |RoomCannotBeDeletedException ex) {
                 System.out.println("An error has occurred while deleting the Room: " + ex.getMessage() + "\n");
             }
         } else {
