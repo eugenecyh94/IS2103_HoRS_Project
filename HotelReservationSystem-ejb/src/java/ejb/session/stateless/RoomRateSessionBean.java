@@ -2,7 +2,6 @@ package ejb.session.stateless;
 
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,15 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     @Override
     public void updateRoomRate(RoomRateEntity roomRate) {
 
-        em.merge(roomRate);
+        RoomRateEntity updatedRoomRate = em.find(RoomRateEntity.class, roomRate.getRoomRateId());
+        
+        updatedRoomRate.setRateName(roomRate.getRateName());
+        updatedRoomRate.setRoomType(roomRate.getRoomType());
+        updatedRoomRate.setRateType(roomRate.getRateType());
+        updatedRoomRate.setRate(roomRate.getRate());
+        updatedRoomRate.setStartDate(roomRate.getStartDate());
+        updatedRoomRate.setEndDate(roomRate.getEndDate());
+        
     }
 
     @Override

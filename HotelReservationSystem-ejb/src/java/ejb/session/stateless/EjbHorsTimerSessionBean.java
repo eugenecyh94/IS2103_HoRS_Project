@@ -37,7 +37,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
     //@Schedule(dayOfWeek = "*", hour = "2", info = "Daily2amRoomAllocationTimer")    
     //for testing, triggered every 5 seconds
     @Override
-    @Schedule(hour = "*", minute = "*", second = "*/5", info = "TestRoomAllocationTimer")
+    @Schedule(hour = "*", minute = "*/1", info = "TestRoomAllocationTimer")
     public void automatedRoomAllocation() {
 
         System.out.println("********** Automated Allocation Started");

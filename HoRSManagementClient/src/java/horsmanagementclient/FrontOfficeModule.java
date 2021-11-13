@@ -31,9 +31,15 @@ public class FrontOfficeModule {
     public FrontOfficeModule() {
     }
 
-    public FrontOfficeModule(EmployeeEntity currentEmployeeEntity) {
+    public FrontOfficeModule(ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote, SearchSessionBeanRemote searchSessionBeanRemote, RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity) {
+        this.reservationEntitySessionBeanRemote = reservationEntitySessionBeanRemote;
+        this.searchSessionBeanRemote = searchSessionBeanRemote;
+        this.roomTypeEntitySessionBeanRemote = roomTypeEntitySessionBeanRemote;
+        this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
         this.currentEmployeeEntity = currentEmployeeEntity;
     }
+
+    
 
     public void menuFrontOffice() throws InvalidAccessRightException {
 
@@ -115,11 +121,11 @@ public class FrontOfficeModule {
         }
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
-            System.out.printf("%20s%20s\n", "Room Type", "Room Rate");
+            System.out.printf("%20s%30s\n", "Room Type", "Room Rate");
 
             int i = 0;
             while (i < availableRooms.size()) {
-                System.out.printf("%20s%20s\n", availableRooms.get(i++), availableRooms.get(i++));
+                System.out.printf("%20s%30s\n", availableRooms.get(i++), availableRooms.get(i++));
             }
         } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
             System.out.println("Error occured: " + ex.getMessage());
@@ -165,11 +171,11 @@ public class FrontOfficeModule {
         RoomTypeEntity roomTypeEntity;
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
-            System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
+            System.out.printf("%2s%30s%20s\n", "#", "Room Type", "Room Rate");
 
             int i = 0, j = 1;
             while (i < availableRooms.size()) {
-                System.out.printf("%2s%20s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
+                System.out.printf("%2s%30s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
             }
 
             System.out.println("Enter the # of the Room Type you wish to book: ");

@@ -266,7 +266,7 @@ public class SalesManagementModule {
             }
         }
         System.out.println("Change Room Rate per night? y/n");
-        if (sc.nextLine().trim().equals('y')) {
+        if (sc.nextLine().toUpperCase().trim().equals("Y")) {
             System.out.println("Enter the Room Rate per night : ");
             roomRateEntity.setRate(sc.nextBigDecimal());
         }
@@ -274,7 +274,7 @@ public class SalesManagementModule {
         sc.nextLine();
         if (roomRateEntity.getRateType().equals(RateTypeEnum.PEAK) || roomRateEntity.getRateType().equals(RateTypeEnum.PROMOTION)) {
             System.out.println("Change Room Rate Dates? y/n");
-            if (sc.nextLine().trim().equals('y')) {
+            if (sc.nextLine().toUpperCase().trim().equals("Y")) {
                 while (true) {
 
                     System.out.println("Enter Start Date (dd/MM/yyyy): ");
