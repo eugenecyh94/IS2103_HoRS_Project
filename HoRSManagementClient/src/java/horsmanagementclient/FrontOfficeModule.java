@@ -8,6 +8,7 @@ import entity.EmployeeEntity;
 import entity.GuestEntity;
 import entity.ReservationEntity;
 import entity.RoomTypeEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -106,34 +107,49 @@ public class FrontOfficeModule {
             }
         }
 
-        int numAdults;
-        while (true) {
-            System.out.println("Enter the number of Adults: ");
-            numAdults = sc.nextInt();
-            if (numAdults > 0) {
-                break;
-            } else {
-                System.out.println("The number of Adults has to be greater than 0!");
-            }
+        int totalDays = 0;
+
+        for (LocalDate dailyDate = checkinDate; dailyDate.isBefore(checkoutDate); dailyDate = dailyDate.plusDays(1)) {
+            totalDays += 1;
         }
 
+        String totalDaysInString = new String();
+        BigDecimal totalDaysInBd = new BigDecimal(totalDaysInString.valueOf(totalDays));
+        System.out.println("\nTotal Nights of Stay = " + totalDaysInBd.toString() + "\n");
+
         int numRooms;
+
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
+            System.out.print(">");
             numRooms = sc.nextInt();
             if (numRooms > 0) {
                 break;
             } else {
-                System.out.println("The number of rooms has to be greater than 0!");
+                System.out.println("The number of rooms has to be greater than 0!" + "\n");
             }
         }
+
+        int numAdults;
+
+        while (true) {
+            System.out.println("Enter the number of adults: ");
+            System.out.print(">");
+            numAdults = sc.nextInt();
+            if (numAdults > 0) {
+                break;
+            } else {
+                System.err.println("The number of adults has to be greater than 0!" + "\n");
+            }
+        }
+
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
-            System.out.printf("%20s%30s\n", "Room Type", "Room Rate");
+            System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
 
-            int i = 0;
+            int i = 0, j = 1;
             while (i < availableRooms.size()) {
-                System.out.printf("%20s%30s\n", availableRooms.get(i++), availableRooms.get(i++));
+                System.out.printf("%2s%20s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
             }
         } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
             System.out.println("Error occured: " + ex.getMessage());
