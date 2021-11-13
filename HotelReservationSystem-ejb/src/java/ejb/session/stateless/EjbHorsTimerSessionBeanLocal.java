@@ -5,8 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.DailyExceptionReportEntity;
 import java.time.LocalDate;
 import javax.ejb.Local;
+import util.exception.NoAllocationExceptionReportException;
 
 /**
  *
@@ -20,4 +22,9 @@ public interface EjbHorsTimerSessionBeanLocal {
     public void manualRoomAllocation(LocalDate date);
 
     public void deleteExceptionReport(Long exceptionReportId);
+    
+    public DailyExceptionReportEntity viewCurrentDayAllocationExceptionReport() throws NoAllocationExceptionReportException;
+    
+     public DailyExceptionReportEntity viewSpecificDayAllocationExceptionReport(LocalDate date) throws NoAllocationExceptionReportException;
+    
 }

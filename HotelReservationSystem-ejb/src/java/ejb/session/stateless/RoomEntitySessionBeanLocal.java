@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.RoomEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.RoomCannotBeDeletedException;
 import util.exception.RoomCannotBeFoundException;
 
 @Local
@@ -16,7 +17,7 @@ public interface RoomEntitySessionBeanLocal {
 
     public void updateRoomDetails(RoomEntity updatedRoom);
 
-    public void deleteRoombyID(Long roomID) throws RoomCannotBeFoundException;
+    public void deleteRoombyID(Long roomID) throws RoomCannotBeDeletedException, RoomCannotBeFoundException;
 
     public List<RoomEntity> retrieveAllRooms();
 

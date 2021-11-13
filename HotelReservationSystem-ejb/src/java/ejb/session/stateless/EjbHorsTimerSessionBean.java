@@ -7,7 +7,6 @@ package ejb.session.stateless;
 
 import entity.DailyExceptionReportEntity;
 import entity.ReservationEntity;
-import entity.RoomEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.NoAllocationExceptionReportException;
 import util.exception.RoomAllocationNotUpgradedException;
 import util.exception.RoomAllocationUpgradedException;
 
@@ -30,7 +30,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
     ReservationEntitySessionBeanLocal reservationEntitySessionBeanLocal;
     @EJB
     AllocationSessionBeanLocal allocationSessionBeanLocal;
-    
+
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
 
@@ -43,20 +43,41 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
         System.out.println("********** Automated Allocation Started");
 
         LocalDate today = LocalDate.now();
-        DailyExceptionReportEntity exceptionReport = new DailyExceptionReportEntity(today);
+
+        List<DailyExceptionReportEntity> exceptionReports = em
+                .createQuery("SELECT er FROM DailyExceptionReportEntity er").getResultList();
+
+        DailyExceptionReportEntity exceptionReport = null;
+
+        if (exceptionReports.isEmpty()) {
+            exceptionReport = new DailyExceptionReportEntity(today);
+            em.persist(exceptionReport);
+            em.flush();
+        } else {
+            for (DailyExceptionReportEntity er : exceptionReports) {
+                if (er.getDate().equals(today)) {
+                    exceptionReport = er;
+                    break;
+                }
+            }
+        }
+
+        if (exceptionReport == null) {
+            exceptionReport = new DailyExceptionReportEntity(today);
+            em.persist(exceptionReport);
+            em.flush();
+        }
+
         List<ReservationEntity> reservations = reservationEntitySessionBeanLocal.retrieveAllReservationsByCheckInDate(today);
 
-        em.persist(exceptionReport);
-        em.flush();
-
         List<ReservationEntity> notAllocatedReservations = new ArrayList<>();
-        
+
         for (ReservationEntity rs : reservations) {
-            if(!rs.isRoomAllocated()){
+            if (!rs.isRoomAllocated()) {
                 notAllocatedReservations.add(rs);
             }
         }
-        
+
         for (ReservationEntity rs : notAllocatedReservations) {
             try {
                 allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
@@ -71,23 +92,44 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
     @Override
     public void manualRoomAllocation(LocalDate date) {
 
-        DailyExceptionReportEntity exceptionReport = new DailyExceptionReportEntity(date);
+        List<DailyExceptionReportEntity> exceptionReports = em
+                .createQuery("SELECT er FROM DailyExceptionReportEntity er").getResultList();
+
+        DailyExceptionReportEntity exceptionReport = null;
+
+        if (exceptionReports.isEmpty()) {
+            exceptionReport = new DailyExceptionReportEntity(date);
+            em.persist(exceptionReport);
+            em.flush();
+        } else {
+            for (DailyExceptionReportEntity er : exceptionReports) {
+                if (er.getDate().equals(date)) {
+                    exceptionReport = er;
+                    break;
+                }
+            }
+        }
+
+        if (exceptionReport == null) {
+            exceptionReport = new DailyExceptionReportEntity(date);
+            em.persist(exceptionReport);
+            em.flush();
+        }
+
         List<ReservationEntity> reservations = reservationEntitySessionBeanLocal.retrieveAllReservationsByCheckInDate(date);
 
-        em.persist(exceptionReport);
-        em.flush();
-        
         List<ReservationEntity> notAllocatedReservations = new ArrayList<>();
-        
+
         for (ReservationEntity rs : reservations) {
-            if(!rs.isRoomAllocated()){
+            if (!rs.isRoomAllocated()) {
                 notAllocatedReservations.add(rs);
             }
         }
-        
+
         for (ReservationEntity rs : notAllocatedReservations) {
             try {
                 allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
+                rs.setRoomAllocated(true);
             } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
                 String exceptionString = "Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage();
                 exceptionReport.getExceptionDetails().add(exceptionString);
@@ -96,11 +138,65 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
     }
 
     @Override
-    public void deleteExceptionReport(Long exceptionReportId) {
-        
-        DailyExceptionReportEntity exceptionReport = em.find(DailyExceptionReportEntity.class, exceptionReportId);
-        em.remove(exceptionReport);
-        
+    public DailyExceptionReportEntity viewCurrentDayAllocationExceptionReport() throws NoAllocationExceptionReportException {
+
+        LocalDate date = LocalDate.now();
+
+        List<DailyExceptionReportEntity> exceptionReports = em
+                .createQuery("SELECT er FROM DailyExceptionReportEntity er").getResultList();
+
+        if (exceptionReports.isEmpty()) {
+            throw new NoAllocationExceptionReportException("No Room Allocation Report is found!");
+        }
+
+        DailyExceptionReportEntity exceptionReport = null;
+
+        for (DailyExceptionReportEntity er : exceptionReports) {
+            if (er.getDate().equals(date)) {
+                exceptionReport = er;
+            }
+        }
+
+        if (exceptionReport == null) {
+            throw new NoAllocationExceptionReportException("No Room Allocation Report is found!");
+        }
+
+        return exceptionReport;
     }
-    
+
+    @Override
+    public DailyExceptionReportEntity viewSpecificDayAllocationExceptionReport(LocalDate date) throws NoAllocationExceptionReportException {
+
+        List<DailyExceptionReportEntity> exceptionReports = em
+                .createQuery("SELECT er FROM DailyExceptionReportEntity er").getResultList();
+
+        if (exceptionReports.isEmpty()) {
+            throw new NoAllocationExceptionReportException("No Room Allocation Report is found!");
+        }
+
+        DailyExceptionReportEntity exceptionReport = null;
+
+        for (DailyExceptionReportEntity er : exceptionReports) {
+            if (er.getDate().equals(date)) {
+                exceptionReport = er;
+            }
+        }
+
+        if (exceptionReport == null) {
+            throw new NoAllocationExceptionReportException("No Room Allocation Report is found!");
+        }
+
+        return exceptionReport;
+    }
+
+    @Override
+    public void deleteExceptionReport(Long exceptionReportId
+    ) {
+
+        DailyExceptionReportEntity exceptionReport = em.find(DailyExceptionReportEntity.class,
+                exceptionReportId);
+        em.remove(exceptionReport);
+
+    }
+
 }

@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.RoomCannotBeDeletedException;
 import util.exception.RoomCannotBeFoundException;
 
 @Stateless
@@ -65,21 +66,27 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
     @Override
     public void updateRoomDetails(RoomEntity updatedRoom) {
 
-        em.merge(updatedRoom);
+        RoomEntity servUpdatedRoom = em.find(RoomEntity.class, updatedRoom.getRoomId());
+
+        servUpdatedRoom.setRoomNumber(updatedRoom.getRoomNumber());
+        servUpdatedRoom.setRoomType(updatedRoom.getRoomType());
+        servUpdatedRoom.setDisabled(updatedRoom.isDisabled());
 
     }
 
     @Override
-    public void deleteRoombyID(Long roomID) throws RoomCannotBeFoundException {
+    public void deleteRoombyID(Long roomID) throws RoomCannotBeDeletedException, RoomCannotBeFoundException {
 
         RoomEntity roomToBeDeleted = em.find(RoomEntity.class, roomID);
 
         if (roomToBeDeleted == null) {
             throw new RoomCannotBeFoundException("Room does not exists for the entered Room Number");
+        } else if (roomToBeDeleted.isRoomAllocated()) {
+            throw new RoomCannotBeDeletedException("Room is currently in used, cannot be deleted!");
+        } else {
+            RoomTypeEntity roomType = roomToBeDeleted.getRoomType();
+            roomType.getRooms().remove(roomToBeDeleted);
         }
-
-        RoomTypeEntity roomType = roomToBeDeleted.getRoomType();
-        roomType.getRooms().remove(roomToBeDeleted);
 
         em.remove(roomToBeDeleted);
     }
@@ -89,27 +96,26 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
 
         Query query = em.createQuery("SELECT r FROM RoomEntity r");
         List<RoomEntity> rooms = query.getResultList();
-        
-        for(RoomEntity r : rooms) {
+
+        for (RoomEntity r : rooms) {
             r.getRoomType();
         }
 
         return rooms;
     }
-    
+
     @Override
     public List<RoomEntity> retrieveAllAvailableRooms() {
 
         Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomStatusAvail = TRUE");
         List<RoomEntity> rooms = query.getResultList();
-        
-        for(RoomEntity r : rooms) {
+
+        for (RoomEntity r : rooms) {
             r.getRoomType();
         }
 
         return rooms;
     }
-
 
     @Override
     public List<RoomEntity> retrieveAllRoomsByRoomType(Long roomTypeId) throws RoomCannotBeFoundException {

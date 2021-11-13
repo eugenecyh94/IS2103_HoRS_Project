@@ -27,7 +27,7 @@ public class DailyExceptionReportEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exceptionReportId;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private LocalDate date;
     @Column(nullable = false)
     private List<String> exceptionDetails;
