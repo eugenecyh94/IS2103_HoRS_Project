@@ -1,5 +1,6 @@
 package horsmanagementclient;
 
+import ejb.session.stateless.EjbHorsTimerSessionBeanRemote;
 import ejb.session.stateless.GuestEntitySessionBeanRemote;
 import entity.EmployeeEntity;
 import java.util.Scanner;
@@ -24,6 +25,7 @@ public class ManagementMainApp {
     private RoomRateSessionBeanRemote roomRateSessionBeanRemote;
     private ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote;
     private SearchSessionBeanRemote searchSessionBeanRemote;
+    private EjbHorsTimerSessionBeanRemote ejbHorsTimerSessionBeanRemote;
 
     private SystemAdministrationModule systemAdministrationModule;
     private OperationsManagementModule operationsManagementModule;
@@ -34,7 +36,7 @@ public class ManagementMainApp {
     public ManagementMainApp() {
     }
 
-    public ManagementMainApp(RoomEntitySessionBeanRemote roomEntitySessionBeanRemote, EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, RoomRateSessionBeanRemote roomRateSessionBeanRemote, ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote, SearchSessionBeanRemote searchSessionBeanRemote) {
+    public ManagementMainApp(RoomEntitySessionBeanRemote roomEntitySessionBeanRemote, EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, RoomRateSessionBeanRemote roomRateSessionBeanRemote, ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote, SearchSessionBeanRemote searchSessionBeanRemote, EjbHorsTimerSessionBeanRemote ejbHorsTimerSessionBeanRemote) {
         this.roomEntitySessionBeanRemote = roomEntitySessionBeanRemote;
         this.employeeEntitySessionBeanRemote = employeeEntitySessionBeanRemote;
         this.partnerEntitySessionBeanRemote = partnerEntitySessionBeanRemote;
@@ -43,6 +45,7 @@ public class ManagementMainApp {
         this.roomRateSessionBeanRemote = roomRateSessionBeanRemote;
         this.reservationEntitySessionBeanRemote = reservationEntitySessionBeanRemote;
         this.searchSessionBeanRemote = searchSessionBeanRemote;
+        this.ejbHorsTimerSessionBeanRemote = ejbHorsTimerSessionBeanRemote;
     }
 
     public void runApp() {
@@ -68,7 +71,7 @@ public class ManagementMainApp {
                         salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, roomRateSessionBeanRemote, roomTypeEntitySessionBeanRemote);
                         operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
-                        frontOfficeModule = new FrontOfficeModule(reservationEntitySessionBeanRemote, searchSessionBeanRemote, roomTypeEntitySessionBeanRemote, guestEntitySessionBeanRemote, currentEmployeeEntity);
+                        frontOfficeModule = new FrontOfficeModule(reservationEntitySessionBeanRemote, searchSessionBeanRemote, roomTypeEntitySessionBeanRemote, guestEntitySessionBeanRemote, currentEmployeeEntity, ejbHorsTimerSessionBeanRemote);
 
                         if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.OPSMANAGER)) {
                             operationsManagementModule.menuOperationsManagement();

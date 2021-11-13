@@ -38,7 +38,7 @@ public class GuestEntity implements Serializable {
     private String email;
     @Column(nullable = false, length = 128, unique = true)
     private String mobileNumber;
-    @Column(nullable = false, length = 16, unique = true)
+    @Column(nullable = false, length = 16)
     private String username;
     @Column(nullable = false, length = 8)
     private String password;

@@ -93,36 +93,7 @@ public class FrontOfficeModule {
         }
     }
 
-    private void doViewCurrentAllocationReport() {
-
-        try {
-        List<String> allocationReport = ejbHorsTimerSessionBeanRemote.viewCurrentDayAllocationExceptionReport().getExceptionDetails();
-
-        for (String report : allocationReport) {
-            System.out.println(report);
-        }
-        } catch (NoAllocationExceptionReportException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    private void doViewAllocationReport() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Enter Date> ");
-        String sdate = sc.nextLine().trim();
-
-        try {
-            LocalDate date = LocalDate.parse(sdate, formatter);
-            List<String> allocationReport = ejbHorsTimerSessionBeanRemote.viewSpecificDayAllocationExceptionReport(date).getExceptionDetails();
-            for (String report : allocationReport) {
-                System.out.println(report);
-            }
-        } catch (NoAllocationExceptionReportException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-    }
+     
 
     private void doWalkInRoomSearch() {
         Scanner sc = new Scanner(System.in);

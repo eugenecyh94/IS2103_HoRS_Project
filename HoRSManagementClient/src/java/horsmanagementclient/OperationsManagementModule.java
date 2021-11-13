@@ -361,7 +361,7 @@ public class OperationsManagementModule {
     }
 
     private void doViewAllRoomTypes() {
-        System.out.println("*** Merlion Management System :: Operations Management :: View All RoomTypes ***\n");
+        System.out.println("*** Merlion Management System :: Operations Management:: View All RoomTypes ***\n");
 
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
         System.out.printf("%8s%30s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
@@ -375,12 +375,12 @@ public class OperationsManagementModule {
     private void doCreateNewRoomEntity() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("*** Merlion Management System :: System Administration :: Create New RoomEntity ***\n");
+        System.out.println("*** Merlion Management System :: Operations Management :: Create New RoomEntity ***\n");
 
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-        System.out.printf("%8s%20s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
+        System.out.printf("%8s%30s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
         roomTypeEntities.forEach(roomTypeEntity -> {
-            System.out.printf("%8s%20s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
+            System.out.printf("%8s%30s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
         });
 
         Long roomTypeId;
@@ -418,8 +418,8 @@ public class OperationsManagementModule {
 
         try {
             RoomEntity roomEntity = roomEntitySessionBeanRemote.retrieveRoomByRoomNumber(roomNumber);
-            System.out.printf("%8s%30s%20s%20s%20s\n", "Room ID", "Room Number", "Room Type", "Room Status", "Room Allocated");
-            System.out.printf("%8s%30s%20s%20s%20s\n", roomEntity.getRoomId(), roomEntity.getRoomNumber(), roomEntity.getRoomType().getName(), roomEntity.isRoomStatusAvail(), roomEntity.isRoomAllocated());
+            System.out.printf("%8s%30s%30s%20s%20s\n", "Room ID", "Room Number", "Room Type", "Room Status", "Room Allocated");
+            System.out.printf("%8s%30s%30s%20s%20s\n", roomEntity.getRoomId(), roomEntity.getRoomNumber(), roomEntity.getRoomType().getName(), roomEntity.isRoomStatusAvail(), roomEntity.isRoomAllocated());
             System.out.println("------------------------");
             System.out.println("1: Update Room");
             System.out.println("2: Delete Room");

@@ -44,7 +44,7 @@ public class ReservationMainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Merlion Management System ***\n");
+            System.out.println("*** Merlion Reservation System ***\n");
             if (currentGuestEntity != null) {
                 System.out.println("You are logged in as " + currentGuestEntity.getFirstName() + " " + currentGuestEntity.getLastName());
                 System.out.println("1: Search Hotel Room");
@@ -144,7 +144,7 @@ public class ReservationMainApp {
 
         String username;
 
-        System.out.println("Enter Username: ");
+        System.out.print("Enter Username: ");
         username = sc.nextLine().trim();
 
         while (true) {
@@ -157,7 +157,7 @@ public class ReservationMainApp {
         }
         guestEntity.setUsername(username);
 
-        System.out.println("Enter Password: ");
+        System.out.print("Enter Password: ");
         String password = sc.nextLine().trim();
         guestEntity.setPassword(password);
         guestEntity.setRegistered(Boolean.TRUE);
@@ -172,12 +172,12 @@ public class ReservationMainApp {
 
         System.out.println("*** Merlion Reservation System :: Search Room  ***\n");
 
-        System.out.println("Enter the check in Date (dd/mm/yyyy): ");
+        System.out.print("Enter the check in Date (dd/mm/yyyy): ");
         System.out.print(">");
         String sdate = sc.nextLine().trim();
         LocalDate checkinDate = LocalDate.parse(sdate, formatter);
 
-        System.out.println("Enter the check out Date (dd/MM/yyyy): ");
+        System.out.print("Enter the check out Date (dd/MM/yyyy): ");
         System.out.print(">");
         sdate = sc.nextLine().trim();
         LocalDate checkoutDate = LocalDate.parse(sdate, formatter);
@@ -195,7 +195,7 @@ public class ReservationMainApp {
         int numRooms;
 
         while (true) {
-            System.out.println("Enter the number of rooms that you want to book: ");
+            System.out.print("Enter the number of rooms that you want to book: ");
             System.out.print(">");
             numRooms = sc.nextInt();
             if (numRooms > 0) {
@@ -208,7 +208,7 @@ public class ReservationMainApp {
         int numAdults;
 
         while (true) {
-            System.out.println("Enter the number of adults: ");
+            System.out.print("Enter the number of adults: ");
             System.out.print(">");
             numAdults = sc.nextInt();
             if (numAdults > 0) {
@@ -232,7 +232,7 @@ public class ReservationMainApp {
                 int response;
                 System.out.println("1. Reserve Room");
                 System.out.println("2. Back");
-                System.out.println(">");
+                System.out.print(">");
                 response = 0;
 
                 response = sc.nextInt();
@@ -268,7 +268,7 @@ public class ReservationMainApp {
         try {
             while (true) {
 
-                System.out.println("Enter the # of the Room Type you wish to book from the above list: ");
+                System.out.print("Enter the # of the Room Type you wish to book from the above list: ");
                 System.out.print(">");
                 int input = sc.nextInt();
 
@@ -317,7 +317,7 @@ public class ReservationMainApp {
 
         System.out.println("*** Merlion Reservation System :: View My Reservation Details***\n");
 
-        System.out.println("Enter the Reservation ID: ");
+        System.out.print("Enter the Reservation ID: ");
         System.out.print(">");
         Long reservationId = sc.nextLong();
         sc.nextLine();
