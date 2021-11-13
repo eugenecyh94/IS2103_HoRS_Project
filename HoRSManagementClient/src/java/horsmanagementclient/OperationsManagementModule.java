@@ -359,7 +359,7 @@ public class OperationsManagementModule {
             System.out.printf("%8s%20s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
         });
         System.out.println("");
-        
+
     }
 
     private void doCreateNewRoomEntity() {
@@ -372,7 +372,7 @@ public class OperationsManagementModule {
         roomTypeEntities.forEach(roomTypeEntity -> {
             System.out.printf("%8s%20s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
         });
-        
+
         Long roomTypeId;
 
         while (true) {
@@ -437,8 +437,9 @@ public class OperationsManagementModule {
             doViewAllRoomTypes();
 
             while (true) {
-                System.out.println("Enter RoomType Id: ");
+                System.out.println("Enter RoomType Id > ");
                 Long roomTypeId = sc.nextLong();
+                sc.nextLine();
                 try {
                     RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(roomTypeId);
                     roomEntity.setRoomType(roomTypeEntity);
@@ -450,8 +451,24 @@ public class OperationsManagementModule {
             }
         }
 
-        System.out.print("Enter Room Status: Current Status is " + roomEntity.isRoomStatusAvail() + " (y for available, n for unavailable)> ");
-        if (sc.next().equals('y')) {
+        System.out.print("Change Room Number? y/n > ");
+        if (sc.nextLine().trim().equals('y')) {
+            while (true) {
+                System.out.println("Enter Room Number > ");
+                String newNumber = sc.nextLine().trim();
+                try {
+                    RoomEntity roomEntity1 = roomEntitySessionBeanRemote.retrieveRoomByRoomNumber(newNumber);
+                    System.out.println("Room Number already exits! Try Again\n");
+                } catch (RoomCannotBeFoundException ex) {
+                    roomEntity.setRoomNumber(newNumber);
+                    break;
+                }
+            }
+
+        }
+
+        System.out.print("Enter Room Status: Current Status is " + roomEntity.isRoomStatusAvail() + "! Change to " + !roomEntity.isRoomStatusAvail() + "? (y/n)");
+        if (sc.nextLine().trim().equals('y')) {
             roomEntity.setRoomStatusAvail(!roomEntity.isRoomStatusAvail());
             System.out.println("Room Status changed to " + roomEntity.isRoomStatusAvail());
         }

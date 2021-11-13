@@ -52,6 +52,8 @@ public class GuestEntity implements Serializable {
     public GuestEntity() {
         this.reservations = new ArrayList<>();
         this.registered = false;
+        this.username = "default";
+        this.password = "default";
     }
 
     public GuestEntity(String firstName, String lastName, String passportNumber, String email, String mobileNumber, String userName, String password) {

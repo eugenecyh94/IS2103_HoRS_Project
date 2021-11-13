@@ -22,6 +22,8 @@ import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.NoRoomTypeAvailableException;
@@ -52,6 +54,10 @@ public class PartnerEntityWebService {
     @EJB
     private PartnerEntitySessionBeanLocal partnerEntitySessionBeanLocal;
     
+    @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
+    private EntityManager em;
+    
+    
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     @WebMethod(operationName = "partnerLogin")
@@ -64,6 +70,9 @@ public class PartnerEntityWebService {
     public GuestEntity retrieveGuestByPassportNumber(@WebParam(name = "passportNumber") String passportNumber) throws GuestNotFoundException {
         
         GuestEntity guestEntity = guestEntitySessionBeanLocal.retrieveGuestByPassportNumber(passportNumber);
+        
+        em.detach(guestEntity);
+        guestEntity.setReservations(null);
         return guestEntity;
     }
     
@@ -71,6 +80,9 @@ public class PartnerEntityWebService {
     public GuestEntity registerAsGuest(@WebParam(name = "guestentity")GuestEntity newGuestEntity) {
         
         GuestEntity guestEntity = guestEntitySessionBeanLocal.registerAsGuest(newGuestEntity);
+        
+        em.detach(guestEntity);
+        guestEntity.setReservations(null);
         return guestEntity;
     }
     
@@ -100,18 +112,38 @@ public class PartnerEntityWebService {
         reservationEntity.setCheckOutDate(checkOutDate);
         
         reservationEntity = reservationEntitySessionBeanLocal.createNewGuestReservation(reservationEntity, guestId);
+        
+        em.detach(reservationEntity);
+        reservationEntity.setRoomType(null);
+        reservationEntity.setGuest(null);
+        
         return reservationEntity;
     }
 
     @WebMethod(operationName = "viewPartnerReservationDetails")
     public ReservationEntity viewPartnerReservationDetails(@WebParam(name = "reservationId") Long reservationId) throws ReservationCannotBeFoundException {
         ReservationEntity reservationEntity = reservationEntitySessionBeanLocal.retrieveReservationById(reservationId);
+        
+        em.detach(reservationEntity);
+        reservationEntity.setRoomType(null);
+        reservationEntity.setGuest(null);
+        
         return reservationEntity;
     }
 
     @WebMethod(operationName = "viewAllPartnerReservations")
     public List<ReservationEntity> viewAllPartnerReservations(@WebParam(name = "partnerId") Long partnerID) throws PartnerNotFoundException {
         List<ReservationEntity> reservationEntitys = reservationEntitySessionBeanLocal.retrieveAllReservationsByPartnerId(partnerID);
+        
+        em.detach(reservationEntitys);
+        
+        for(ReservationEntity reservationEntity : reservationEntitys) {
+            reservationEntity.setGuest(null);
+            RoomTypeEntity roomTypeEntity = reservationEntity.getRoomType();
+            em.detach(roomTypeEntity);
+            
+            roomTypeEntity.setReservations(null);
+        }
         return reservationEntitys;
                 
     }
@@ -119,7 +151,12 @@ public class PartnerEntityWebService {
     @WebMethod(operationName = "retreiveRoomTypeEntityByName")
     public RoomTypeEntity retreiveRoomTypeEntityByName (@WebParam(name = "roomTypeName") String roomTypeName) throws RoomTypeCannotBeFoundException {
         RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanLocal.retrieveRoomTypeByName(roomTypeName);
+        
+        em.detach(roomTypeEntity);
+        roomTypeEntity.setReservations(null);
+        roomTypeEntity.setRooms(null);
         return roomTypeEntity;
     }
+
             
 }
