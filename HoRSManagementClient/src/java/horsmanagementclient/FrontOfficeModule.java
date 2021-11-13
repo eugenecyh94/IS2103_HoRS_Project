@@ -1,5 +1,6 @@
 package horsmanagementclient;
 
+import ejb.session.stateless.EjbHorsTimerSessionBeanRemote;
 import ejb.session.stateless.GuestEntitySessionBeanRemote;
 import ejb.session.stateless.ReservationEntitySessionBeanRemote;
 import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
@@ -15,6 +16,7 @@ import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
 import util.exception.GuestNotFoundException;
 import util.exception.InvalidAccessRightException;
+import util.exception.NoAllocationExceptionReportException;
 import util.exception.NoRoomTypeAvailableException;
 import util.exception.RoomTypeCannotBeFoundException;
 
@@ -24,6 +26,7 @@ public class FrontOfficeModule {
     private SearchSessionBeanRemote searchSessionBeanRemote;
     private RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote;
     private GuestEntitySessionBeanRemote guestEntitySessionBeanRemote;
+    private EjbHorsTimerSessionBeanRemote ejbHorsTimerSessionBeanRemote;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private EmployeeEntity currentEmployeeEntity;
@@ -31,12 +34,13 @@ public class FrontOfficeModule {
     public FrontOfficeModule() {
     }
 
-    public FrontOfficeModule(ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote, SearchSessionBeanRemote searchSessionBeanRemote, RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity) {
+    public FrontOfficeModule(ReservationEntitySessionBeanRemote reservationEntitySessionBeanRemote, SearchSessionBeanRemote searchSessionBeanRemote, RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity, EjbHorsTimerSessionBeanRemote ejbHorsTimerSessionBeanRemote) {
         this.reservationEntitySessionBeanRemote = reservationEntitySessionBeanRemote;
         this.searchSessionBeanRemote = searchSessionBeanRemote;
         this.roomTypeEntitySessionBeanRemote = roomTypeEntitySessionBeanRemote;
         this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
         this.currentEmployeeEntity = currentEmployeeEntity;
+        this.ejbHorsTimerSessionBeanRemote = ejbHorsTimerSessionBeanRemote;
     }
 
     public void menuFrontOffice() throws InvalidAccessRightException {
@@ -54,10 +58,12 @@ public class FrontOfficeModule {
             System.out.println("2: Walk-In Room Reservation");
             System.out.println("3: Check-In Guest");
             System.out.println("4: Check-Out Guest");
-            System.out.println("5: Back\n");
+            System.out.println("5: Retrieve Current Day Allocation report");
+            System.out.println("6: Retrieve Day Allocation report");
+            System.out.println("7: Back\n");
             response = 0;
 
-            while (response < 1 || response > 11) {
+            while (response < 1 || response > 7) {
                 System.out.print("> ");
 
                 response = scanner.nextInt();
@@ -71,16 +77,51 @@ public class FrontOfficeModule {
                 } else if (response == 4) {
                     doCheckOutGuest();
                 } else if (response == 5) {
+                    doViewCurrentAllocationReport();
+                } else if (response == 6) {
+                    doViewAllocationReport();
+                } else if (response == 7) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
 
-            if (response == 5) {
+            if (response == 7) {
                 break;
             }
         }
+    }
+
+    private void doViewCurrentAllocationReport() {
+
+        try {
+        List<String> allocationReport = ejbHorsTimerSessionBeanRemote.viewCurrentDayAllocationExceptionReport().getExceptionDetails();
+
+        for (String report : allocationReport) {
+            System.out.println(report);
+        }
+        } catch (NoAllocationExceptionReportException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void doViewAllocationReport() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter Date> ");
+        String sdate = sc.nextLine().trim();
+
+        try {
+            LocalDate date = LocalDate.parse(sdate, formatter);
+            List<String> allocationReport = ejbHorsTimerSessionBeanRemote.viewSpecificDayAllocationExceptionReport(date).getExceptionDetails();
+            for (String report : allocationReport) {
+                System.out.println(report);
+            }
+        } catch (NoAllocationExceptionReportException ex) {
+            System.out.println(ex.getMessage());
+        }
+
     }
 
     private void doWalkInRoomSearch() {
