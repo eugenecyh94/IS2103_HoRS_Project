@@ -34,7 +34,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ManagementMainApp managementMainApp = new ManagementMainApp(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, employeeEntitySessionBeanRemote, guestEntitySessionBeanRemote, partnerEntitySessionBeanRemote, roomRateSessionBeanRemote);
+        ManagementMainApp managementMainApp = new ManagementMainApp(roomEntitySessionBeanRemote, employeeEntitySessionBeanRemote, partnerEntitySessionBeanRemote, guestEntitySessionBeanRemote, roomTypeEntitySessionBeanRemote, roomRateSessionBeanRemote);
 
         managementMainApp.runApp();
     }
