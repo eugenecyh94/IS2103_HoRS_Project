@@ -61,9 +61,16 @@ public class PartnerEntityWebService {
     }
 
     @WebMethod(operationName = "retrieveGuestByPassportNumber")
-    public GuestEntity retrieveGuestByPassportNumer(@WebParam(name = "passportNumber") String passportNumber) throws GuestNotFoundException {
+    public GuestEntity retrieveGuestByPassportNumber(@WebParam(name = "passportNumber") String passportNumber) throws GuestNotFoundException {
         
         GuestEntity guestEntity = guestEntitySessionBeanLocal.retrieveGuestByPassportNumber(passportNumber);
+        return guestEntity;
+    }
+    
+    @WebMethod(operationName = "registerAsGuest")
+    public GuestEntity registerAsGuest(@WebParam(name = "guestentity")GuestEntity newGuestEntity) {
+        
+        GuestEntity guestEntity = guestEntitySessionBeanLocal.registerAsGuest(newGuestEntity);
         return guestEntity;
     }
     
@@ -75,11 +82,11 @@ public class PartnerEntityWebService {
     }
     
     @WebMethod(operationName = "partnerSearchRoom")
-    public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException{
+    public List<String> partnerSearchRoom(@WebParam(name = "checkinDate") String checkinDate, @WebParam(name = "checkoutDate") String checkoutDate, @WebParam(name = "numRooms") int guestNumberOfRooms, @WebParam(name = "numAdults") int numAdults) throws NoRoomTypeAvailableException, RoomTypeCannotBeFoundException{
         
         LocalDate checkInDate = LocalDate.parse(checkinDate, formatter);
         LocalDate checkOutDate = LocalDate.parse(checkoutDate, formatter);
-        List<String> availableRooms = searchSessionBeanLocal.searchAvailableRoomTypesOnline(checkInDate, checkOutDate, guestNumberOfRooms);
+        List<String> availableRooms = searchSessionBeanLocal.searchAvailableRoomTypesOnline(checkInDate, checkOutDate, guestNumberOfRooms, numAdults);
         
         return availableRooms;
     }
