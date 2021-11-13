@@ -19,77 +19,57 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanRemot
 
     public EmployeeEntitySessionBean() {
     }
-    
+
     @Override
-    public Long createNewEmployee(EmployeeEntity newEmployeeEntity)
-    {
+    public Long createNewEmployee(EmployeeEntity newEmployeeEntity) {
         em.persist(newEmployeeEntity);
         em.flush();
-        
+
         return newEmployeeEntity.getEmployeeId();
     }
-    
-    
-    
+
     @Override
-    public List<EmployeeEntity> retrieveAllEmployees()
-    {
+    public List<EmployeeEntity> retrieveAllEmployees() {
         Query query = em.createQuery("SELECT s FROM EmployeeEntity s");
-        
+
         return query.getResultList();
     }
-    
-    
-    
+
     @Override
-    public EmployeeEntity retrieveEmployeeByEmployeeId(Long employeeId) throws EmployeeNotFoundException
-    {
+    public EmployeeEntity retrieveEmployeeByEmployeeId(Long employeeId) throws EmployeeNotFoundException {
         EmployeeEntity employeeEntity = em.find(EmployeeEntity.class, employeeId);
-        
-        if(employeeEntity != null)
-        {
+
+        if (employeeEntity != null) {
             return employeeEntity;
-        }
-        else
-        {
+        } else {
             throw new EmployeeNotFoundException("Employee ID " + employeeId + " does not exist!");
         }
     }
-    
-    
+
     @Override
     public EmployeeEntity retrieveEmployeeByUsername(String username) throws EmployeeNotFoundException {
+        System.out.println("Query...");
         Query query = em.createQuery("SELECT s FROM EmployeeEntity s WHERE s.username = :inUsername");
         query.setParameter("inUsername", username);
-        
-        try
-        {
-            return (EmployeeEntity)query.getSingleResult();
-        }
-        catch(NoResultException | NonUniqueResultException ex)
-        {
+        System.out.println("Not the Query");
+        try {
+            return (EmployeeEntity) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new EmployeeNotFoundException("Employee Username " + username + " does not exist!");
         }
     }
-    
-    
+
     @Override
-    public EmployeeEntity employeeLogin (String username, String password) throws InvalidLoginCredentialException{
-        try
-        {
+    public EmployeeEntity employeeLogin(String username, String password) throws InvalidLoginCredentialException {
+        try {
             EmployeeEntity employeeEntity = retrieveEmployeeByUsername(username);
             
-            if(employeeEntity.getPassword().equals(password))
-            {
+            if (employeeEntity.getPassword().equals(password)) {
                 return employeeEntity;
-            }
-            else
-            {
+            } else {
                 throw new InvalidLoginCredentialException("Invalid password!");
             }
-        }
-        catch(EmployeeNotFoundException ex)
-        {
+        } catch (EmployeeNotFoundException ex) {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
         }
     }
