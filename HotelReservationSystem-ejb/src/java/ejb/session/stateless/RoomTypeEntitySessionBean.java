@@ -71,10 +71,15 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     @Override
     public void updateRoomTypeDetails(RoomTypeEntity updatedRoomType) {
 
-        em.merge(updatedRoomType);
+        RoomTypeEntity servUpdatedRoomType = em.find(RoomTypeEntity.class, updatedRoomType.getRoomTypeId());
 
-        //assumption is on the menu options will be printed for user to edit whatever attribute they want
-        //any attribute that is not edited will be returned as original attribute result.
+        servUpdatedRoomType.setName(updatedRoomType.getName());
+        servUpdatedRoomType.setDescription(updatedRoomType.getDescription());
+        servUpdatedRoomType.setCapacity(updatedRoomType.getCapacity());
+        servUpdatedRoomType.setRoomAmenities(updatedRoomType.getRoomAmenities());
+        servUpdatedRoomType.setBedSize(updatedRoomType.getBedSize());
+        servUpdatedRoomType.setNextHigherRoomType(updatedRoomType.getNextHigherRoomType());
+
     }
 
     @Override
