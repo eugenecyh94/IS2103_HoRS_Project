@@ -224,7 +224,7 @@ public class ReservationMainApp {
 
         RoomTypeEntity roomTypeEntity;
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms);
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms);
             System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
 
             int i = 0, j = 1;
