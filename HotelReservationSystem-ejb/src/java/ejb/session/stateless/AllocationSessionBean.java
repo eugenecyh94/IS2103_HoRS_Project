@@ -66,7 +66,7 @@ public class AllocationSessionBean implements AllocationSessionBeanRemote, Alloc
                         .setParameter("inName", upgradedRoomTypeName).getSingleResult();
 
                 roomsAvailableForAllocation = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomType = :inRoomType AND r.roomAllocated = FALSE "
-                        + "AND r.roomStatusAvail = TRUE AND r.disabled. = FALSE")
+                        + "AND r.roomStatusAvail = TRUE AND r.disabled = FALSE")
                         .setParameter("inRoomType", upgradedRoomType).getResultList();
 
                 if (!roomsAvailableForAllocation.isEmpty() && (roomsAvailableForAllocation.size() >= reservation.getNumOfRooms())) {
