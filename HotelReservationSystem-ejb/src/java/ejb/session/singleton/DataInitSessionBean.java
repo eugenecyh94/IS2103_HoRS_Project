@@ -79,7 +79,7 @@ public class DataInitSessionBean {
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Family Room Published",RateTypeEnum.PUBLISHED,new BigDecimal("300"),familyRoom));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Family Room Normal",RateTypeEnum.NORMAL,new BigDecimal("150"),familyRoom));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Junior Suite Published",RateTypeEnum.PUBLISHED,new BigDecimal("400"),juniorSuite));
-        roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Junior Suite Published",RateTypeEnum.NORMAL,new BigDecimal("400"),juniorSuite));
+        roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Junior Suite Published",RateTypeEnum.NORMAL,new BigDecimal("200"),juniorSuite));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Grand Suite Published",RateTypeEnum.PUBLISHED,new BigDecimal("500"),grandSuite));
         roomRateSessionBeanLocal.createNewRoomRate(new RoomRateEntity("Grand Suite Published",RateTypeEnum.NORMAL,new BigDecimal("250"),grandSuite));
         } catch (RoomTypeCannotBeFoundException ex) {

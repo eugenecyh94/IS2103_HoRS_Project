@@ -114,7 +114,7 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
         List<ReservationEntity> reservations = query.getResultList();
         List<ReservationEntity> dateFilteredReservations = new ArrayList<>();
 
-        for (LocalDate dailyDate = guestCheckInDate; dailyDate.isEqual(guestCheckOutDate); dailyDate.plusDays(1)) {
+        for (LocalDate dailyDate = guestCheckInDate; dailyDate.isBefore(guestCheckOutDate); dailyDate = dailyDate.plusDays(1)) {
             for (ReservationEntity rs : reservations) {
                 if (!(dailyDate.isBefore(rs.getCheckInDate()) || dailyDate.isAfter(rs.getCheckOutDate()))) {
                     if (!dateFilteredReservations.contains(rs)) {

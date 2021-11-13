@@ -181,7 +181,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
                 totalDays += 1;
                 System.out.println("For debugging: dailyDate loop: " + dailyDate.toString());
                 int dailyAvailableRooms = totalRoomsAvailable;
-                //parameter for calculate rate is false, as search is done in front counter - refer to roomratesessionbean
+                
                 try {
                     periodRoomTypeRate = periodRoomTypeRate.add(roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), true).getRate());
                     System.out.println("For debugging: Daily Room Rate = " + roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), true).getRate());

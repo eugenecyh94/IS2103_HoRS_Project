@@ -171,7 +171,7 @@ public class ReservationMainApp {
 
         LocalDate checkoutDate;
 
- while (true) {
+        while (true) {
             System.out.println("Enter the check out Date (dd/MM/yyyy): ");
             sDate = sc.nextLine().trim();
             checkoutDate = LocalDate.parse(sDate, formatter);
@@ -203,7 +203,7 @@ public class ReservationMainApp {
                 System.out.println("The number of Adults has to be greater than 0!");
             }
         }
-        
+
         int numRooms;
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
@@ -215,8 +215,6 @@ public class ReservationMainApp {
             }
         }
 
-        System.out.println("\n"); //for formatting
-        
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms, numAdults);
             System.out.printf("%20s%30s\n", "Room Type", "Average Room Rate/Night(SGD)");
@@ -273,7 +271,7 @@ public class ReservationMainApp {
                 System.out.println("The number of Adults has to be greater than 0!");
             }
         }
-        
+
         int numRooms;
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
@@ -316,11 +314,11 @@ public class ReservationMainApp {
                     System.out.println("Invalid choice try again, please enter the # of the Room Type you wish to book again: ");
                 }
             }
-            
+
             BigDecimal dailyRateofChosenRoomInBd = new BigDecimal(dailyRateOfChosenRoom);
             BigDecimal totalAmountInBd = dailyRateofChosenRoomInBd.multiply(totalDaysInBd).multiply(totalRoomsInBd);
 
-            System.out.println("Total Amount for " + roomTypeEntity.getName() + " from " 
+            System.out.println("Total Amount for " + roomTypeEntity.getName() + " from "
                     + checkinDate.toString() + " to " + checkoutDate.toString() + " is SGD"
                     + totalAmountInBd.toString());
 

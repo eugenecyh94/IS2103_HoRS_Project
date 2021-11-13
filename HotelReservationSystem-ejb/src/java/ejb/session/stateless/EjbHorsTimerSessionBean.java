@@ -9,6 +9,7 @@ import entity.DailyExceptionReportEntity;
 import entity.ReservationEntity;
 import entity.RoomEntity;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
@@ -29,6 +30,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
     ReservationEntitySessionBeanLocal reservationEntitySessionBeanLocal;
     @EJB
     AllocationSessionBeanLocal allocationSessionBeanLocal;
+    
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
 
@@ -46,12 +48,21 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
 
         em.persist(exceptionReport);
         em.flush();
+
+        List<ReservationEntity> notAllocatedReservations = new ArrayList<>();
         
         for (ReservationEntity rs : reservations) {
+            if(!rs.isRoomAllocated()){
+                notAllocatedReservations.add(rs);
+            }
+        }
+        
+        for (ReservationEntity rs : notAllocatedReservations) {
             try {
                 allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
+                rs.setRoomAllocated(true);
             } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
-                String exceptionString = new String("Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage());
+                String exceptionString = "Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage();
                 exceptionReport.getExceptionDetails().add(exceptionString);
             }
         }
@@ -66,11 +77,19 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
         em.persist(exceptionReport);
         em.flush();
         
+        List<ReservationEntity> notAllocatedReservations = new ArrayList<>();
+        
         for (ReservationEntity rs : reservations) {
+            if(!rs.isRoomAllocated()){
+                notAllocatedReservations.add(rs);
+            }
+        }
+        
+        for (ReservationEntity rs : notAllocatedReservations) {
             try {
                 allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
             } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
-                String exceptionString = new String("Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage());
+                String exceptionString = "Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage();
                 exceptionReport.getExceptionDetails().add(exceptionString);
             }
         }

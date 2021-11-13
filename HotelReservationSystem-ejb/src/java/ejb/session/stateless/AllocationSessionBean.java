@@ -42,8 +42,8 @@ public class AllocationSessionBean implements AllocationSessionBeanRemote, Alloc
         List<RoomEntity> roomsAllocatedToGuest = new ArrayList<>();
 
         //querying all rooms of the room Type 
-        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomType := inRoomType AND r.roomAllocated = FALSE "
-                + "AND r.roomStatusAvail = TRUE AND r.disabled. = FALSE");
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomType = :inRoomType AND r.roomAllocated = FALSE "
+                + "AND r.roomStatusAvail = TRUE AND r.disabled = FALSE");
         query.setParameter("inRoomType", reservedRoomType);
         List<RoomEntity> roomsAvailableForAllocation = query.getResultList();
 
@@ -62,10 +62,10 @@ public class AllocationSessionBean implements AllocationSessionBeanRemote, Alloc
         while (roomsAvailableForAllocation.isEmpty() || (roomsAvailableForAllocation.size() < numOfRoomsRequired)) {
             //search for higher room type 
             try {
-                upgradedRoomType = (RoomTypeEntity) em.createQuery("SEELECT rt FROM RoomTypeEntity rt WHERE rt.name := inName")
+                upgradedRoomType = (RoomTypeEntity) em.createQuery("SELECT rt FROM RoomTypeEntity rt WHERE rt.name = :inName")
                         .setParameter("inName", upgradedRoomTypeName).getSingleResult();
 
-                roomsAvailableForAllocation = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomType := inRoomType AND r.roomAllocated = FALSE "
+                roomsAvailableForAllocation = em.createQuery("SELECT r FROM RoomEntity r WHERE r.roomType = :inRoomType AND r.roomAllocated = FALSE "
                         + "AND r.roomStatusAvail = TRUE AND r.disabled. = FALSE")
                         .setParameter("inRoomType", upgradedRoomType).getResultList();
 
