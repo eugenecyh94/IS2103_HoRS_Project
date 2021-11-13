@@ -186,10 +186,10 @@ public class ReservationMainApp {
 
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms);
-            System.out.printf("%20s%20s\n", "Room Type", "Room Rate");
+            System.out.printf("%20s%30s\n", "Room Type", "Average Room Rate per night");
 
             for (int i = 0; i < availableRooms.size(); i++) {
-                System.out.printf(/*"%20s%20s\n", */availableRooms.get(i)/*, availableRooms.get(i++)*/);
+                System.out.printf("%20s%30s\n", availableRooms.get(i), availableRooms.get(i += 1));
             }
         } catch (NoRoomTypeAvailableException | RoomTypeCannotBeFoundException ex) {
             System.out.println(ex.getMessage());

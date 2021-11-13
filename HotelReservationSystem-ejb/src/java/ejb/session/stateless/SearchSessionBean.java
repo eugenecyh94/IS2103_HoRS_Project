@@ -4,6 +4,7 @@ import entity.ReservationEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,17 +69,19 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
                     totalRoomsAvailable++;
                 }
             }
-            System.out.println("For debugging: totalRoomsAvailable = " + totalRoomsAvailable);
+            System.out.println("For debugging: totalRoomsAvailable = " + rt.getName() + " " + totalRoomsAvailable);
             int periodAvailableRooms = totalRoomsAvailable;
             BigDecimal periodRoomTypeRate = new BigDecimal("0");
+            int totalDays = 0;
 
             //Looping through every day
-            for (LocalDate dailyDate = checkInDate; dailyDate.isBefore(checkOutDate.plusDays(1)); dailyDate = dailyDate.plusDays(1)) {
+            for (LocalDate dailyDate = checkInDate; dailyDate.isBefore(checkOutDate); dailyDate = dailyDate.plusDays(1)) {
+                totalDays += 1;
                 System.out.println("For debugging: dailyDate loop: " + dailyDate.toString());
                 int dailyAvailableRooms = totalRoomsAvailable;
                 //parameter for calculate rate is false, as search is done in front counter - refer to roomratesessionbean
                 try {
-                    periodRoomTypeRate.add(roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), false).getRate());
+                    periodRoomTypeRate = periodRoomTypeRate.add(roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), false).getRate());
                     System.out.println("For debugging: Daily Room Rate = " + roomRateSessionBeanLocal.selectDailyRoomRate(dailyDate, rt.getRoomTypeId(), false).getRate());
                 } catch (RoomRateCannotBeFoundException ex) {
                     ex.getMessage();
@@ -94,16 +97,24 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
                     periodAvailableRooms = dailyAvailableRooms;
                 }
             }
-            System.out.println("For debugging: periodRoomsAvailable = " + periodAvailableRooms);
+            System.out.println("For debugging: periodRoomsAvailable = "  + rt.getName() + " " + periodAvailableRooms);
+            System.out.println("For debugging: periodRoomRate = "  + rt.getName() + " " + periodRoomTypeRate.toString());
             //if avail rooms > guest required number of rooms
-            if (periodAvailableRooms >= guestNumberOfRooms) {
+            if (periodAvailableRooms >= guestNumberOfRooms && !periodRoomTypeRate.equals(new BigDecimal("0"))) {
+                String totalDaysInString = new String();
+                BigDecimal totalDaysInBd = new BigDecimal(totalDaysInString.valueOf(totalDays));
                 availableRoomTypeAndRatePerNight.add(rt.getName());
-                availableRoomTypeAndRatePerNight.add("SGD " + periodRoomTypeRate.toString()); //can change to per night if neccessary;
+                availableRoomTypeAndRatePerNight.add("SGD " + periodRoomTypeRate.divide(totalDaysInBd, 2 , RoundingMode.CEILING).toString()); //can change to per night if neccessary;
             }
         }
 
         if (availableRoomTypeAndRatePerNight.isEmpty()) {
             throw new NoRoomTypeAvailableException("No Room Type is available for this period!");
+        }
+        
+        System.out.println("For debugging: List returned");
+        for(String s : availableRoomTypeAndRatePerNight) {
+            System.out.println(s);
         }
 
         return availableRoomTypeAndRatePerNight;
@@ -129,7 +140,7 @@ public class SearchSessionBean implements SearchSessionBeanRemote, SearchSession
             BigDecimal periodRoomTypeRates = new BigDecimal("0");
 
             //Looping through every day
-            for (LocalDate dailyDate = checkInDate; dailyDate.isBefore(checkOutDate.plusDays(1)); dailyDate = dailyDate.plusDays(1)) {
+            for (LocalDate dailyDate = checkInDate; dailyDate.isBefore(checkOutDate); dailyDate = dailyDate.plusDays(1)) {
                 int dailyAvailableRooms = totalRoomsAvailable;
                 //parameter for calculate rate is true, as search is done online - refer to roomratesessionbean
                 try{
