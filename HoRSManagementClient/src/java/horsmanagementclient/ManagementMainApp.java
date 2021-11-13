@@ -45,10 +45,6 @@ public class ManagementMainApp {
         this.searchSessionBeanRemote = searchSessionBeanRemote;
     }
 
-
-
-    
-
     public void runApp() {
         Scanner scanner = new Scanner(System.in);
         Integer response = 0;

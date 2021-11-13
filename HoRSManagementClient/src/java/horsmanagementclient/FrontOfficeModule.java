@@ -116,7 +116,7 @@ public class FrontOfficeModule {
             if (numRooms > 0) {
                 break;
             } else {
-                System.err.println("The number of rooms has to be greater than 0!");
+                System.out.println("The number of rooms has to be greater than 0!");
             }
         }
         try {

@@ -37,7 +37,6 @@ public class ReservationEntity implements Serializable {
     private int numOfAdults;
     @Column(nullable = false)
     private int numOfRooms;
-    @Column(nullable = false)
     private BigDecimal totalAmount;
     @Column(nullable = false)
     private boolean roomAllocated;
