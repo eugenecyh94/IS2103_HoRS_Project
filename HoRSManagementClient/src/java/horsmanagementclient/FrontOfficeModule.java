@@ -39,8 +39,6 @@ public class FrontOfficeModule {
         this.currentEmployeeEntity = currentEmployeeEntity;
     }
 
-    
-
     public void menuFrontOffice() throws InvalidAccessRightException {
 
         if (currentEmployeeEntity.getAccessRightEnum() != EmployeeAccessRightEnum.GUESTRELATIONSOFFICER) {
@@ -94,9 +92,19 @@ public class FrontOfficeModule {
         String sDate = sc.nextLine().trim();
         LocalDate checkinDate = LocalDate.parse(sDate, formatter);
 
-        System.out.println("Enter the check out Date (dd/MM/yyyy): ");
-        sDate = sc.nextLine().trim();
-        LocalDate checkoutDate = LocalDate.parse(sDate, formatter);
+        LocalDate checkoutDate;
+
+        while (true) {
+            System.out.println("Enter the check out Date (dd/MM/yyyy): ");
+            sDate = sc.nextLine().trim();
+            checkoutDate = LocalDate.parse(sDate, formatter);
+
+            if (checkoutDate.isBefore(checkinDate)) {
+                System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+            } else {
+                break;
+            }
+        }
 
         int numAdults;
         while (true) {
@@ -142,9 +150,19 @@ public class FrontOfficeModule {
         String sDate = sc.nextLine().trim();
         LocalDate checkinDate = LocalDate.parse(sDate, formatter);
 
-        System.out.println("Enter the check out Date (dd/MM/yyyy): ");
-        sDate = sc.nextLine().trim();
-        LocalDate checkoutDate = LocalDate.parse(sDate, formatter);
+        LocalDate checkoutDate;
+
+        while (true) {
+            System.out.println("Enter the check out Date (dd/MM/yyyy): ");
+            sDate = sc.nextLine().trim();
+            checkoutDate = LocalDate.parse(sDate, formatter);
+
+            if (checkoutDate.isBefore(checkinDate)) {
+                System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+            } else {
+                break;
+            }
+        }
 
         int numAdults;
         while (true) {
@@ -167,7 +185,7 @@ public class FrontOfficeModule {
                 System.err.println("The number of rooms has to be greater than 0!");
             }
         }
-        
+
         RoomTypeEntity roomTypeEntity;
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
