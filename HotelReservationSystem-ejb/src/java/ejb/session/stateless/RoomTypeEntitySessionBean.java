@@ -4,6 +4,7 @@ import entity.ReservationEntity;
 import entity.RoomEntity;
 import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -106,13 +107,9 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
     public List<RoomTypeEntity> retrieveAllRoomTypes() {
 
         Query query = em.createQuery("SELECT r FROM RoomTypeEntity r WHERE r.roomTypeEnabled = TRUE");
-       
+
         return query.getResultList();
 
-    }
-
-    public void persist(Object object) {
-        em.persist(object);
     }
 
 }

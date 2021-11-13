@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import util.enumeration.RateTypeEnum;
+import util.exception.RoomRateCannotBeFoundException;
 import util.exception.RoomTypeCannotBeFoundException;
 
 public class SalesManagementModule {
@@ -28,9 +29,10 @@ public class SalesManagementModule {
     public SalesManagementModule() {
     }
 
-    public SalesManagementModule(EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity) {
+    public SalesManagementModule(EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, EmployeeEntity currentEmployeeEntity, RoomRateSessionBeanRemote roomRateSessionBeanRemote) {
         this.employeeEntitySessionBeanRemote = employeeEntitySessionBeanRemote;
         this.currentEmployeeEntity = currentEmployeeEntity;
+        this.roomRateSessionBeanRemote = roomRateSessionBeanRemote;
     }
 
     public void menuSalesManagement() throws InvalidAccessRightException {
@@ -84,7 +86,7 @@ public class SalesManagementModule {
         System.out.println("Enter the Room Rate Name: ");
         roomRateEntity.setRateName(sc.nextLine().trim());
 
-        System.out.println("*** RoomTypes ***\n");
+        System.out.println("\n*** RoomTypes ***\n");
 
         try {
             List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
@@ -153,26 +155,36 @@ public class SalesManagementModule {
         System.out.print("Enter Room Rate ID> ");
         Long roomRateId = sc.nextLong();
 
-        RoomRateEntity roomRateEntity = roomRateSessionBeanRemote.retrieveRoomRateById(roomRateId);
-        if (roomRateEntity != null) {
-            System.out.printf("%8s%20s%20s%20s%20s\n", "RoomRate ID", "RoomRate Name", "RoomRate Type", "Per Night", "Start Date", "End Date");
-            System.out.printf("%8s%20s%20s%20s%20s\n", roomRateEntity.getRoomRateId(), roomRateEntity.getRateName(), roomRateEntity.getRateType().toString(), roomRateEntity.getRate(), roomRateEntity.getStartDate().toString(), roomRateEntity.getEndDate().toString());
-            System.out.println("------------------------");
-            System.out.println("1: Update RomRate");
-            System.out.println("2: Delete RomRate");
-            System.out.println("3: Back\n");
-            System.out.print("> ");
-            response = sc.nextInt();
+        while (true) {
+            try {
+            RoomRateEntity roomRateEntity = roomRateSessionBeanRemote.retrieveRoomRateById(roomRateId);
 
-            if (response == 1) {
-                doUpdateRoomRate(roomRateEntity);
-            } else if (response == 2) {
-                doDeleteRoomRate(roomRateEntity);
+                System.out.printf("%8s%20s%20s%20s%20s\n", "RoomRate ID", "RoomRate Name", "RoomRate Type", "Per Night", "Start Date", "End Date");
+                System.out.printf("%8s%20s%20s%20s%20s\n", roomRateEntity.getRoomRateId(), roomRateEntity.getRateName(), roomRateEntity.getRateType().toString(), roomRateEntity.getRate(), roomRateEntity.getStartDate().toString(), roomRateEntity.getEndDate().toString());
+                System.out.println("------------------------");
+                System.out.println("1: Update RoomRate");
+                System.out.println("2: Delete RoomRate");
+                System.out.println("3: Back\n");
+                System.out.print("> ");
+                response = sc.nextInt();
+
+                if (response == 1) {
+                    doUpdateRoomRate(roomRateEntity);
+                    break;
+                } else if (response == 2) {
+                    doDeleteRoomRate(roomRateEntity);
+                    break;
+                } else if (response == 3) {
+                    break;
+                } else {
+                    System.out.print("Invalid response! Please enter again > ");
+                    response = sc.nextInt();
+                }
+            } catch (RoomRateCannotBeFoundException ex ){
+                System.out.print("No Room Rate with the ID found! Please enter Room Rate ID again>");
+                roomRateId = sc.nextLong();
             }
-        } else {
-            System.out.println("No Room Rate with the ID found!");
         }
-
     }
 
     private void doViewAllRoomRates() {

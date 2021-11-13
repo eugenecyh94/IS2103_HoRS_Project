@@ -13,7 +13,7 @@ public interface RoomRateSessionBeanLocal {
 
     public RoomRateEntity createNewRoomRate(RoomRateEntity newRoomRate) throws RoomTypeCannotBeFoundException;
 
-    public RoomRateEntity retrieveRoomRateById(Long roomRateId);
+    public RoomRateEntity retrieveRoomRateById(Long roomRateId) throws RoomRateCannotBeFoundException;
 
     public List<RoomRateEntity> retrieveRoomRateByRoomType(Long roomTypeId) throws RoomCannotBeFoundException;
 

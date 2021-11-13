@@ -39,10 +39,15 @@ public class RoomRateSessionBean implements RoomRateSessionBeanRemote, RoomRateS
     }
 
     @Override
-    public RoomRateEntity retrieveRoomRateById(Long roomRateId) {
+    public RoomRateEntity retrieveRoomRateById(Long roomRateId) throws RoomRateCannotBeFoundException{
 
+  
         RoomRateEntity roomRate = em.find(RoomRateEntity.class, roomRateId);
-
+  
+        if(roomRate == null){
+        throw new RoomRateCannotBeFoundException("Room Rate does not exists for the entered ID!");
+        }
+        
         return roomRate;
 
     }
