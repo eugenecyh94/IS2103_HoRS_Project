@@ -219,7 +219,7 @@ public class ReservationMainApp {
         }
 
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms, numAdults);
             System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
 
             int i = 0, j = 1;
