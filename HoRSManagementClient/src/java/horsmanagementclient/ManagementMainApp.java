@@ -63,7 +63,7 @@ public class ManagementMainApp {
                         doLogin();
                         System.out.println("Login successful!\n");
 
-                        salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, roomRateSessionBeanRemote);
+                        salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, roomRateSessionBeanRemote, roomTypeEntitySessionBeanRemote);
                         operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
                         frontOfficeModule = new FrontOfficeModule(currentEmployeeEntity);
@@ -103,9 +103,10 @@ public class ManagementMainApp {
         username = scanner.nextLine().trim();
         System.out.print("Enter password> ");
         password = scanner.nextLine().trim();
-
+        
         if (username.length() > 0 && password.length() > 0) {
             currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);
+            System.out.println("Not username and password");
         } else {
             throw new InvalidLoginCredentialException("Invalid or Missing login credential!");
         }
