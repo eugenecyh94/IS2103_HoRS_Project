@@ -30,14 +30,18 @@ public class ManagementMainApp {
     public ManagementMainApp() {
     }
 
-    public ManagementMainApp(RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, RoomEntitySessionBeanRemote roomEntitySessionBeanRemote, EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote, RoomRateSessionBeanRemote roomRateSessionBeanRemote) {
-        this.roomTypeEntitySessionBeanRemote = roomTypeEntitySessionBeanRemote;
+    public ManagementMainApp(RoomEntitySessionBeanRemote roomEntitySessionBeanRemote, EmployeeEntitySessionBeanRemote employeeEntitySessionBeanRemote, PartnerEntitySessionBeanRemote partnerEntitySessionBeanRemote, GuestEntitySessionBeanRemote guestEntitySessionBeanRemote, RoomTypeEntitySessionBeanRemote roomTypeEntitySessionBeanRemote, RoomRateSessionBeanRemote roomRateSessionBeanRemote) {
         this.roomEntitySessionBeanRemote = roomEntitySessionBeanRemote;
         this.employeeEntitySessionBeanRemote = employeeEntitySessionBeanRemote;
-        this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
         this.partnerEntitySessionBeanRemote = partnerEntitySessionBeanRemote;
+        this.guestEntitySessionBeanRemote = guestEntitySessionBeanRemote;
+        this.roomTypeEntitySessionBeanRemote = roomTypeEntitySessionBeanRemote;
         this.roomRateSessionBeanRemote = roomRateSessionBeanRemote;
     }
+
+
+
+    
 
     public void runApp() {
         Scanner scanner = new Scanner(System.in);
@@ -103,7 +107,7 @@ public class ManagementMainApp {
         if (username.length() > 0 && password.length() > 0) {
             currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);
         } else {
-            throw new InvalidLoginCredentialException("Missing login credential!");
+            throw new InvalidLoginCredentialException("Invalid or Missing login credential!");
         }
     }
 }

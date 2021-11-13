@@ -85,7 +85,7 @@ public class EmployeeEntitySessionBean implements EmployeeEntitySessionBeanRemot
             }
             else
             {
-                throw new InvalidLoginCredentialException("Invalid password!");
+                throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
             }
         }
         catch(EmployeeNotFoundException ex)

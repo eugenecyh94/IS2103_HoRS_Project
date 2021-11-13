@@ -185,7 +185,7 @@ public class ReservationMainApp {
         }
 
         try {
-            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms);
+            List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms);
             System.out.printf("%20s%30s\n", "Room Type", "Average Room Rate per night");
 
             for (int i = 0; i < availableRooms.size(); i++) {
@@ -225,21 +225,26 @@ public class ReservationMainApp {
         RoomTypeEntity roomTypeEntity;
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesOnline(checkinDate, checkoutDate, numRooms);
-            System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
+            System.out.printf("%2s%20s%30s\n", "#", "Room Type", "Average Room Rate per night");
 
             int i = 0, j = 1;
             while (i < availableRooms.size()) {
-                System.out.printf("%2s%20s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
+                System.out.printf("%2s%20s%30s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
             }
 
             System.out.println("Enter the # of the Room Type you wish to book: ");
-            int input = sc.nextInt();
+            int input = 0;
             while (true) {
-                if (input > 0 && input < j) {
-                    roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeByName(availableRooms.get((input - 1 * 2)));
-                    break;
+                input = sc.nextInt();
+                if (input > 0 && input <= j) {
+                    try {
+                        roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeByName(availableRooms.get(((input - 1) * 2)));
+                        break;
+                    } catch (RoomTypeCannotBeFoundException ex) {
+                        System.out.println("Invalid choice try again, please enter the # of the Room Type you wish to book again: ");
+                    }
                 } else {
-                    System.out.println("Invalid choice try again!");
+                    System.out.println("Invalid choice try again, please enter the # of the Room Type you wish to book again: ");
                 }
             }
 
