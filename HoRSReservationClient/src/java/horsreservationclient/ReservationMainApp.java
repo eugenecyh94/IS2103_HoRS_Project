@@ -106,6 +106,11 @@ public class ReservationMainApp {
 
         try {
             currentGuestEntity = guestEntitySessionBeanRemote.guestLogin(username, password);
+            
+            if(currentGuestEntity.getPassword().equals("default")) {
+                currentGuestEntity = null;
+                throw new InvalidLoginCredentialException();
+            }
         } catch (InvalidLoginCredentialException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -117,24 +122,24 @@ public class ReservationMainApp {
 
         System.out.println("*** Merlion Reservation System :: Register As Guest ***\n");
 
-        System.out.println("Enter First Name");
-        System.out.println(">");
+        System.out.print("Enter First Name ");
+        System.out.print(">");
         guestEntity.setFirstName(sc.nextLine().trim());
 
-        System.out.println("Enter Last Name");
+        System.out.print("Enter Last Name ");
         
         guestEntity.setLastName(sc.nextLine().trim());
 
-        System.out.println("Enter Passport Number");
-        System.out.println(">");
+        System.out.print("Enter Passport Number ");
+        System.out.print(">");
         guestEntity.setPassportNumber(sc.nextLine().trim());
 
-        System.out.println("Enter email");
-        System.out.println(">");
+        System.out.print("Enter email ");
+        System.out.print(">");
         guestEntity.setEmail(sc.nextLine().trim());
 
-        System.out.println("Enter mobile number");
-        System.out.println(">");
+        System.out.print("Enter mobile number ");
+        System.out.print(">");
         guestEntity.setMobileNumber(sc.nextLine().trim());
 
         String username;
@@ -168,12 +173,12 @@ public class ReservationMainApp {
         System.out.println("*** Merlion Reservation System :: Search Room  ***\n");
 
         System.out.println("Enter the check in Date (dd/mm/yyyy): ");
-        System.out.println(">");
+        System.out.print(">");
         String sdate = sc.nextLine().trim();
         LocalDate checkinDate = LocalDate.parse(sdate, formatter);
 
         System.out.println("Enter the check out Date (dd/MM/yyyy): ");
-        System.out.println(">");
+        System.out.print(">");
         sdate = sc.nextLine().trim();
         LocalDate checkoutDate = LocalDate.parse(sdate, formatter);
 
@@ -191,7 +196,7 @@ public class ReservationMainApp {
 
         while (true) {
             System.out.println("Enter the number of rooms that you want to book: ");
-            System.out.println(">");
+            System.out.print(">");
             numRooms = sc.nextInt();
             if (numRooms > 0) {
                 break;
@@ -204,7 +209,7 @@ public class ReservationMainApp {
 
         while (true) {
             System.out.println("Enter the number of adults: ");
-            System.out.println(">");
+            System.out.print(">");
             numAdults = sc.nextInt();
             if (numAdults > 0) {
                 break;
@@ -236,6 +241,7 @@ public class ReservationMainApp {
 
                     if (response == 1) {
                         doReserveHotelRoom(availableRooms, checkinDate, checkoutDate, numRooms, numAdults, totalDaysInBd);
+                        break;
                     } else if (response == 2) {
                         break;
                     } else {
@@ -263,7 +269,7 @@ public class ReservationMainApp {
             while (true) {
 
                 System.out.println("Enter the # of the Room Type you wish to book from the above list: ");
-                System.out.println(">");
+                System.out.print(">");
                 int input = sc.nextInt();
 
                 if (input > 0 && input <= availableRooms.size() / 2) {
@@ -312,7 +318,7 @@ public class ReservationMainApp {
         System.out.println("*** Merlion Reservation System :: View My Reservation Details***\n");
 
         System.out.println("Enter the Reservation ID: ");
-        System.out.println(">");
+        System.out.print(">");
         Long reservationId = sc.nextLong();
         sc.nextLine();
 
