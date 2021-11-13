@@ -99,9 +99,10 @@ public class ManagementMainApp {
         username = scanner.nextLine().trim();
         System.out.print("Enter password> ");
         password = scanner.nextLine().trim();
-
+        
         if (username.length() > 0 && password.length() > 0) {
             currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);
+            System.out.println("Not username and password");
         } else {
             throw new InvalidLoginCredentialException("Missing login credential!");
         }
