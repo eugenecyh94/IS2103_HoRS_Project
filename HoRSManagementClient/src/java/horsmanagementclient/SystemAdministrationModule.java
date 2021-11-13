@@ -128,8 +128,6 @@ public class SystemAdministrationModule {
         newPartnerEntity.setFirstName(scanner.nextLine().trim());
         System.out.print("Enter Last Name> ");
         newPartnerEntity.setLastName(scanner.nextLine().trim());
-        
-        scanner.nextLine();
         System.out.print("Enter Username> ");
         newPartnerEntity.setUsername(scanner.nextLine().trim());
         System.out.print("Enter Password> ");
