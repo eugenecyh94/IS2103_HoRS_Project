@@ -11,6 +11,7 @@ import entity.RoomRateEntity;
 import entity.RoomTypeEntity;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import util.enumeration.RateTypeEnum;
 import util.exception.RoomRateCannotBeFoundException;
@@ -90,9 +91,9 @@ public class SalesManagementModule {
         System.out.println("\n*** RoomTypes ***\n");
 
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-        System.out.printf("%8s%20s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
+        System.out.printf("%2s%30s%30s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
         roomTypeEntities.forEach(roomTypeEntity -> {
-            System.out.printf("%8s%20s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
+            System.out.printf("%2s%30s%30s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
         });
 
         System.out.println("Enter the Room Type ID: ");
@@ -125,13 +126,28 @@ public class SalesManagementModule {
         roomRateEntity.setRate(sc.nextBigDecimal());
         sc.nextLine();
         if (roomRateEntity.getRateType().equals(RateTypeEnum.PEAK) || roomRateEntity.getRateType().equals(RateTypeEnum.PROMOTION)) {
+            while (true) {
+                try {
+                    System.out.println("Enter Start Date (dd/MM/yyyy): ");
+                    String sDate = sc.nextLine().trim();
+                    roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
 
-            System.out.println("Enter Start Date (dd/MM/yyyy): ");
-            String sDate = sc.nextLine().trim();
-            roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
-            System.out.println("Enter End Date (dd/MM/yyyy): ");
-            sDate = sc.nextLine().trim();
-            roomRateEntity.setEndDate(LocalDate.parse(sDate, formatter));
+                    while (true) {
+                        System.out.println("Enter End Date (dd/MM/yyyy): ");
+                        sDate = sc.nextLine().trim();
+                        roomRateEntity.setEndDate(LocalDate.parse(sDate, formatter));
+                        if (roomRateEntity.getStartDate().isBefore(roomRateEntity.getEndDate())) {
+                            break;
+                        } else {
+                            System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+                        }
+                    }
+
+                    break;
+                } catch (DateTimeParseException ex) {
+                    System.out.println("Invalide choice!\n");
+                }
+            }
 
         }
         try {
@@ -155,8 +171,8 @@ public class SalesManagementModule {
             try {
                 RoomRateEntity roomRateEntity = roomRateSessionBeanRemote.retrieveRoomRateById(roomRateId);
 
-                System.out.printf("%8s%20s%20s%20s%20s\n", "RoomRate ID", "RoomRate Name", "RoomRate Type", "Per Night", "Start Date", "End Date");
-                System.out.printf("%8s%20s%20s%20s%20s\n", roomRateEntity.getRoomRateId(), roomRateEntity.getRateName(), roomRateEntity.getRateType().toString(), roomRateEntity.getRate(), roomRateEntity.getStartDate(), roomRateEntity.getEndDate());
+                System.out.printf("%2s%40s%20s%20s%20s\n", "RoomRate ID", "RoomRate Name", "RoomRate Type", "Per Night", "Start Date", "End Date");
+                System.out.printf("%2s%40s%20s%20s%20s\n", roomRateEntity.getRoomRateId(), roomRateEntity.getRateName(), roomRateEntity.getRateType().toString(), roomRateEntity.getRate(), roomRateEntity.getStartDate(), roomRateEntity.getEndDate());
                 System.out.println("------------------------");
                 System.out.println("1: Update RoomRate");
                 System.out.println("2: Delete RoomRate");
@@ -187,10 +203,10 @@ public class SalesManagementModule {
         System.out.println("*** Merlion Management System :: Sales Management :: View All RoomRates ***\n");
 
         List<RoomRateEntity> roomRateEntities = roomRateSessionBeanRemote.retrieveAllRoomRates();
-        System.out.printf("%8s%20s%20s%20s%20s\n", "RoomRate ID", "RoomRate Name", "RoomRate Type", "Per Night", "Start Date", "End Date");
+        System.out.printf("%2s%40s%20s%20s%20s\n", "RoomRate ID", "RoomRate Name", "RoomRate Type", "Per Night", "Start Date", "End Date");
 
         roomRateEntities.forEach(roomRateEntity -> {
-            System.out.printf("%8s%20s%20s%20s%20s\n", roomRateEntity.getRoomRateId(), roomRateEntity.getRateName(), roomRateEntity.getRateType().toString(), roomRateEntity.getRate(), roomRateEntity.getStartDate(), roomRateEntity.getEndDate());
+            System.out.printf("%2s%40s%20s%20s%20s\n", roomRateEntity.getRoomRateId(), roomRateEntity.getRateName(), roomRateEntity.getRateType().toString(), roomRateEntity.getRate(), roomRateEntity.getStartDate(), roomRateEntity.getEndDate());
         });
 
         System.out.println("");
@@ -227,10 +243,10 @@ public class SalesManagementModule {
 
         //removed try-catch block here as no exception is thrown and caught 
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-        System.out.printf("%8s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
+        System.out.printf("%2s%40s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
 
         roomTypeEntities.forEach(roomTypeEntity -> {
-            System.out.printf("%8s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
+            System.out.printf("%2s%40s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
         });
 
         System.out.println("");
@@ -257,7 +273,7 @@ public class SalesManagementModule {
                 Integer roomRateInt = sc.nextInt();
 
                 if (roomRateInt >= 1 && roomRateInt <= 4) {
-                    roomRateEntity.setRateType(RateTypeEnum.values()[roomRateInt-1]);
+                    roomRateEntity.setRateType(RateTypeEnum.values()[roomRateInt - 1]);
 
                     break;
                 } else {
@@ -270,25 +286,38 @@ public class SalesManagementModule {
             System.out.println("Enter the Room Rate per night : ");
             roomRateEntity.setRate(sc.nextBigDecimal());
         }
-        
+
         sc.nextLine();
         if (roomRateEntity.getRateType().equals(RateTypeEnum.PEAK) || roomRateEntity.getRateType().equals(RateTypeEnum.PROMOTION)) {
             System.out.println("Change Room Rate Dates? y/n");
             if (sc.nextLine().toUpperCase().trim().equals("Y")) {
                 while (true) {
+                    try {
+                        System.out.println("Enter Start Date (dd/MM/yyyy): ");
+                        String sDate = sc.nextLine().trim();
+                        roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
 
-                    System.out.println("Enter Start Date (dd/MM/yyyy): ");
-                    String sDate = sc.nextLine().trim();
-                    roomRateEntity.setStartDate(LocalDate.parse(sDate, formatter));
-                    System.out.println("Enter End Date (dd/MM/yyyy): ");
-                    sDate = sc.nextLine().trim();
-                    roomRateEntity.setEndDate(LocalDate.parse(sDate, formatter));
+                        while (true) {
+                            System.out.println("Enter End Date (dd/MM/yyyy): ");
+                            sDate = sc.nextLine().trim();
+                            roomRateEntity.setEndDate(LocalDate.parse(sDate, formatter));
+                            if (roomRateEntity.getStartDate().isBefore(roomRateEntity.getEndDate())) {
+                                break;
+                            } else {
+                                System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+                            }
+                        }
+
+                        break;
+                    } catch (DateTimeParseException ex) {
+                        System.out.println("Invalide choice!\n");
+                    }
                 }
             }
         }
 
         roomRateSessionBeanRemote.updateRoomRate(roomRateEntity);
-        System.out.println("Room Rate Updated Successfully!");
+        System.out.println("Room Rate Updated Successfully!\n");
 
     }
 }
