@@ -92,6 +92,7 @@ public class PartnerEntityWebService {
     public PartnerEntity addPartnerReservation(@WebParam(name = "reservationEntity") Long reservationEntityId, @WebParam(name = "partnerId") Long partnerId) throws ReservationCannotBeFoundException, PartnerNotFoundException {
 
         PartnerEntity partnerEntity = partnerEntitySessionBeanLocal.addParnterReservation(reservationEntityId, partnerId);
+        em.detach(partnerEntity);
         return partnerEntity;
     }
 
@@ -114,7 +115,6 @@ public class PartnerEntityWebService {
         reservationEntity.setCheckOutDate(checkOutDate);
 
         reservationEntity = reservationEntitySessionBeanLocal.createNewGuestReservation(reservationEntity, guestId);
-
         em.detach(reservationEntity);
         reservationEntity.setRoomType(null);
         reservationEntity.setGuest(null);
@@ -127,11 +127,10 @@ public class PartnerEntityWebService {
         ReservationEntity reservationEntity = reservationEntitySessionBeanLocal.retrieveReservationById(reservationId);
 
         em.detach(reservationEntity);
-        RoomTypeEntity roomTypeEntity = reservationEntity.getRoomType();
-        roomTypeEntity.setReservations(null);
         reservationEntity.setGuest(null);
-        return String.format("%8s%20s%20s%20s%20s\n", reservationEntity.getReservationId(), reservationEntity.getRoomType().getName(), reservationEntity.getCheckInDate().toString(), reservationEntity.getCheckOutDate().toString(), reservationEntity.getNumOfRooms());
-    
+        String text = String.format("%8s%20s%20s%20s%20s\n", reservationEntity.getReservationId(), reservationEntity.getRoomType().getName(), reservationEntity.getCheckInDate().toString(), reservationEntity.getCheckOutDate().toString(), reservationEntity.getNumOfRooms());
+        return text;
+
     }
 
     @WebMethod(operationName = "viewAllPartnerReservations")
@@ -141,9 +140,6 @@ public class PartnerEntityWebService {
 
         for (ReservationEntity reservationEntity : reservationEntitys) {
             em.detach(reservationEntity);
-            reservationEntity.setGuest(null);
-            RoomTypeEntity roomTypeEntity = reservationEntity.getRoomType();
-            roomTypeEntity.setReservations(null);
             dates.add(String.format("%8s%20s%20s%20s%20s\n", reservationEntity.getReservationId(), reservationEntity.getRoomType().getName(), reservationEntity.getCheckInDate().toString(), reservationEntity.getCheckOutDate().toString(), reservationEntity.getNumOfRooms()));
         }
         return dates;
