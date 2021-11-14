@@ -80,6 +80,13 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
 
         PartnerEntity partner = em.find(PartnerEntity.class, partnerId);
 
+        List <ReservationEntity> reservations = partner.getPartnerReservations();
+        reservations.size();
+
+        for(ReservationEntity rs : reservations){
+            rs.getRoomType();
+        }
+        
         if (partner == null) {
             throw new PartnerNotFoundException("Partner does not exist for the entered ID!");
         }
