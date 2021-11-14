@@ -56,11 +56,10 @@ public class OperationsManagementModule {
             System.out.println("5: View All Rooms");
             System.out.println("6: View Room Details");
             System.out.println("-----------------------");
-            System.out.println("7: View Room Allocation Exception Report");
-            System.out.println("8: Back\n");
+            System.out.println("7: Back\n");
             response = 0;
 
-            while (response < 1 || response > 8) {
+            while (response < 1 || response > 7) {
                 System.out.print("> ");
 
                 response = sc.nextInt();
@@ -78,15 +77,13 @@ public class OperationsManagementModule {
                 } else if (response == 6) {
                     doViewRoomDetails();
                 } else if (response == 7) {
-                    doViewExceptionReport();
-                } else if (response == 8) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
 
-            if (response == 8) {
+            if (response == 7) {
                 break;
             }
         }
@@ -99,39 +96,39 @@ public class OperationsManagementModule {
 
         String name = "";
         while (name.length() < 1) {
-            System.out.println("Enter the Room Type Name: ");
+            System.out.println("\nEnter the Room Type Name: ");
             name = sc.nextLine().trim();
             if (name.length() > 0) {
                 roomTypeEntity.setName(name);
             } else {
-                System.out.println("Invalid option, please try again!\n");
+                System.out.println("\nInvalid option, please try again!\n");
             }
         }
 
         String description = "";
         while (description.length() < 1) {
-            System.out.println("Enter the Room Type Description: ");
+            System.out.println("\nEnter the Room Type Description: ");
             description = sc.nextLine().trim();
             if (description.length() > 0) {
                 roomTypeEntity.setDescription(description);
             } else {
-                System.out.println("Invalid option, please try again!\n");
+                System.out.println("\nInvalid option, please try again!\n");
             }
         }
 
         String size = "";
         while (size.length() < 1) {
-            System.out.println("Enter the Room Type Size: ");
+            System.out.println("\nEnter the Room Type Size: ");
             size = sc.nextLine().trim();
             if (size.length() > 0) {
                 roomTypeEntity.setRoomSize(size);
             } else {
-                System.out.println("Invalid option, please try again!\n");
+                System.out.println("\nInvalid option, please try again!\n");
             }
         }
 
         while (true) {
-            System.out.print("1: Select Bed Size 1: SINGLE, 2: SUPERSINGLE, 3: QUEEN, 4: KING > ");
+            System.out.print("\n1: Select Bed Size 1: SINGLE, 2: SUPERSINGLE, 3: QUEEN, 4: KING > ");
             Integer bedSizeInt = sc.nextInt();
             sc.nextLine();
 
@@ -143,14 +140,14 @@ public class OperationsManagementModule {
             }
         }
 
-        System.out.println("Enter the Room Type Capacity: ");
+        System.out.println("\nEnter the Room Type Capacity: ");
         roomTypeEntity.setCapacity(sc.nextInt());
         sc.nextLine();
 
         List<String> roomAmenities = new ArrayList<>();
 
         while (true) {
-            System.out.println("Enter Room Type Amenities: ");
+            System.out.println("\nEnter Room Type Amenities: ");
             System.out.println("1: WIFI");
             System.out.println("2: BATHTUB");
             System.out.println("3: BATHROOMAMENITIES");
@@ -195,7 +192,7 @@ public class OperationsManagementModule {
         roomTypeEntity.setRoomAmenities(roomAmenities);
 
         String higherRoom = "";
-        System.out.print("Enter next higher room type (leave blank and enter if no next higher room type)> ");
+        System.out.print("\nEnter next higher room type (leave blank and enter if no next higher room type)> ");
         higherRoom = sc.nextLine().trim();
         if (higherRoom.length() > 0) {
             roomTypeEntity.setNextHigherRoomType(higherRoom);
@@ -204,25 +201,25 @@ public class OperationsManagementModule {
         }
 
         RoomTypeEntity newRoomTypeEntity = roomTypeEntitySessionBeanRemote.createNewRoomType(roomTypeEntity);
-        System.out.println("New Room Type Entity created Successfully with ID: " + newRoomTypeEntity.getRoomTypeId());
+        System.out.println("\nNew Room Type Entity created Successfully with ID: " + newRoomTypeEntity.getRoomTypeId() + "\n");
     }
 
     private void doViewRoomType() {
         Scanner sc = new Scanner(System.in);
         Integer response = 0;
 
-        System.out.println("*** Merlion Management System :: Operations Management :: View RoomType Details ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View RoomType Details ***\n");
         System.out.print("Enter RoomType ID: ");
         //String roomTypeName = sc.nextLine().trim();
         Long roomTypeId = sc.nextLong();
         try {
             RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(roomTypeId);
-            System.out.printf("%8s%30s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
-            System.out.printf("%8s%30s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
+            System.out.printf("%12s%30s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity");
+            System.out.printf("%12s%30s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity());
             System.out.println("------------------------");
             System.out.println("1: Update RoomType");
             System.out.println("2: Delete RoomType");
-            System.out.println("3: Back\n");
+            System.out.println("3: Back");
             System.out.print("> ");
             response = sc.nextInt();
 
@@ -232,7 +229,7 @@ public class OperationsManagementModule {
                 doDeleteRoomType(roomTypeEntity);
             }
         } catch (RoomTypeCannotBeFoundException ex) {
-            System.out.println("An error has occurred while retrieving RoomType: " + ex.getMessage() + "\n");
+            System.out.println("\nAn error has occurred while retrieving RoomType: " + ex.getMessage() + "\n");
         }
     }
 
@@ -240,21 +237,21 @@ public class OperationsManagementModule {
         Scanner sc = new Scanner(System.in);
         String input;
 
-        System.out.println("*** Merlion Management System :: Operations Management :: View RoomType Details :: Update RoomType ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View RoomType Details :: Update RoomType ***\n");
         System.out.print("Enter RoomType Name (blank if no change)> ");
         input = sc.nextLine().trim();
         if (input.length() > 0) {
             roomTypeEntity.setName(input);
         }
 
-        System.out.print("Enter Room Description (blank if no change)> ");
+        System.out.print("\nEnter Room Description (blank if no change)> ");
         input = sc.nextLine().trim();
         if (input.length() > 0) {
             roomTypeEntity.setDescription(input);
         }
 
         while (true) {
-            System.out.print("Enter Room Capacity (enter 0 if no changes)> ");
+            System.out.print("\nEnter Room Capacity (enter 0 if no changes)> ");
             int capacity = sc.nextInt();
             if (capacity > 0) {
                 roomTypeEntity.setCapacity(capacity);
@@ -262,14 +259,14 @@ public class OperationsManagementModule {
             } else if (capacity == 0) {
                 break;
             } else {
-                System.out.println("Invalid option, please enter 0 or positive number!");
+                System.out.println("\nInvalid option, please enter 0 or positive number!");
             }
         }
 
         List<String> roomAmenities = new ArrayList<>();
 
         while (true) {
-            System.out.println("Enter Room Type Amenities: ");
+            System.out.println("\nEnter Room Type Amenities: ");
             System.out.println("0: NO CHANGE");
             System.out.println("1: WIFI");
             System.out.println("2: BATHTUB");
@@ -310,12 +307,12 @@ public class OperationsManagementModule {
             } else if (amenityInteger == 0) {
                 break;
             } else {
-                System.out.println("Invalid option, please try again!\n");
+                System.out.println("\nInvalid option, please try again!\n");
             }
         }
 
         while (true) {
-            System.out.print("Select Bed Size (0: No Change, 1: SINGLE, 2: SUPERSINGLE, 3: QUEEN, 4: KING)> ");
+            System.out.print("\nSelect Bed Size (0: No Change, 1: SINGLE, 2: SUPERSINGLE, 3: QUEEN, 4: KING)> ");
             Integer bedSizeInteger = sc.nextInt();
 
             if (bedSizeInteger >= 1 && bedSizeInteger <= 4) {
@@ -324,49 +321,49 @@ public class OperationsManagementModule {
             } else if (bedSizeInteger == 0) {
                 break;
             } else {
-                System.out.println("Invalid option, please try again!\n");
+                System.out.println("\nInvalid option, please try again!\n");
             }
         }
 
         sc.nextLine();
 
-        System.out.print("Enter next higher room Type (blank if no change)> ");
+        System.out.print("\nEnter next higher room Type (blank if no change)> ");
         input = sc.nextLine().trim();
         if (input.length() > 0) {
             roomTypeEntity.setNextHigherRoomType(input);
         }
 
         roomTypeEntitySessionBeanRemote.updateRoomTypeDetails(roomTypeEntity);
-        System.out.println("RoomType updated successfully!\n");
+        System.out.println("\nRoomType updated successfully!\n");
     }
 
     private void doDeleteRoomType(RoomTypeEntity roomTypeEntity) {
         Scanner sc = new Scanner(System.in);
         String input;
 
-        System.out.println("*** Merlion Management System :: Operations Management :: View RoomType Details :: Delete RoomType ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View RoomType Details :: Delete RoomType ***\n");
         System.out.printf("Confirm Delete RoomType %s (RoomType ID: %d) (Enter 'Y' to Delete)> ", roomTypeEntity.getName(), roomTypeEntity.getRoomTypeId());
         input = sc.nextLine().trim().toUpperCase();
 
         if (input.equals("Y")) {
             try {
                 roomTypeEntitySessionBeanRemote.deleteRoomTypebyID(roomTypeEntity.getRoomTypeId());
-                System.out.println("RoomType deleted successfully!\n");
+                System.out.println("\nRoomType deleted successfully!");
             } catch (RoomTypeCannotBeDeletedException ex) {
-                System.out.println("Room cannot be deleted: " + ex.getMessage() + "\n");
+                System.out.println("\nRoom cannot be deleted: " + ex.getMessage() + "\n");
             }
         } else {
-            System.out.println("RoomType NOT deleted!\n");
+            System.out.println("\nRoomType NOT deleted!\n");
         }
     }
 
     private void doViewAllRoomTypes() {
-        System.out.println("*** Merlion Management System :: Operations Management:: View All RoomTypes ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management:: View All RoomTypes ***\n");
 
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-        System.out.printf("%8s%30s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
+        System.out.printf("%12s%30s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
         roomTypeEntities.forEach(roomTypeEntity -> {
-            System.out.printf("%8s%30s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
+            System.out.printf("%12s%30s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
         });
         System.out.println("");
 
@@ -375,12 +372,12 @@ public class OperationsManagementModule {
     private void doCreateNewRoomEntity() {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("*** Merlion Management System :: Operations Management :: Create New RoomEntity ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management :: Create New RoomEntity ***\n");
 
         List<RoomTypeEntity> roomTypeEntities = roomTypeEntitySessionBeanRemote.retrieveAllRoomTypes();
-        System.out.printf("%8s%30s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
+        System.out.printf("%12s%30s%20s%20s%20s%20s\n", "RoomType ID", "RoomType Name", "RoomType Bed Size", "Room size", "Capacity", "Enabled");
         roomTypeEntities.forEach(roomTypeEntity -> {
-            System.out.printf("%8s%30s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
+            System.out.printf("%12s%30s%20s%20s%20s%20s\n", roomTypeEntity.getRoomTypeId().toString(), roomTypeEntity.getName(), roomTypeEntity.getBedSize().toString(), roomTypeEntity.getRoomSize(), roomTypeEntity.getCapacity(), roomTypeEntity.isRoomTypeEnabled());
         });
 
         Long roomTypeId;
@@ -392,18 +389,18 @@ public class OperationsManagementModule {
                 roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(roomTypeId);
                 break;
             } catch (RoomTypeCannotBeFoundException ex) {
-                System.out.println("An error has occured: " + ex.getMessage() + " Try Again!\n");
+                System.out.println("\nAn error has occured: " + ex.getMessage() + " Try Again!\n");
             }
         }
 
         RoomEntity newRoomEntity = new RoomEntity();
 
         sc.nextLine();
-        System.out.println("Enter Room Number");
+        System.out.println("\nEnter Room Number");
         newRoomEntity.setRoomNumber(sc.nextLine().trim());
 
         newRoomEntity = roomEntitySessionBeanRemote.createNewRoom(newRoomEntity, roomTypeId);
-        System.out.println("New " + newRoomEntity.getRoomType().getName() + " " + newRoomEntity.getRoomNumber()
+        System.out.println("\nNew " + newRoomEntity.getRoomType().getName() + " " + newRoomEntity.getRoomNumber()
                 + " created Successfully with ID:" + newRoomEntity.getRoomId() + "\n");
 
     }
@@ -412,14 +409,14 @@ public class OperationsManagementModule {
         Scanner sc = new Scanner(System.in);
         Integer response = 0;
 
-        System.out.println("*** Merlion Management System :: Operations Management :: View Room Details ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View Room Details ***\n");
         System.out.print("Enter Room Number> ");
         String roomNumber = sc.nextLine().trim();
 
         try {
             RoomEntity roomEntity = roomEntitySessionBeanRemote.retrieveRoomByRoomNumber(roomNumber);
-            System.out.printf("%8s%30s%30s%20s%20s\n", "Room ID", "Room Number", "Room Type", "Room Status", "Room Allocated");
-            System.out.printf("%8s%30s%30s%20s%20s\n", roomEntity.getRoomId(), roomEntity.getRoomNumber(), roomEntity.getRoomType().getName(), roomEntity.isRoomStatusAvail(), roomEntity.isRoomAllocated());
+            System.out.printf("%12s%30s%30s%20s%20s\n", "Room ID", "Room Number", "Room Type", "Room Status", "Room Allocated");
+            System.out.printf("%12s%30s%30s%20s%20s\n", roomEntity.getRoomId(), roomEntity.getRoomNumber(), roomEntity.getRoomType().getName(), roomEntity.isRoomStatusAvail(), roomEntity.isRoomAllocated());
             System.out.println("------------------------");
             System.out.println("1: Update Room");
             System.out.println("2: Delete Room");
@@ -433,7 +430,7 @@ public class OperationsManagementModule {
                 doDeleteRoom(roomEntity);
             }
         } catch (RoomCannotBeFoundException ex) {
-            System.out.println("An error has occurred while retrieving Room: " + ex.getMessage() + "\n");
+            System.out.println("\nAn error has occurred while retrieving Room: " + ex.getMessage() + "\n");
         }
     }
 
@@ -441,34 +438,34 @@ public class OperationsManagementModule {
         Scanner sc = new Scanner(System.in);
         String input;
 
-        System.out.println("*** Merlion Management System :: Operations Management :: View Room Details :: Update Room ***\n");
-        System.out.print("Change Room Type? y/n > ");
-        if (sc.nextLine().equals('y')) {
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View Room Details :: Update Room ***\n");
+        System.out.print("\nChange Room Type? Y/N > ");
+        if (sc.nextLine().equals('Y')) {
             doViewAllRoomTypes();
 
             while (true) {
-                System.out.println("Enter RoomType Id > ");
+                System.out.println("\nEnter RoomType Id > ");
                 Long roomTypeId = sc.nextLong();
                 sc.nextLine();
                 try {
                     RoomTypeEntity roomTypeEntity = roomTypeEntitySessionBeanRemote.retrieveRoomTypeById(roomTypeId);
                     roomEntity.setRoomType(roomTypeEntity);
-                    System.out.println("Room Type Changed to " + roomEntity.getRoomType().getName());
+                    System.out.println("\nRoom Type Changed to " + roomEntity.getRoomType().getName());
                     break;
                 } catch (RoomTypeCannotBeFoundException ex) {
-                    System.out.println("An error has occured: " + ex.getMessage() + " Try Again!\n");
+                    System.out.println("\nAn error has occured: " + ex.getMessage() + " Try Again!\n");
                 }
             }
         }
 
-        System.out.print("Change Room Number? y/n > ");
+        System.out.print("\nChange Room Number? Y/N > ");
         if (sc.nextLine().trim().toUpperCase().equals('Y')) {
             while (true) {
-                System.out.println("Enter Room Number > ");
+                System.out.println("\nEnter Room Number > ");
                 String newNumber = sc.nextLine().trim();
                 try {
                     RoomEntity roomEntity1 = roomEntitySessionBeanRemote.retrieveRoomByRoomNumber(newNumber);
-                    System.out.println("Room Number already exits! Try Again\n");
+                    System.out.println("\nRoom Number already exits! Try Again\n");
                 } catch (RoomCannotBeFoundException ex) {
                     roomEntity.setRoomNumber(newNumber);
                     break;
@@ -477,48 +474,38 @@ public class OperationsManagementModule {
 
         }
 
-        System.out.print("Enter Room Status: Current Status is " + roomEntity.isRoomStatusAvail() + "! Change to " + !roomEntity.isRoomStatusAvail() + "? (y/n)");
+        System.out.print("\nEnter Room Status: Current Status is " + roomEntity.isRoomStatusAvail() + "! Change to " + !roomEntity.isRoomStatusAvail() + "? (Y/N)");
         if (sc.nextLine().trim().toUpperCase().equals('Y')) {
             roomEntity.setRoomStatusAvail(!roomEntity.isRoomStatusAvail());
             System.out.println("Room Status changed to " + roomEntity.isRoomStatusAvail());
         }
 
         roomEntitySessionBeanRemote.updateRoomDetails(roomEntity);
-        System.out.println("Room updated successfully!\n");
-    }
-
-    private RoomTypeEntitySessionBeanRemote lookupRoomTypeEntitySessionBeanRemote() {
-        try {
-            Context c = new InitialContext();
-            return (RoomTypeEntitySessionBeanRemote) c.lookup("java:comp/env/RoomTypeEntitySessionBean");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
+        System.out.println("\nRoom updated successfully!");
     }
 
     private void doDeleteRoom(RoomEntity roomEntity) {
         Scanner sc = new Scanner(System.in);
         String input;
 
-        System.out.println("*** Merlion Management System :: Operations Management :: View Room Details :: Delete Room ***\n");
-        System.out.printf("Confirm Delete Room %s (Room ID: %d) (Enter 'y' to Delete)> ", roomEntity.getRoomNumber(), roomEntity.getRoomId());
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View Room Details :: Delete Room ***\n");
+        System.out.printf("\nConfirm Delete Room %s (Room ID: %d) (Enter 'y' to Delete)> ", roomEntity.getRoomNumber(), roomEntity.getRoomId());
         input = sc.nextLine().toUpperCase().trim();
 
         if (input.equals("Y")) {
             try {
                 roomEntitySessionBeanRemote.deleteRoombyID(roomEntity.getRoomId());
-                System.out.println("Room deleted successfully!\n");
+                System.out.println("\nRoom deleted successfully!\n");
             } catch (RoomCannotBeFoundException | RoomCannotBeDeletedException ex) {
-                System.out.println("An error has occurred while deleting the Room: " + ex.getMessage() + "\n");
+                System.out.println("\nAn error has occurred while deleting the Room: " + ex.getMessage() + "\n");
             }
         } else {
-            System.out.println("Room NOT deleted!\n");
+            System.out.println("\nRoom NOT deleted!");
         }
     }
 
     private void doViewAllRooms() {
-        System.out.println("*** Merlion Management System :: Operations Management :: View All Rooms ***\n");
+        System.out.println("\n*** Merlion Management System :: Operations Management :: View All Rooms ***\n");
 
         List<RoomEntity> roomEntities = roomEntitySessionBeanRemote.retrieveAllRooms();
         System.out.printf("%8s%30s%20s%20s\n", "Room ID", "Room Number", "Room Status", "Allocated");
@@ -530,7 +517,4 @@ public class OperationsManagementModule {
         System.out.println("");
     }
 
-    private void doViewExceptionReport() {
-
-    }
 }
