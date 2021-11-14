@@ -13,6 +13,7 @@ import ejb.session.stateless.RoomEntitySessionBeanRemote;
 import ejb.session.stateless.RoomRateSessionBeanRemote;
 import ejb.session.stateless.RoomTypeEntitySessionBeanRemote;
 import ejb.session.stateless.SearchSessionBeanRemote;
+import java.util.InputMismatchException;
 import util.enumeration.EmployeeAccessRightEnum;
 
 public class ManagementMainApp {
@@ -53,47 +54,51 @@ public class ManagementMainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("\n*** Welcome to Merlion Hotel Management System ***\n");
-            System.out.println("1: Login");
-            System.out.println("2: Exit\n");
-            response = 0;
+            try {
+                System.out.println("\n*** Welcome to Merlion Hotel Management System ***\n");
+                System.out.println("1: Login");
+                System.out.println("2: Exit\n");
+                response = 0;
 
-            while (response < 1 || response > 2) {
-                System.out.print("> ");
+                while (response < 1 || response > 2) {
+                    System.out.print("> ");
 
-                response = scanner.nextInt();
+                    response = scanner.nextInt();
 
-                if (response == 1) {
-                    try {
-                        doLogin();
-                        System.out.println("Login successful!\n");
+                    if (response == 1) {
+                        try {
+                            doLogin();
+                            System.out.println("Login successful!\n");
 
-                        salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, roomRateSessionBeanRemote, roomTypeEntitySessionBeanRemote);
-                        operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
-                        systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
-                        frontOfficeModule = new FrontOfficeModule(reservationEntitySessionBeanRemote, searchSessionBeanRemote, roomTypeEntitySessionBeanRemote, guestEntitySessionBeanRemote, currentEmployeeEntity, ejbHorsTimerSessionBeanRemote, roomEntitySessionBeanRemote);
+                            salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, roomRateSessionBeanRemote, roomTypeEntitySessionBeanRemote);
+                            operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
+                            systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
+                            frontOfficeModule = new FrontOfficeModule(reservationEntitySessionBeanRemote, searchSessionBeanRemote, roomTypeEntitySessionBeanRemote, guestEntitySessionBeanRemote, currentEmployeeEntity, ejbHorsTimerSessionBeanRemote, roomEntitySessionBeanRemote);
 
-                        if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.OPSMANAGER)) {
-                            operationsManagementModule.menuOperationsManagement();
-                        } else if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.SYSTEMADMIN)) {
-                            systemAdministrationModule.menuSystemAdministration();
-                        } else if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.SALESMANAGER)) {
-                            salesManagementModule.menuSalesManagement();
-                        } else if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.GUESTRELATIONSOFFICER)) {
-                            frontOfficeModule.menuFrontOffice();
+                            if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.OPSMANAGER)) {
+                                operationsManagementModule.menuOperationsManagement();
+                            } else if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.SYSTEMADMIN)) {
+                                systemAdministrationModule.menuSystemAdministration();
+                            } else if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.SALESMANAGER)) {
+                                salesManagementModule.menuSalesManagement();
+                            } else if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.GUESTRELATIONSOFFICER)) {
+                                frontOfficeModule.menuFrontOffice();
+                            }
+                        } catch (InvalidLoginCredentialException | InvalidAccessRightException ex) {
+                            System.out.println("Invalid login credential: " + ex.getMessage() + "\n");
                         }
-                    } catch (InvalidLoginCredentialException | InvalidAccessRightException ex) {
-                        System.out.println("Invalid login credential: " + ex.getMessage() + "\n");
+                    } else if (response == 2) {
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!\n");
                     }
-                } else if (response == 2) {
-                    break;
-                } else {
-                    System.out.println("Invalid option, please try again!\n");
                 }
-            }
 
-            if (response == 2) {
-                break;
+                if (response == 2) {
+                    break;
+                }
+            } catch (InputMismatchException ex) {
+                System.out.println("Invalid option, please try again!");
             }
         }
     }
@@ -108,10 +113,10 @@ public class ManagementMainApp {
         username = scanner.nextLine().trim();
         System.out.print("Enter password> ");
         password = scanner.nextLine().trim();
-        
+
         if (username.length() > 0 && password.length() > 0) {
-            currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);  
-        }else {
+            currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);
+        } else {
             throw new InvalidLoginCredentialException("Invalid or Missing login credential!");
         }
     }
