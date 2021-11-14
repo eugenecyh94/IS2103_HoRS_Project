@@ -53,7 +53,7 @@ public class ManagementMainApp {
         Integer response = 0;
 
         while (true) {
-            System.out.println("*** Welcome to Merlion Hotel Management System ***\n");
+            System.out.println("\n*** Welcome to Merlion Hotel Management System ***\n");
             System.out.println("1: Login");
             System.out.println("2: Exit\n");
             response = 0;
@@ -103,16 +103,15 @@ public class ManagementMainApp {
         String username = "";
         String password = "";
 
-        System.out.println("*** Merlion Management System :: Login ***\n");
+        System.out.println("\n*** Merlion Management System :: Login ***\n");
         System.out.print("Enter username> ");
         username = scanner.nextLine().trim();
         System.out.print("Enter password> ");
         password = scanner.nextLine().trim();
         
         if (username.length() > 0 && password.length() > 0) {
-            currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);
-            System.out.println("Not username and password");
-        } else {
+            currentEmployeeEntity = employeeEntitySessionBeanRemote.employeeLogin(username, password);  
+        }else {
             throw new InvalidLoginCredentialException("Invalid or Missing login credential!");
         }
     }
