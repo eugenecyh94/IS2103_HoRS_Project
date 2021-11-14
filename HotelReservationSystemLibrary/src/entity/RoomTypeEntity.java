@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import util.enumeration.BedSizeEnum;
 
 /**
@@ -25,19 +27,29 @@ public class RoomTypeEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomTypeId;
     @Column(unique = true, length = 30, nullable = false)
+    @NotNull
+    @Size(min = 1, max = 30)
     private String name;
     @Column(length = 255)
+    @Size(min = 0, max = 255)
     private String description;
     @Column(nullable = false)
     private int capacity;
     @Column(length = 10, nullable = false)
+    @Size(min = 1, max = 10)
+    @NotNull
     private String roomSize; //sqm - to look into using string or int or enum
     @Column(nullable = false)
+    @NotNull
     private BedSizeEnum bedSize;
     @Column(nullable = false)
+    @NotNull
     private List<String> roomAmenities;
     @Column(nullable = false)
+    @NotNull
     private boolean roomTypeEnabled;
+    @NotNull
+    @Size(min = 1, max = 16)
     @Column(nullable = false, length = 16)
     private String nextHigherRoomType;
 
@@ -61,8 +73,6 @@ public class RoomTypeEntity implements Serializable {
         this.roomAmenities = roomAmenities;
         this.nextHigherRoomType = priority;
     }
-    
-    
 
     //methods
     public Long getRoomTypeId() {
@@ -161,7 +171,7 @@ public class RoomTypeEntity implements Serializable {
     public void setRooms(List<RoomEntity> rooms) {
         this.rooms = rooms;
     }
-    
+
     /**
      * @return the priority
      */
@@ -175,7 +185,5 @@ public class RoomTypeEntity implements Serializable {
     public void setNextHigherRoomType(String nextHigherRoomType) {
         this.nextHigherRoomType = nextHigherRoomType;
     }
-
-    
 
 }

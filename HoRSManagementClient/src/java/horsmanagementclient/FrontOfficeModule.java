@@ -14,6 +14,8 @@ import entity.RoomTypeEntity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
@@ -71,25 +73,29 @@ public class FrontOfficeModule {
             response = 0;
 
             while (response < 1 || response > 7) {
-                System.out.print("> ");
+                try {
+                    System.out.print("> ");
 
-                response = scanner.nextInt();
+                    response = scanner.nextInt();
 
-                if (response == 1) {
-                    doWalkInRoomSearch();
-                } else if (response == 2) {
-                    doCheckInGuest();
-                } else if (response == 3) {
-                    doCheckOutGuest();
-                } else if (response == 4) {
-                    doManualRoomAllocation();
-                } else if (response == 5) {
-                    doViewCurrentAllocationExceptionReport();
-                } else if (response == 6) {
-                    doViewAllocationExceptionReport();
-                } else if (response == 7) {
-                    break;
-                } else {
+                    if (response == 1) {
+                        doWalkInRoomSearch();
+                    } else if (response == 2) {
+                        doCheckInGuest();
+                    } else if (response == 3) {
+                        doCheckOutGuest();
+                    } else if (response == 4) {
+                        doManualRoomAllocation();
+                    } else if (response == 5) {
+                        doViewCurrentAllocationExceptionReport();
+                    } else if (response == 6) {
+                        doViewAllocationExceptionReport();
+                    } else if (response == 7) {
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!\n");
+                    }
+                } catch (InputMismatchException ex) {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
@@ -104,25 +110,32 @@ public class FrontOfficeModule {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("*** Merlion Management System :: Front Office Module :: Walk-In Search Room  ***\n");
-
-        System.out.println("Enter the check in Date (dd/mm/yyyy): ");
-        String sDate = sc.nextLine().trim();
-        LocalDate checkinDate = LocalDate.parse(sDate, formatter);
-
-        LocalDate checkoutDate;
+        LocalDate checkinDate = LocalDate.now();
+        LocalDate checkoutDate = LocalDate.now();
 
         while (true) {
-            System.out.println("Enter the check out Date (dd/MM/yyyy): ");
-            sDate = sc.nextLine().trim();
-            checkoutDate = LocalDate.parse(sDate, formatter);
+            try {
+                System.out.println("Enter the check in Date (dd/mm/yyyy): ");
+                String sDate = sc.nextLine().trim();
+                checkinDate = LocalDate.parse(sDate, formatter);
 
-            if (checkoutDate.isBefore(checkinDate)) {
-                System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
-            } else {
+                while (true) {
+                    System.out.println("Enter the check out Date (dd/MM/yyyy): ");
+                    sDate = sc.nextLine().trim();
+                    checkoutDate = LocalDate.parse(sDate, formatter);
+
+                    if (checkoutDate.isBefore(checkinDate)) {
+                        System.out.println("\nCheckout Date entered is wrong! Checkout Date must be after Check In Date!");
+                    } else {
+                        break;
+                    }
+                }
                 break;
+            } catch (DateTimeParseException ex) {
+                System.out.println("Wrong Date, Try Again!");
             }
         }
-
+        
         int totalDays = 0;
 
         for (LocalDate dailyDate = checkinDate; dailyDate.isBefore(checkoutDate); dailyDate = dailyDate.plusDays(1)) {
@@ -161,11 +174,11 @@ public class FrontOfficeModule {
 
         try {
             List<String> availableRooms = searchSessionBeanRemote.searchAvailableRoomTypesWalkIn(checkinDate, checkoutDate, numRooms, numAdults);
-            System.out.printf("%2s%20s%20s\n", "#", "Room Type", "Room Rate");
+            System.out.printf("%2s%40s%20s\n", "#", "Room Type", "Room Rate");
 
             int i = 0, j = 1;
             while (i < availableRooms.size()) {
-                System.out.printf("%2s%20s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
+                System.out.printf("%2s%40s%20s\n", j++, availableRooms.get(i++), availableRooms.get(i++));
             }
 
             while (true) {

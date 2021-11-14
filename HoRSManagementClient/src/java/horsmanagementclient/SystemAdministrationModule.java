@@ -4,10 +4,10 @@ import ejb.session.stateless.EmployeeEntitySessionBeanRemote;
 import ejb.session.stateless.PartnerEntitySessionBeanRemote;
 import entity.EmployeeEntity;
 import entity.PartnerEntity;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import util.enumeration.EmployeeAccessRightEnum;
-import util.exception.EmployeeNotFoundException;
 import util.exception.InvalidAccessRightException;
 
 public class SystemAdministrationModule {
@@ -27,7 +27,7 @@ public class SystemAdministrationModule {
     }
 
     public void menuSystemAdministration() throws InvalidAccessRightException {
-        
+
         if (currentEmployeeEntity.getAccessRightEnum() != EmployeeAccessRightEnum.SYSTEMADMIN) {
             throw new InvalidAccessRightException("You don't have SYSTEM ADMIN rights to access the System Administration Module.");
         }
@@ -46,27 +46,31 @@ public class SystemAdministrationModule {
             response = 0;
 
             while (response < 1 || response > 7) {
-                System.out.print("> ");
+                try {
+                    System.out.print("> ");
 
-                response = scanner.nextInt();
+                    response = scanner.nextInt();
 
-                if (response == 1) {
-                    doCreateNewEmployee();
-                } else if (response == 2) {
-                    doViewAllEmployees();
-                } else if (response == 3) {
-                    doCreateNewPartner();
-                } else if (response == 4) {
-                    doViewAllPartners();
-                } else if (response == 5) {
-                    break;
-                } else {
+                    if (response == 1) {
+                        doCreateNewEmployee();
+                    } else if (response == 2) {
+                        doViewAllEmployees();
+                    } else if (response == 3) {
+                        doCreateNewPartner();
+                    } else if (response == 4) {
+                        doViewAllPartners();
+                    } else if (response == 5) {
+                        break;
+                    } else {
+                        System.out.println("Invalid option, please try again!\n");
+                    }
+                } catch (InputMismatchException ex) {
                     System.out.println("Invalid option, please try again!\n");
                 }
-            }
+                if (response == 5) {
+                    break;
+                }
 
-            if (response == 5) {
-                break;
             }
         }
     }
@@ -109,10 +113,10 @@ public class SystemAdministrationModule {
         System.out.println("*** Merlion Management System :: System Administration :: View All Employees ***\n");
 
         List<EmployeeEntity> employeeEntities = employeeEntitySessionBeanRemote.retrieveAllEmployees();
-        System.out.printf("%8s%20s%20s%15s%20s%20s\n", "Employee ID", "First Name", "Last Name", "Access Right", "Username", "Password");
+        System.out.printf("%12s%20s%20s%20s%20s%20s\n", "Employee ID", "First Name", "Last Name", "Access Right", "Username", "Password");
 
         for (EmployeeEntity employeeEntity : employeeEntities) {
-            System.out.printf("%8s%10s%10s%20s%15s%20s\n", employeeEntity.getEmployeeId().toString(), employeeEntity.getFirstName(), employeeEntity.getLastName(), employeeEntity.getAccessRightEnum().toString(), employeeEntity.getUsername(), employeeEntity.getPassword());
+            System.out.printf("%12s%20s%20s%20s%20s%20s\n", employeeEntity.getEmployeeId().toString(), employeeEntity.getFirstName(), employeeEntity.getLastName(), employeeEntity.getAccessRightEnum().toString(), employeeEntity.getUsername(), employeeEntity.getPassword());
         }
 
         System.out.print("\nPress any key to continue...> ");
@@ -143,14 +147,13 @@ public class SystemAdministrationModule {
         System.out.println("*** Merlion Management System :: System Administration :: View All Partners ***\n");
 
         List<PartnerEntity> partnerEntities = partnerEntitySessionBeanRemote.retrieveAllPartners();
-        System.out.printf("%8s%20s%20s%20s\n", "Partner ID", "First Name", "Username", "Password");
+        System.out.printf("%12s%20s%20s%20s\n", "Partner ID", "First Name", "Username", "Password");
 
         for (PartnerEntity partnerEntity : partnerEntities) {
-            System.out.printf("%8s%20s%20s%20s\n", partnerEntity.getPartnerId().toString(), partnerEntity.getFirstName(), partnerEntity.getUsername(), partnerEntity.getPassword());
+            System.out.printf("%12s%20s%20s%20s\n", partnerEntity.getPartnerId().toString(), partnerEntity.getFirstName(), partnerEntity.getUsername(), partnerEntity.getPassword());
         }
 
         System.out.print("\nPress any key to continue...> ");
         scanner.nextLine();
     }
 }
-
