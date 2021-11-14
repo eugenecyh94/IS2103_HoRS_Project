@@ -1,5 +1,6 @@
 package ejb.session.stateless;
 
+import entity.ReservationEntity;
 import entity.RoomEntity;
 import entity.RoomTypeEntity;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.NoRoomAllocationException;
 import util.exception.RoomCannotBeDeletedException;
 import util.exception.RoomCannotBeFoundException;
 
@@ -60,7 +62,21 @@ public class RoomEntitySessionBean implements RoomEntitySessionBeanRemote, RoomE
         } catch (NoResultException ex) {
             throw new RoomCannotBeFoundException("Room does not exists for the entered Room Number!");
         }
-
+    }
+    
+    @Override
+    public List<RoomEntity> retrieveRoomsByReservationId(Long reservationId) throws NoRoomAllocationException {        
+        
+        ReservationEntity rs = em.find(ReservationEntity.class, reservationId);
+        
+        Query query = em.createQuery("SELECT r FROM RoomEntity r WHERE r.currentReservation = :inReservation").setParameter("inReservation", rs);
+        
+        if(query.getResultList().isEmpty()) { 
+            throw new NoRoomAllocationException("No rooms are allocation for this reservation ID " + reservationId);
+        } else {
+            return query.getResultList();
+        }
+        
     }
 
     @Override

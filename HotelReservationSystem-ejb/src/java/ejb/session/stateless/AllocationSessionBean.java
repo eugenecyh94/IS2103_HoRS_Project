@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import util.exception.RoomAllocationNotUpgradedException;
+import util.exception.NoRoomAllocationException;
 import util.exception.RoomAllocationUpgradedException;
 
 /**
@@ -32,7 +32,7 @@ public class AllocationSessionBean implements AllocationSessionBeanRemote, Alloc
     }
 
     @Override
-    public void allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, RoomAllocationNotUpgradedException {
+    public void allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, NoRoomAllocationException {
 
         ReservationEntity reservation = em.find(ReservationEntity.class, reservationId);
         RoomTypeEntity reservedRoomType = reservation.getRoomType();
@@ -81,7 +81,7 @@ public class AllocationSessionBean implements AllocationSessionBeanRemote, Alloc
                     upgradedRoomTypeName = upgradedRoomType.getNextHigherRoomType();
                 }
             } catch (NoResultException ex) {
-                throw new RoomAllocationNotUpgradedException("Reserved Room Type is unavailable and upgrades are unavailable!");
+                throw new NoRoomAllocationException("Reserved Room Type is unavailable and upgrades are unavailable!");
             }
         }
     }

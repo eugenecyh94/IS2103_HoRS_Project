@@ -45,7 +45,6 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
 
         roomType.getRoomAmenities().size();
         roomType.getRooms().size();
-        roomType.getReservations().size();
 
         return roomType;
 
@@ -60,7 +59,6 @@ public class RoomTypeEntitySessionBean implements RoomTypeEntitySessionBeanRemot
             RoomTypeEntity roomType = (RoomTypeEntity) query.getSingleResult();
             roomType.getRoomAmenities().size();
             roomType.getRooms().size();
-            roomType.getReservations().size();
             return roomType;
         } catch (NoResultException ex) {
             throw new RoomTypeCannotBeFoundException("Room Type does not exists for the entered name!");

@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.DailyExceptionReportEntity;
 import entity.ReservationEntity;
+import entity.RoomEntity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.NoAllocationExceptionReportException;
-import util.exception.RoomAllocationNotUpgradedException;
+import util.exception.NoRoomAllocationException;
 import util.exception.RoomAllocationUpgradedException;
 
 /**
@@ -30,14 +31,16 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
     ReservationEntitySessionBeanLocal reservationEntitySessionBeanLocal;
     @EJB
     AllocationSessionBeanLocal allocationSessionBeanLocal;
+    @EJB
+    RoomEntitySessionBeanLocal roomEntitySessionBeanLocal;
 
     @PersistenceContext(unitName = "HotelReservationSystem-ejbPU")
     private EntityManager em;
 
-    //@Schedule(dayOfWeek = "*", hour = "2", info = "Daily2amRoomAllocationTimer")    
+    @Schedule(dayOfWeek = "*", hour = "2", info = "Daily2amRoomAllocationTimer")
     //for testing, triggered every 5 seconds
     @Override
-    @Schedule(hour = "*", minute = "*/1", info = "TestRoomAllocationTimer")
+    //@Schedule(hour = "*", minute = "*/1", info = "TestRoomAllocationTimer")
     public void automatedRoomAllocation() {
 
         System.out.println("********** Automated Allocation Started");
@@ -82,7 +85,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
             try {
                 allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
                 rs.setRoomAllocated(true);
-            } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
+            } catch (RoomAllocationUpgradedException | NoRoomAllocationException ex) {
                 String exceptionString = "Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage();
                 exceptionReport.getExceptionDetails().add(exceptionString);
             }
@@ -130,7 +133,7 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
             try {
                 allocationSessionBeanLocal.allocateRoom(rs.getReservationId());
                 rs.setRoomAllocated(true);
-            } catch (RoomAllocationUpgradedException | RoomAllocationNotUpgradedException ex) {
+            } catch (RoomAllocationUpgradedException | NoRoomAllocationException ex) {
                 String exceptionString = "Reservation ID: " + rs.getReservationId() + " " + "\n" + ex.getMessage();
                 exceptionReport.getExceptionDetails().add(exceptionString);
             }
@@ -187,6 +190,16 @@ public class EjbHorsTimerSessionBean implements EjbHorsTimerSessionBeanRemote, E
         }
 
         return exceptionReport;
+    }
+
+    @Override
+    public List<RoomEntity> checkOutGuest(Long reservationId, List<RoomEntity> rooms) {
+
+            for (RoomEntity r : rooms) {
+                r.setRoomAllocated(false);
+            }
+
+            return rooms;
     }
 
     @Override

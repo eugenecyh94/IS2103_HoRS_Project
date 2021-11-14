@@ -71,7 +71,7 @@ public class ManagementMainApp {
                         salesManagementModule = new SalesManagementModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, roomRateSessionBeanRemote, roomTypeEntitySessionBeanRemote);
                         operationsManagementModule = new OperationsManagementModule(roomTypeEntitySessionBeanRemote, roomEntitySessionBeanRemote, currentEmployeeEntity);
                         systemAdministrationModule = new SystemAdministrationModule(employeeEntitySessionBeanRemote, currentEmployeeEntity, partnerEntitySessionBeanRemote);
-                        frontOfficeModule = new FrontOfficeModule(reservationEntitySessionBeanRemote, searchSessionBeanRemote, roomTypeEntitySessionBeanRemote, guestEntitySessionBeanRemote, currentEmployeeEntity, ejbHorsTimerSessionBeanRemote);
+                        frontOfficeModule = new FrontOfficeModule(reservationEntitySessionBeanRemote, searchSessionBeanRemote, roomTypeEntitySessionBeanRemote, guestEntitySessionBeanRemote, currentEmployeeEntity, ejbHorsTimerSessionBeanRemote, roomEntitySessionBeanRemote);
 
                         if (currentEmployeeEntity.getAccessRightEnum().equals(EmployeeAccessRightEnum.OPSMANAGER)) {
                             operationsManagementModule.menuOperationsManagement();

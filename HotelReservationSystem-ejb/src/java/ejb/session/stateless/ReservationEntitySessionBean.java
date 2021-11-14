@@ -24,7 +24,7 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
     }
 
     @Override // to amend to only input reservationtype object for para later
-    public ReservationEntity createNewGuestReservation(ReservationEntity reservation, Long guestId) throws GuestNotFoundException{
+    public ReservationEntity createNewGuestReservation(ReservationEntity reservation, Long guestId) throws GuestNotFoundException {
 
         GuestEntity guestEntity = em.find(GuestEntity.class, guestId);
         if (guestEntity != null) {
@@ -32,9 +32,7 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
             em.persist(reservation);
             em.flush();
             return reservation;
-        }
-        
-        else{ 
+        } else {
             throw new GuestNotFoundException("Guest with the ID Not Found!");
         }
 
@@ -65,8 +63,8 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
         if (guest == null) {
             throw new GuestNotFoundException("Guest does not exists for the entered ID!");
         }
-        
-        for(ReservationEntity reservationEntity : guest.getReservations()){
+
+        for (ReservationEntity reservationEntity : guest.getReservations()) {
             reservationEntity.getRoomType();
         }
 
@@ -80,13 +78,13 @@ public class ReservationEntitySessionBean implements ReservationEntitySessionBea
 
         PartnerEntity partner = em.find(PartnerEntity.class, partnerId);
 
-        List <ReservationEntity> reservations = partner.getPartnerReservations();
+        List<ReservationEntity> reservations = partner.getPartnerReservations();
         reservations.size();
 
-        for(ReservationEntity rs : reservations){
+        for (ReservationEntity rs : reservations) {
             rs.getRoomType();
         }
-        
+
         if (partner == null) {
             throw new PartnerNotFoundException("Partner does not exist for the entered ID!");
         }

@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Entity
 public class PartnerEntity implements Serializable {
@@ -25,9 +28,10 @@ public class PartnerEntity implements Serializable {
     private String username;
     @Column(nullable = false, length = 8)
     private String password;
-    
+    @OneToMany(fetch = FetchType.LAZY)
     private List<ReservationEntity> partnerReservations;
 
+    
 //constructors
     public PartnerEntity() {
         partnerReservations = new ArrayList<>();

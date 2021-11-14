@@ -3,6 +3,7 @@ package ejb.session.stateless;
 import entity.RoomEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.NoRoomAllocationException;
 import util.exception.RoomCannotBeDeletedException;
 import util.exception.RoomCannotBeFoundException;
 
@@ -24,5 +25,7 @@ public interface RoomEntitySessionBeanLocal {
     public List<RoomEntity> retrieveAllRoomsByRoomType(Long roomTypeId) throws RoomCannotBeFoundException;
 
     public List<RoomEntity> retrieveAllAvailableRooms();
+
+    public List<RoomEntity> retrieveRoomsByReservationId(Long reservationId) throws NoRoomAllocationException;
 
 }

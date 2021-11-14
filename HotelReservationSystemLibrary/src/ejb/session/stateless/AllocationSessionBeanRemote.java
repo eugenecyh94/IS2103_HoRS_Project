@@ -8,7 +8,7 @@ package ejb.session.stateless;
 import entity.RoomEntity;
 import java.util.List;
 import javax.ejb.Remote;
-import util.exception.RoomAllocationNotUpgradedException;
+import util.exception.NoRoomAllocationException;
 import util.exception.RoomAllocationUpgradedException;
 
 /**
@@ -18,6 +18,6 @@ import util.exception.RoomAllocationUpgradedException;
 @Remote
 public interface AllocationSessionBeanRemote {
 
-    public void allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, RoomAllocationNotUpgradedException;
+    public void allocateRoom(Long reservationId) throws RoomAllocationUpgradedException, NoRoomAllocationException;
     
 }
