@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import util.enumeration.RateTypeEnum;
 
 @Entity
@@ -22,15 +23,18 @@ public class RoomRateEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomRateId;
     @NotNull
-    @Size(min=)
+    @Size(min=1, max=45)
     @Column(length = 45, nullable = false)
     private String rateName;
+    @NotNull
     @Column(nullable = false)
     private RateTypeEnum rateType;
+    @NotNull
     @Column(nullable = false)
     private BigDecimal rate;
     private LocalDate startDate;
     private LocalDate endDate;
+    @NotNull
     @OneToOne(optional = false)
     private RoomTypeEntity roomType;
 
